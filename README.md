@@ -1,5 +1,7 @@
 # Contoso Hotel Demo in Python
 
+![Contoso Hotel Screenshot](contoso_hotel.jpg)
+
 ## General setup guidance
 
  1. Configure Environment Variable ``MSSQL_CONNECTION_STRING`` or supply a file named ``./secrets-store/MSSQL_CONNECTION_STRING``
