@@ -78,6 +78,18 @@ def api_manage_booking():
     except Exception as e:
         return jsonify({ "success" : False, "error" : str(e) }), 500
 
+@app.route("/api/booking", methods=["GET"])
+def api_get_booking():
+    try:
+        bookingId = request.args.get("bookingId", None)
+        if bookingId is not None:
+            bookingId = int(bookingId)
+        else:
+            return jsonify({ "success" : False, "error" : "bookingId is required" }), 400
+        booking = dblayer.get_booking(bookingId)
+        return jsonify(booking), 200
+    except Exception as e:
+        return jsonify({ "success" : False, "error" : str(e) }), 500
 
 @app.route("/api/bookings", methods=["GET"])
 def api_get_bookings():
@@ -136,6 +148,18 @@ def api_manage_hotel():
     except Exception as e:
         return jsonify({ "success" : False, "error" : str(e) }), 500
 
+@app.route("/api/hotel", methods=["GET"])
+def api_get_hotel():
+    try:
+        hotelId = request.args.get("hotelId", None)
+        if hotelId is not None:
+            hotelId = int(hotelId)
+        else:
+            return jsonify({ "success" : False, "error" : "hotelId is required" }), 400
+        hotel = dblayer.get_hotel(hotelId)
+        return jsonify(hotel), 200
+    except Exception as e:
+        return jsonify({ "success" : False, "error" : str(e) }), 500
 
 @app.route("/api/hotels", methods=["GET"])
 def api_get_hotels():
@@ -180,6 +204,18 @@ def api_manage_visitor():
     except Exception as e:
         return jsonify({ "success" : False, "error" : str(e) }), 500
 
+@app.route("/api/visitor", methods=["GET"])
+def api_get_visitor():
+    try:
+        visitorId = request.args.get("visitorId", None)
+        if visitorId is not None:
+            visitorId = int(visitorId)
+        else:
+            return jsonify({ "success" : False, "error" : "visitorId is required" }), 400
+        visitor = dblayer.get_visitor(visitorId)
+        return jsonify(visitor), 200
+    except Exception as e:
+        return jsonify({ "success" : False, "error" : str(e) }), 500
 
 @app.route("/api/visitors", methods=["GET"])
 def api_get_visitors(name : str = ""):

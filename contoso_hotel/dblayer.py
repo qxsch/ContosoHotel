@@ -95,6 +95,29 @@ def delete_booking(bookingId : int) -> bool:
     connection.close()
     return requiresDeletion
 
+def get_booking(bookingId : int) -> Dict[str, Union[int, str, float, bool]]:
+    connection = get_mssql_connection()
+    cursor = connection.cursor()
+    cursor.execute("select bookingId, hotelId, visitorId, checkin, checkout, adults, kids, babies, rooms, price from bookings where bookingId = ?", (bookingId))
+    row = cursor.fetchone()
+    if row is None:
+        return {}
+    booking = {
+        "bookingId" : row.bookingId,
+        "hotelId" : row.hotelId,
+        "visitorId" : row.visitorId,
+        "checkin" : row.checkin.strftime('%Y-%m-%d'),
+        "checkout" : row.checkout.strftime('%Y-%m-%d'),
+        "adults" : row.adults,
+        "kids" : row.kids,
+        "babies" : row.babies,
+        "rooms" : row.rooms,
+        "price" : row.price
+    }
+    cursor.close()
+    connection.close()
+    return booking
+
 def get_bookings(visitorId : int = 0, hotelId : int = 0, fromdate : datetime = None, untildate : datetime = None) -> Iterable[Dict[str, Union[int, str, float, bool]]]:
     params = []
     query = """
@@ -224,6 +247,21 @@ def delete_visitor(visitorId : int) -> bool:
     connection.close()
     return requiresDeletion
 
+def get_visitor(visitorId : int) -> Dict[str, Union[int, str, float, bool]]:
+    connection = get_mssql_connection()
+    cursor = connection.cursor()
+    cursor.execute("SELECT visitorId, firstname, lastname FROM visitors WHERE visitorId = ?", (visitorId))
+    row = cursor.fetchone()
+    if row is None:
+        return {}
+    visitor = {
+        "visitorId" : row.visitorId,
+        "firstname" : row.firstname,
+        "lastname" : row.lastname
+    }
+    cursor.close()
+    connection.close()
+    return visitor
 
 def get_visitors(name : str = "", exactMatch : bool = False) -> Iterable[Dict[str, Union[int, str, float, bool]]]:
     connection = get_mssql_connection()
@@ -304,6 +342,22 @@ def delete_hotel(hotelId : int) -> bool:
         connection.commit()
     connection.close()
     return requiresDeletion
+
+def get_hotel(hotelId : int) -> Dict[str, Union[int, str, float, bool]]:
+    connection = get_mssql_connection()
+    cursor = connection.cursor()
+    cursor.execute("SELECT hotelId, hotelname, pricePerNight FROM hotels WHERE hotelId = ?", (hotelId))
+    row = cursor.fetchone()
+    if row is None:
+        return {}
+    hotel = {
+        "hotelId" : row.hotelId,
+        "hotelname" : row.hotelname,
+        "pricePerNight" : row.pricePerNight
+    }
+    cursor.close()
+    connection.close()
+    return hotel
 
 def get_hotels(name : str = "", exactMatch : bool = False) -> Iterable[Dict[str, Union[int, str, float, bool]]]:
     connection = get_mssql_connection()

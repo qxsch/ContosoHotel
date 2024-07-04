@@ -146,6 +146,111 @@
 ```
 
 
+
+## Get a single Hotel
+
+**Endpoint:** ``GET /api/hotel?hotelId=<int>``
+
+**Response Codes:**
+| Code | Description |
+| --- | --- |
+| 200 | Success |
+| 400 | Bad Request (Invalid input data) |
+| 500 | Internal Server Error (Server side processing error) |
+
+**Example Body (Success - 200):**
+```json
+{
+   "hotelId": 6,
+   "hotelname": "Contoso Hotel Los Angeles",
+   "pricePerNight": 350.0
+}
+```
+
+**Example Body (Failure - 400 or 500):**
+```json
+{ 
+   "success" : false,
+   "error" : "Some error message here"
+}
+```
+
+
+## Get a single Visitor
+
+**Endpoint:** ``GET /api/visitor?visitorId=<int>``
+
+| Get Parameter | Type | Default Value | Description |
+| --- | --- | --- | --- |
+| ``name``  | string | *empty* | Optional Name to filter (first or last name) |
+| ``exactMatch`` | bool | false | Optional exactMatch (``false`` uses ``like '%search%'`` ) |
+
+**Response Codes:**
+| Code | Description |
+| --- | --- |
+| 200 | Success |
+| 400 | Bad Request (Invalid input data) |
+| 500 | Internal Server Error (Server side processing error) |
+
+**Example Body (Success - 200):**
+```json
+[
+  {
+    "firstname": "Frank",
+    "lastname": "Green",
+    "visitorId": 6
+  }
+]
+```
+
+**Example Body (Failure - 400 or 500):**
+```json
+{ 
+   "success" : false,
+   "error" : "Some error message here"
+}
+```
+
+
+## Get a single Booking
+
+**Endpoint:** ``GET /api/booking?bookingId=<int>``
+
+**Response Codes:**
+| Code | Description |
+| --- | --- |
+| 200 | Success |
+| 400 | Bad Request (Invalid input data) |
+| 500 | Internal Server Error (Server side processing error) |
+
+**Example Body (Success - 200):**
+```json
+{
+   "adults": 2,
+   "babies": 0,
+   "bookingId": 2,
+   "checkin": "2024-07-05",
+   "checkout": "2024-07-10",
+   "firstname": "Bob",
+   "hotelId": 2,
+   "hotelname": "Contoso Hotel Paris",
+   "kids": 0,
+   "lastname": "Jones",
+   "price": 1000.0,
+   "rooms": 1,
+   "visitorId": 2
+}
+```
+
+**Example Body (Failure - 400 or 500):**
+```json
+{ 
+   "success" : false,
+   "error" : "Some error message here"
+}
+```
+
+
 ## Create Hotel
 
 **Endpoint:** ``PUT /api/hotel``
@@ -258,6 +363,81 @@
    "kids": 0,
    "babies": 0,
    "price": 1000.0
+}
+```
+
+**Example Body (Failure - 400 or 500):**
+```json
+{ 
+   "success" : false,
+   "error" : "Some error message here"
+}
+```
+
+## Update Hotel
+
+**Endpoint:** ``POST /api/hotel``
+
+**Request Body:**
+```json
+{
+   "hotelId": 6,
+   "hotelname": "Contoso Hotel Los Angeles",
+   "pricePerNight": 350.0
+}
+```
+
+**Response Codes:**
+| Code | Description |
+| --- | --- |
+| 200 | Success |
+| 400 | Bad Request (Invalid input data) |
+| 500 | Internal Server Error (Server side processing error) |
+
+**Example Body (Success - 200):**
+```json
+{
+   "hotelId": 6,
+   "hotelname": "Contoso Hotel Los Angeles",
+   "pricePerNight": 350.0
+}
+```
+
+**Example Body (Failure - 400 or 500):**
+```json
+{ 
+   "success" : false,
+   "error" : "Some error message here"
+}
+```
+
+
+## Update Visitor
+
+**Endpoint:** ``POST /api/visitor``
+
+**Request Body:**
+```json
+{
+   "visitorId": 6,
+   "firstname": "Frank",
+   "lastname": "Green"
+}
+```
+
+**Response Codes:**
+| Code | Description |
+| --- | --- |
+| 200 | Success |
+| 400 | Bad Request (Invalid input data) |
+| 500 | Internal Server Error (Server side processing error) |
+
+**Example Body (Success - 200):**
+```json
+{
+   "visitorId": 6,
+   "firstname": "Frank",
+   "lastname": "Green"
 }
 ```
 
