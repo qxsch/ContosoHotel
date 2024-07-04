@@ -1,4 +1,6 @@
-# Contoso Hotel Demo in Python
+# ![Contoso Hotel Icon](contoso_hotel/static/favicons/favicon-32x32.png) Contoso Hotel Demo in Python
+
+
 
 ![Contoso Hotel Screenshot](contoso_hotel.jpg)
 
