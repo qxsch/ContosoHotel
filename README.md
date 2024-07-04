@@ -13,7 +13,7 @@
 
  1. Build the Docker Image: ``docker build -t pycontosohotel:latest .``
  1. Run the Docker Container:
-    1. Using environment variable  ``docker run -p 8000:8000 -e MSSQL_CONNECTION_STRING='DRIVER={ODBC Driver 18 for SQL Server};SERVER=MYINSTANCENAME.database.windows.net;DATABASE=MYDATABASENAME;UID=MYSQLUSERNAME;PWD=*******' pycontosohotel:latest``
+    1. Using environment variable  ``docker run -p 8000:8000 -e MSSQL_CONNECTION_STRING='DRIVER={ODBC Driver 18 for SQL Server};SERVER=MSSQLINSTANCENAME.database.windows.net;DATABASE=MSSQLDBNAME;UID=MSSQLUSERNAME;PWD=*******' pycontosohotel:latest``
     1. Using volume mount
        1. Create a file ``MSSQL_CONNECTION_STRING`` with the connection string in the ``/path/to/secrets-store`` directory
        1. ``docker run -p 8000:8000 -v '/path/to/secrets-store:/app/secrets-store' pycontosohotel:latest``
