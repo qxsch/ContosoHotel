@@ -180,11 +180,6 @@
 
 **Endpoint:** ``GET /api/visitor?visitorId=<int>``
 
-| Get Parameter | Type | Default Value | Description |
-| --- | --- | --- | --- |
-| ``name``  | string | *empty* | Optional Name to filter (first or last name) |
-| ``exactMatch`` | bool | false | Optional exactMatch (``false`` uses ``like '%search%'`` ) |
-
 **Response Codes:**
 | Code | Description |
 | --- | --- |
