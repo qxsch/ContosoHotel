@@ -127,7 +127,10 @@ def api_manage_hotel():
                 record["hotelname"] = str(record["hotelname"])
             else:
                 return jsonify({ "success" : False, "error" : "hotelname is required" }), 400
-            return jsonify(dblayer.create_hotel(record["hotelname"], record["pricePerNight"], record["hotelId"])), 200
+            if request.method == "PUT":
+                return jsonify(dblayer.create_hotel(record["hotelname"], record["pricePerNight"], record["hotelId"])), 200
+            else:
+                return jsonify(dblayer.update_hotel(record["hotelname"], record["pricePerNight"], record["hotelId"])), 200
         else:
             return jsonify({ "success" : False, "error" : "Method not allowed" }), 405 
     except Exception as e:
@@ -155,19 +158,23 @@ def api_manage_visitor():
             visitorId = int(visitorId)
             deleted = dblayer.delete_visitor(visitorId)
             return jsonify({"success" : True, "deleted": deleted, "visitorId" : visitorId}), 200
-        elif request.method == "PUT":
+        elif request.method == "PUT" or request.method == "POST":
             record = json.loads(request.data)
             if "visitorId" in record:
-                record["visitorId"] = int(record["visitorId"])
+                if record["visitorId"] is not None:
+                    record["visitorId"] = int(record["visitorId"])
             else:
                 record["visitorId"] = None
+            if record["visitorId"] is None and request.method == "PUT":
+                return jsonify({ "success" : False, "error" : "visitorId is required" }), 400
             for k in ["firstname", "lastname"]:
                 if k not in record:
                     return jsonify({ "success" : False, "error" : f"{k} is required" }), 400
                 record[k] = str(record[k])
-            return jsonify(dblayer.create_visitor(record["firstname"], record["lastname"], record["visitorId"])), 200
-        elif request.method == "POST":
-            return jsonify({ "success" : False, "error" : "Method not allowed" }), 405
+            if request.method == "PUT":
+                return jsonify(dblayer.create_visitor(record["firstname"], record["lastname"], record["visitorId"])), 200
+            else:
+                return jsonify(dblayer.update_visitor(record["firstname"], record["lastname"], record["visitorId"])), 200
         else:
             return jsonify({ "success" : False, "error" : "Method not allowed" }), 405 
     except Exception as e:

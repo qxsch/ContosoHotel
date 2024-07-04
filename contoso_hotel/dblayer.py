@@ -2,6 +2,11 @@ import pyodbc
 import os
 from datetime import datetime, timedelta
 from typing import Dict, Union, Iterable
+from enum import Enum
+
+class SQLMode(Enum):
+    INSERT = 1
+    UPDATE = 2
 
 
 def get_mssql_connection() -> pyodbc.Connection:
@@ -20,7 +25,7 @@ def get_mssql_connection() -> pyodbc.Connection:
     return pyodbc.connect(connectionString)
 
 
-def create_booking(hotelId : int, visitorId : int, checkin : datetime, checkout : datetime, adults : int, kids : int, babies : int, rooms : int, price : float = None, bookingId : int = None) -> Dict[str, Union[int, str, float, bool]]:
+def create_booking(hotelId : int, visitorId : int, checkin : datetime, checkout : datetime, adults : int, kids : int, babies : int, rooms : int, price : float = None, bookingId : int = None, sqlmode : SQLMode = 1) -> Dict[str, Union[int, str, float, bool]]:
     if adults <= 0:
         raise ValueError("At least one adult is required")
     if checkin >= checkout:
@@ -164,9 +169,15 @@ def get_bookings(visitorId : int = 0, hotelId : int = 0, fromdate : datetime = N
 
 
 def create_visitor(firstname : str, lastname : str, visitorId : int = None) -> Dict[str, Union[int, str, float, bool]]:
+    return manage_visitor(firstname, lastname, visitorId, SQLMode.INSERT)
+def update_visitor(firstname : str, lastname : str, visitorId : int) -> Dict[str, Union[int, str, float, bool]]:
+    return manage_visitor(firstname, lastname, visitorId, SQLMode.UPDATE)
+def manage_visitor(firstname : str, lastname : str, visitorId : int = None, sqlmode : SQLMode = 1) -> Dict[str, Union[int, str, float, bool]]:
     connection = get_mssql_connection()
     cursor = connection.cursor()
     if visitorId is None:
+        if sqlmode == SQLMode.UPDATE:
+            raise ValueError("visitorId is required for update")
         cursor.execute("SELECT count(*) as num, (select max(v.visitorId) from visitors as v) as currentMaxId FROM visitors WHERE firstname = ? and lastname = ?", (firstname, lastname))
     else:
         cursor.execute("SELECT count(*) as num, (select max(v.visitorId) from visitors as v) as currentMaxId FROM visitors WHERE visitorId = ? or (firstname = ? and lastname = ?)", (visitorId, firstname, lastname))
@@ -176,13 +187,23 @@ def create_visitor(firstname : str, lastname : str, visitorId : int = None) -> D
     cursor.close()
     
     if alreadyExists:
-        raise RuntimeError("Visitor already exists")
+        if sqlmode == SQLMode.INSERT:
+            raise RuntimeError("Visitor already exists")
+    else:
+        if sqlmode == SQLMode.UPDATE:
+            raise RuntimeError("Visitor does not exist")
 
     if nextId <= 0:
         nextId = 1
     
     cursor = connection.cursor()
-    cursor.execute("INSERT INTO visitors (visitorId, firstname, lastname) VALUES (?, ?, ?)", (nextId, firstname, lastname))
+    if sqlmode == SQLMode.UPDATE:
+        nextId = visitorId
+        cursor.execute("UPDATE visitors SET firstname = ?, lastname = ? WHERE visitorId = ?", (firstname, lastname, visitorId))
+    elif sqlmode == SQLMode.INSERT:
+        cursor.execute("INSERT INTO visitors (visitorId, firstname, lastname) VALUES (?, ?, ?)", (nextId, firstname, lastname))
+    else:
+        raise ValueError("Invalid SQL mode")
     cursor.close()
     connection.commit()
     connection.close()
@@ -228,11 +249,16 @@ def get_visitors(name : str = "", exactMatch : bool = False) -> Iterable[Dict[st
     return visitors
 
 
-
 def create_hotel(hotelname : str, pricePerNight : float, hotelId : int = None) -> Dict[str, Union[int, str, float, bool]]:
+    return manage_hotel(hotelname, pricePerNight, hotelId, SQLMode.INSERT)
+def update_hotel(hotelname : str, pricePerNight : float, hotelId : int) -> Dict[str, Union[int, str, float, bool]]:
+    return manage_hotel(hotelname, pricePerNight, hotelId, SQLMode.UPDATE)
+def manage_hotel(hotelname : str, pricePerNight : float, hotelId : int = None, sqlmode : SQLMode = 1) -> Dict[str, Union[int, str, float, bool]]:
     connection = get_mssql_connection()
     cursor = connection.cursor()
     if hotelId is None:
+        if sqlmode == SQLMode.UPDATE:
+            raise ValueError("hotelId is required for update")
         cursor.execute("SELECT count(*) as num, (select max(h.hotelId) from hotels as h) as currentMaxId FROM hotels WHERE hotelname = ?", (hotelname))
     else:
         cursor.execute("SELECT count(*) as num, (select max(h.hotelId) from hotels as h) as currentMaxId FROM hotels WHERE hotelId = ? or hotelname = ?", (hotelId, hotelname))    
@@ -242,13 +268,23 @@ def create_hotel(hotelname : str, pricePerNight : float, hotelId : int = None) -
     cursor.close()
     
     if alreadyExists:
-        raise RuntimeError("Hotel already exists")
+        if sqlmode == SQLMode.INSERT:
+            raise RuntimeError("Hotel already exists")
+    else:
+        if sqlmode == SQLMode.UPDATE:
+            raise RuntimeError("Hotel does not exist")
 
     if nextId <= 0:
         nextId = 1
     
     cursor = connection.cursor()
-    cursor.execute("INSERT INTO hotels (hotelId, hotelname, pricePerNight) VALUES (?, ?, ?)", (nextId, hotelname, pricePerNight))
+    if sqlmode == SQLMode.UPDATE:
+        nextId = hotelId
+        cursor.execute("UPDATE hotels SET hotelname = ?, pricePerNight = ? WHERE hotelId = ?", (hotelname, pricePerNight, hotelId))
+    elif sqlmode == SQLMode.INSERT:
+        cursor.execute("INSERT INTO hotels (hotelId, hotelname, pricePerNight) VALUES (?, ?, ?)", (nextId, hotelname, pricePerNight))
+    else:
+        raise ValueError("Invalid SQL mode")
     cursor.close()
     connection.commit()
     connection.close()
