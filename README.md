@@ -231,10 +231,10 @@
    "checkin": "2024-07-05",
    "checkout": "2024-07-10",
    "adults": 2,
-   "kids": 0,       # optional
-   "babies": 0,     # optional
-   "rooms": 1,      # optional
-   "price": 1000.0  # optional
+   "kids": 0,       // optional
+   "babies": 0,     // optional
+   "rooms": 1,      // optional
+   "price": 1000.0  // optional
 }
 ```
 
