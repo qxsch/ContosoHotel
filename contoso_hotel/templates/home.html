@@ -1,0 +1,14 @@
+{% extends "homelayout.html" %}
+{% block title %}
+Welcome to Contoso Hotel
+{% endblock %}
+{% block content %}
+<h1>Welcome</h1>
+<p>Manage Contoso Hotel bookings</p>
+<nav>
+    <ul>
+        <li><a href="{{ url_for('list') }}" class="icon fa-solid fa-calendar-days"><span class="label">Continue</span></a></li>
+    </ul>
+</nav>
+
+{% endblock %}

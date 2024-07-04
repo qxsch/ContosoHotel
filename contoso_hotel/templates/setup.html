@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Contoso Hotel Setup
+{% endblock %}
+
+{% block headingcontent %}
+<h1>Contoso Hotel Setup</h1>
+{% endblock %}
+
+{% block content %}
+
+<style>
+
+</style>
+
+<p>
+    <input type="checkbox" id="drop_schema" name="drop_schema"><label for="drop_schema">Drop Schema</label>
+    <input type="checkbox" id="create_schema" name="create_schema" checked><label for="create_schema">Create Schema (if not exists)</label>
+    <input type="checkbox" id="populate_data" name="populate_data" checked><label for="populate_data">Populate Sample Data (if empty)</label>
+</p>
+<br />
+<p>
+    <button class="button3d" role="button" id="setupdb">Setup database</button>
+</p>
+<br />
+<div id="log">
+
+</div>
+<br />
+<p>
+    <a href="/">Home</a>
+</p>
+{% endblock %}
+
+{% block bottomloadscript %}
+<script src="{{ url_for('static', filename='assets/js/setup.js') }}"></script>
+{% endblock %}

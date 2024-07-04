@@ -1,0 +1,6 @@
+Flask
+gunicorn
+werkzeug
+requests
+Pillow
+pyodbc
