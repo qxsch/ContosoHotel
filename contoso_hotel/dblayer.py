@@ -1,5 +1,5 @@
 import pyodbc
-import os
+import os, time
 from datetime import datetime, timedelta
 from typing import Dict, Union, Iterable
 from enum import Enum
@@ -24,6 +24,19 @@ def get_mssql_connection() -> pyodbc.Connection:
     
     return pyodbc.connect(connectionString)
 
+
+def longsqlrequest() -> int:
+    connection = get_mssql_connection()
+    cursor = connection.cursor()
+    cursor.execute("select 'hi' as hello")
+    cursor.fetchall()
+    time.sleep(10)
+    cursor.execute("select 'hi' as hello")
+    cursor.fetchall()
+    time.sleep(10)
+    cursor.close()
+    connection.close()
+    return 10 + 10
 
 def create_booking(hotelId : int, visitorId : int, checkin : datetime, checkout : datetime, adults : int, kids : int, babies : int, rooms : int, price : float = None, bookingId : int = None, sqlmode : SQLMode = 1) -> Dict[str, Union[int, str, float, bool]]:
     if adults <= 0:

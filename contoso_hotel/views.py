@@ -21,6 +21,13 @@ def api_setup():
     except Exception as e:
         return jsonify({ "success" : False, "error" : str(e) }), 500
 
+@app.route("/api/longsqlrequest", methods=["GET"])
+def api_longsqlrequest():
+    try:
+        return jsonify(dblayer.longsqlrequest()), 200
+    except Exception as e:
+        return jsonify({ "success" : False, "error" : str(e) }), 500
+
 @app.route("/api/booking", methods=["DELETE", "PUT", "POST"])
 def api_manage_booking():
     try:
