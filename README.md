@@ -289,7 +289,7 @@
 ```json
 {
    "success": true,
-   "deleted": true, # indicates if deletion was necessary
+   "deleted": true,  // indicates if deletion was necessary
    "hotelId": 6
 }
 ```
@@ -322,7 +322,7 @@
 ```json
 {
    "success": true,
-   "deleted": true, # indicates if deletion was necessary
+   "deleted": true,  // indicates if deletion was necessary
    "visitorId": 6
 }
 ```
@@ -355,7 +355,7 @@
 ```json
 {
    "success": true,
-   "deleted": true, # indicates if deletion was necessary
+   "deleted": true,  // indicates if deletion was necessary
    "bookingId": 2
 }
 ```
