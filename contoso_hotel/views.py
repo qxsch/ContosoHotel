@@ -27,7 +27,7 @@ def api_manage_booking():
         if request.method == "DELETE":
             bookingId = request.args.get("bookingId", None)
             if bookingId is None:
-                raise RuntimeError("bookingId is required")
+                return jsonify({ "success" : False, "error" : "bookingId is required" }), 400
             bookingId = int(bookingId)
             deleted = dblayer.delete_booking(bookingId)
             return jsonify({"success" : True, "deleted": deleted, "bookingId" : bookingId}), 200
@@ -40,11 +40,11 @@ def api_manage_booking():
             # required values
             for k in ["visitorId", "hotelId", "adults"]:
                 if k not in record:
-                    raise RuntimeError(f"{k} is required")
+                    return jsonify({ "success" : False, "error" : f"{k} is required" }), 400
                 record[k] = int(record[k])
             for k in ["checkin", "checkout"]:
                 if k not in record:
-                    raise RuntimeError(f"{k} is required")
+                    return jsonify({ "success" : False, "error" : f"{k} is required" }), 400
                 record[k] = datetime.fromisoformat(record[k])
             # optional values
             for k in ["kids", "babies"]:
@@ -106,27 +106,28 @@ def api_manage_hotel():
         if request.method == "DELETE":
             hotelId = request.args.get("hotelId", None)
             if hotelId is None:
-                raise RuntimeError("hotelId is required")
+                return jsonify({ "success" : False, "error" : "hotelId is required" }), 400
             hotelId = int(hotelId)
             deleted = dblayer.delete_hotel(hotelId)
             return jsonify({"success" : True, "deleted": deleted, "hotelId" : hotelId}), 200
-        elif request.method == "PUT":
+        elif request.method == "PUT" or request.method == "POST":
             record = json.loads(request.data)
             if "hotelId" in record:
-                record["hotelId"] = int(record["hotelId"])
+                if record["hotelId"] is not None:
+                    record["hotelId"] = int(record["hotelId"])
             else:
                 record["hotelId"] = None
+            if record["hotelId"] is None and request.method == "PUT":
+                return jsonify({ "success" : False, "error" : "hotelId is required" }), 400
             if "pricePerNight" in record:
                 record["pricePerNight"] = float(record["pricePerNight"])
             else:
-                raise RuntimeError("pricePerNight is required")
+                return jsonify({ "success" : False, "error" : "pricePerNight is required" }), 400
             if "hotelname" in record:
                 record["hotelname"] = str(record["hotelname"])
             else:
-                raise RuntimeError("hotelname is required")
+                return jsonify({ "success" : False, "error" : "hotelname is required" }), 400
             return jsonify(dblayer.create_hotel(record["hotelname"], record["pricePerNight"], record["hotelId"])), 200
-        elif request.method == "POST":
-            return jsonify({ "success" : False, "error" : "Method not allowed" }), 405
         else:
             return jsonify({ "success" : False, "error" : "Method not allowed" }), 405 
     except Exception as e:
@@ -150,7 +151,7 @@ def api_manage_visitor():
         if request.method == "DELETE":
             visitorId = request.args.get("visitorId", None)
             if visitorId is None:
-                raise RuntimeError("visitorId is required")
+                return jsonify({ "success" : False, "error" : "visitorId is required" }), 400
             visitorId = int(visitorId)
             deleted = dblayer.delete_visitor(visitorId)
             return jsonify({"success" : True, "deleted": deleted, "visitorId" : visitorId}), 200
@@ -162,7 +163,7 @@ def api_manage_visitor():
                 record["visitorId"] = None
             for k in ["firstname", "lastname"]:
                 if k not in record:
-                    raise RuntimeError(f"{k} is required")
+                    return jsonify({ "success" : False, "error" : f"{k} is required" }), 400
                 record[k] = str(record[k])
             return jsonify(dblayer.create_visitor(record["firstname"], record["lastname"], record["visitorId"])), 200
         elif request.method == "POST":
