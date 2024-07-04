@@ -1,4 +1,4 @@
-# Python/Flask Tutorial for Visual Studio Code
+# Contoso Hotel Demo in Python
 
  1. Configure Environment Variable ``MSSQL_CONNECTION_STRING`` or supply a file named ``/app/secrets-store/MSSQL_CONNECTION_STRING``
  1. Run the app: ``gunicorn --bind=0.0.0.0 --workers=4 startup:app``
