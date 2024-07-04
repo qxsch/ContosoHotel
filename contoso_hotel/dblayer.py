@@ -83,10 +83,7 @@ def create_booking(hotelId : int, visitorId : int, checkin : datetime, checkout 
 
 def delete_booking(bookingId : int) -> bool:
     connection = get_mssql_connection()
-    cursor = connection.cursor()
-    cursor.execute("SELECT count(*) as num FROM bookings WHERE bookingId = ?", (bookingId))
-    requiresDeletion = cursor.fetchone().num > 0
-    cursor.close()
+    requiresDeletion = tablePrimaryKeyExists(connection, "bookings", bookingId)
     if requiresDeletion:
         cursor = connection.cursor()
         cursor.execute("DELETE FROM bookings WHERE bookingId = ?", (bookingId))
@@ -212,6 +209,9 @@ def manage_visitor(firstname : str, lastname : str, visitorId : int = None, sqlm
     if alreadyExists:
         if sqlmode == SQLMode.INSERT:
             raise RuntimeError("Visitor already exists")
+        if sqlmode == SQLMode.UPDATE:
+            if not tablePrimaryKeyExists(connection, "visitors", visitorId):
+                raise RuntimeError("Visitor does not exist")
     else:
         if sqlmode == SQLMode.UPDATE:
             raise RuntimeError("Visitor does not exist")
@@ -235,10 +235,7 @@ def manage_visitor(firstname : str, lastname : str, visitorId : int = None, sqlm
 
 def delete_visitor(visitorId : int) -> bool:
     connection = get_mssql_connection()
-    cursor = connection.cursor()
-    cursor.execute("SELECT count(*) as num FROM visitors WHERE visitorId = ?", (visitorId))
-    requiresDeletion = cursor.fetchone().num > 0
-    cursor.close()
+    requiresDeletion = tablePrimaryKeyExists(connection, "visitors", visitorId)
     if requiresDeletion:
         cursor = connection.cursor()
         cursor.execute("DELETE FROM visitors WHERE visitorId = ?", (visitorId))
@@ -308,6 +305,9 @@ def manage_hotel(hotelname : str, pricePerNight : float, hotelId : int = None, s
     if alreadyExists:
         if sqlmode == SQLMode.INSERT:
             raise RuntimeError("Hotel already exists")
+        if sqlmode == SQLMode.UPDATE:
+            if not tablePrimaryKeyExists(connection, "hotels", hotelId):
+                raise RuntimeError("Hotel does not exist")
     else:
         if sqlmode == SQLMode.UPDATE:
             raise RuntimeError("Hotel does not exist")
@@ -331,10 +331,7 @@ def manage_hotel(hotelname : str, pricePerNight : float, hotelId : int = None, s
 
 def delete_hotel(hotelId : int) -> bool:
     connection = get_mssql_connection()
-    cursor = connection.cursor()
-    cursor.execute("SELECT count(*) as num FROM hotels WHERE hotelId = ?", (hotelId))
-    requiresDeletion = cursor.fetchone().num > 0
-    cursor.close()
+    requiresDeletion = tablePrimaryKeyExists(connection, "hotels", hotelId)
     if requiresDeletion:
         cursor = connection.cursor()
         cursor.execute("DELETE FROM hotels WHERE hotelId = ?", (hotelId))
@@ -383,6 +380,20 @@ def get_hotels(name : str = "", exactMatch : bool = False) -> Iterable[Dict[str,
     return hotels
 
 
+def tablePrimaryKeyExists(connection, tableName : str, primaryKey : str) -> bool:
+    if tableName == "hotels":
+        query = "SELECT count(*) as num from hotels where hotelId = ?"
+    elif tableName == "visitors":
+        query = "SELECT count(*) as num from visitors where visitorId = ?"
+    elif tableName == "bookings":
+        query = "SELECT count(*) as num from bookings where bookingId = ?"
+    else:
+        raise ValueError("Invalid table name")
+    cursor = connection.cursor()
+    cursor.execute(query, (primaryKey))
+    exists = cursor.fetchone().num > 0
+    cursor.close()
+    return exists
 
 def doesTableHaveRows(connection, tableName : str) -> bool:
     tableName = str(tableName).strip()
