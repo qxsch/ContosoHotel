@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 import json
 from flask import Flask, render_template, request, jsonify, redirect, url_for
 from . import app, dblayer
@@ -250,3 +250,7 @@ def home():
 @app.route("/list")
 def list():
     return render_template("list.html")
+
+@app.route("/create")
+def create():
+    return render_template("create.html", hotels=dblayer.get_hotels(), visitors=dblayer.get_visitors(), checkin=datetime.now().strftime('%Y-%m-%d'), checkout=(datetime.now() + timedelta(days=1)).strftime('%Y-%m-%d'))

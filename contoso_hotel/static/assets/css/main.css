@@ -1159,7 +1159,39 @@ table.nicetable tbody tr td {
   }
 
 
- 
+  select {
+	border: 0.15em solid #3D7B94;
+	border-radius: 0.15em;
+	color:#194457;
+  }
+  select:disabled {
+	--form-control-color: var(--form-control-disabled);
+  
+	color: var(--form-control-disabled);
+	cursor: not-allowed;
+  }
+  select:focus {
+	border: 0.15em solid #3D7B94;
+	outline: max(2px, 0.15em) solid rgba(255,255,255, 0.6);
+	outline-offset: max(2px, 0.15em);
+  }
+
+  input[type="text"], input[type="number"], input[type="date"]  {
+	border: 0.15em solid #3D7B94;
+	border-radius: 0.15em;
+	color:#194457;
+  }
+  input[type="text"]:disabled, input[type="number"]:disabled, input[type="date"]:disabled  {
+	--form-control-color: var(--form-control-disabled);
+  
+	color: var(--form-control-disabled);
+	cursor: not-allowed;
+  }
+  input[type="text"]:focus, input[type="number"]:focus, input[type="date"]:focus {
+	border: 0.15em solid #3D7B94;
+	outline: max(2px, 0.15em) solid rgba(255,255,255, 0.6);
+	outline-offset: max(2px, 0.15em);
+  }
   
   input[type="checkbox"] {
 	/* Add if not using autoprefixer */
@@ -1182,7 +1214,6 @@ table.nicetable tbody tr td {
 	display: inline-block;
 	place-content: center;
   }
-  
   input[type="checkbox"]::before {
 	  display: grid;
 	content: "";
@@ -1196,16 +1227,13 @@ table.nicetable tbody tr td {
 	/* Windows High Contrast Mode */
 	background-color: CanvasText;
   }
-  
   input[type="checkbox"]:checked::before {
 	transform: scale(1);
   }
-  
   input[type="checkbox"]:focus {
 	outline: max(2px, 0.15em) solid currentColor;
 	outline-offset: max(2px, 0.15em);
   }
-  
   input[type="checkbox"]:disabled {
 	--form-control-color: var(--form-control-disabled);
   
@@ -1220,4 +1248,13 @@ table.nicetable tbody tr td {
 	font-weight: 900;
 	letter-spacing: -0.035em;
 	line-height: 1em;
+}
+
+
+p.multiboxes span {
+	margin-right:max(10px, 3em);
+	
+}
+p.multiboxes span:last-child {
+	margin-right:0;
 }

@@ -1,0 +1,78 @@
+{% extends "layout.html" %}
+{% block title %}
+Contoso Hotel Bookings
+{% endblock %}
+{% block headingcontent %}
+<h1>Contoso Hotel Bookings</h1>
+{% endblock %}
+{% block content %}
+<button class="button3d" role="button" id="listbooking">List Bookings</button>
+
+<br><br><br>
+<h2>Create Booking</h2>
+<br>
+<p>
+<label for="hotel">Hotel: &nbsp;</label>
+<select id="hotel" name="hotel">
+    {% for hotel in hotels %}
+    <option value="{{ hotel["hotelId"] }}">{{ hotel["hotelname"] }} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (Per night: {{ hotel["pricePerNight"] }})</option>
+    {% endfor %}
+</select>
+</p>
+<br>
+<p>
+<label for="visitor">Visitor: &nbsp;</label>
+<select id="visitor" name="visitor">
+    {% for visitor in visitors %}
+    <option value="{{ visitor["visitorId"] }}">{{ visitor["firstname"] }} {{ visitor["lastname"] }}</option>
+    {% endfor %}
+</select>
+</p>
+<br>
+<p class="multiboxes">
+    <span>
+        <label for="checkin">Check-in: &nbsp;</label>
+        <input type="date" id="checkin" name="checkin" value="{{ checkin }}">
+    </span>
+    <span>
+        <label for="checkout">Check-out: &nbsp;</label>
+        <input type="date" id="checkout" name="checkout" value="{{ checkout }}">
+    </span>
+</p>
+<br>
+<p class="multiboxes">
+    <span>
+        <label for="adults">Adults: &nbsp;</label>
+        <input type="number" id="adults" name="adults" min="1" max="10" value="1">
+    </span>
+    <span>
+        <label for="kids">Kids: &nbsp;</label>
+        <input type="number" id="kids" name="kids" min="0" max="10" value="0">
+    </span>
+    <span>
+        <label for="babies">Babies: &nbsp;</label>
+        <input type="number" id="babies" name="babies" min="0" max="10" value="0">
+    </span>
+</p>
+<br>
+<p>
+    <label for="rooms">Rooms: &nbsp;</label>
+    <input type="number" id="rooms" name="rooms" min="1" max="10" value="1">
+</p>
+<br>
+<button class="button3d" role="button" id="createbooking">Add Booking</button>
+
+<br><br>
+<div id="log">
+
+</div>
+{% endblock %}
+
+{% block bottomloadscript %}
+<script src="{{ url_for('static', filename='assets/js/createbooking.js') }}"></script>
+<script type="text/javascript">
+document.getElementById("listbooking").onclick = function() {
+    window.location.href = "{{ url_for('list') }}";
+};
+</script>
+{% endblock %}

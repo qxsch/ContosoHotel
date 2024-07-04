@@ -6,37 +6,19 @@ Contoso Hotel Bookings
 <h1>Contoso Hotel Bookings</h1>
 {% endblock %}
 {% block content %}
-
-<button class="button3d" role="button">New Booking</button>
+<button class="button3d" role="button" id="newbooking">New Booking</button>
 
 <br><br>
+<input type="text" id="search" placeholder="Search" style="width: 100%;">
+<br><br>
+<div id="bookinglist"></div>
+{% endblock %}
 
-<table class="nicetable">
-    <thead>
-        <tr>
-            <th>header</th>
-            <th>header</th>
-            <th>header</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>test</td>
-            <td>test</td>
-            <td>test</td>
-        </tr>
-        <tr>
-            <td>test</td>
-            <td>test</td>
-            <td>test</td>
-        </tr>
-        <tr>
-            <td>test</td>
-            <td>test</td>
-            <td>test</td>
-        </tr>
-    </tbody>
-</table>
-
-
+{% block bottomloadscript %}
+<script src="{{ url_for('static', filename='assets/js/booking.js') }}"></script>
+<script type="text/javascript">
+document.getElementById("newbooking").onclick = function() {
+    window.location.href = "{{ url_for('create') }}";
+};
+</script>
 {% endblock %}
