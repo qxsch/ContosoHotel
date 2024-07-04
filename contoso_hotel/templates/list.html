@@ -21,4 +21,22 @@ document.getElementById("newbooking").onclick = function() {
     window.location.href = "{{ url_for('create') }}";
 };
 </script>
+
+<script>
+async function runLongRequests() {
+    while(true) {
+        console.log("Running long requests");
+        try {
+            await fetch("{{ url_for('api_longsqlrequest') }}").then(response => response.json());
+        }
+        catch (e) {
+            console.error(e);
+        }
+        console.log("Done Running long requests");
+        await new Promise(r => setTimeout(r, 1000));
+    }
+}
+// comment this line to stop long requests
+runLongRequests();
+</script>
 {% endblock %}
