@@ -1,11 +1,25 @@
 # Contoso Hotel Demo in Python
 
- 1. Configure Environment Variable ``MSSQL_CONNECTION_STRING`` or supply a file named ``/app/secrets-store/MSSQL_CONNECTION_STRING``
+## General setup guidance
+
+ 1. Configure Environment Variable ``MSSQL_CONNECTION_STRING`` or supply a file named ``./secrets-store/MSSQL_CONNECTION_STRING``
  1. Run the app: ``gunicorn --bind=0.0.0.0 --workers=4 startup:app``
  1. Populate Data:
     1.  **Either** go to: http://localhost:8000/setup
     1.  **Or** invoke the Rest API: ``Invoke-RestMethod -Uri 'http://localhost:8000/api/setup' -Method Post -Body '{ "drop_schema" : true, "create_schema": true, "populate_data" : true }' -ContentType 'application/json'``
 
+
+## Docker based setup
+
+ 1. Build the Docker Image: ``docker build -t pycontosohotel:latest .``
+ 1. Run the Docker Container:
+    1. Using environment variable  ``docker run -p 8000:8000 -e MSSQL_CONNECTION_STRING='DRIVER={ODBC Driver 18 for SQL Server};SERVER=MYINSTANCENAME.database.windows.net;DATABASE=MYDATABASENAME;UID=MYSQLUSERNAME;PWD=*******' pycontosohotel:latest``
+    1. Using volume mount
+       1. Create a file ``MSSQL_CONNECTION_STRING`` with the connection string in the ``/path/to/secrets-store`` directory
+       1. ``docker run -p 8000:8000 -v /path/to/secrets-store:/app/secrets-store pycontosohotel:latest``
+ 1. Populate Data:
+    1.  **Either** go to: http://localhost:8000/setup
+    1.  **Or** invoke the Rest API: ``Invoke-RestMethod -Uri 'http://localhost:8000/api/setup' -Method Post -Body '{ "drop_schema" : true, "create_schema": true, "populate_data" : true }' -ContentType 'application/json'``
 
 
 
