@@ -51,6 +51,15 @@ function recalculateRooms() {
     document.getElementById("rooms").value = String(rooms);
 }
 
+document.getElementById("checkin").addEventListener("change", function() {
+    var checkindate = new Date(Date.parse(document.getElementById("checkin").value));
+    checkindate.setDate(checkindate.getDate() + 1);
+    checkindate = checkindate.toISOString().split('T')[0];
+    if(checkindate >= document.getElementById("checkout").value) {
+        document.getElementById("checkout").value = checkindate;
+    }
+});
+
 document.getElementById("adults").addEventListener("change", function() {
     recalculateRooms();
 });
