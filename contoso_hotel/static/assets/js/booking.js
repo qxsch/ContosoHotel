@@ -162,6 +162,6 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 document.getElementById('search').addEventListener('keyup', function(event) {
-    bookingObj.search(event.target.value, 0.2);
+    bookingObj.search(event.target.value, 0.1);
 });
 
