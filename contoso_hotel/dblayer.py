@@ -176,6 +176,7 @@ def get_bookings(visitorId : int = 0, hotelId : int = 0, fromdate : datetime = N
             query += " and "
         query += "bookings.checkin <= ?"
         params.append(untildate.strftime('%Y-%m-%d'))
+    query += " order by bookings.bookingId desc"
     connection = get_mssql_connection()
     cursor = connection.cursor()
     cursor.execute(query, params)
@@ -279,12 +280,12 @@ def get_visitors(name : str = "", exactMatch : bool = False) -> Iterable[Dict[st
     name = str(name).strip()
     if name != "":
         if exactMatch:
-            cursor.execute("SELECT visitorId, firstname, lastname FROM visitors WHERE firstname = ? or lastname = ?", (name, name))
+            cursor.execute("SELECT visitorId, firstname, lastname FROM visitors WHERE firstname = ? or lastname = ? order by visitorId desc", (name, name))
         else:
             name = "%" + name + "%"
-            cursor.execute("SELECT visitorId, firstname, lastname FROM visitors WHERE firstname like ? or lastname like ?", (name, name))
+            cursor.execute("SELECT visitorId, firstname, lastname FROM visitors WHERE firstname like ? or lastname like ? order by visitorId desc", (name, name))
     else:
-        cursor.execute("SELECT visitorId, firstname, lastname FROM visitors")
+        cursor.execute("SELECT visitorId, firstname, lastname FROM visitors order by visitorId desc")
     visitors = []
     for row in cursor.fetchall():
         visitors.append({
@@ -375,12 +376,12 @@ def get_hotels(name : str = "", exactMatch : bool = False) -> Iterable[Dict[str,
     name = str(name).strip()
     if name != "":
         if exactMatch:
-            cursor.execute("SELECT hotelId, hotelname, pricePerNight FROM hotels WHERE hotelname = ?", (name))
+            cursor.execute("SELECT hotelId, hotelname, pricePerNight FROM hotels WHERE hotelname = ? order by hotelId desc", (name))
         else:
             name = "%" + name + "%"
-            cursor.execute("SELECT hotelId, hotelname, pricePerNight FROM hotels WHERE hotelname like ?", (name))
+            cursor.execute("SELECT hotelId, hotelname, pricePerNight FROM hotels WHERE hotelname like ? order by hotelId desc", (name))
     else:
-        cursor.execute("SELECT hotelId, hotelname, pricePerNight FROM hotels")
+        cursor.execute("SELECT hotelId, hotelname, pricePerNight FROM hotels order by hotelId desc")
     hotels = []
     for row in cursor.fetchall():
         hotels.append({
