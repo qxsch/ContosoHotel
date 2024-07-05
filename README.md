@@ -124,19 +124,19 @@
 ```json
 [
   {
-    "adults": 2,
-    "babies": 0,
     "bookingId": 2,
     "checkin": "2024-07-05",
     "checkout": "2024-07-10",
-    "firstname": "Bob",
     "hotelId": 2,
     "hotelname": "Contoso Hotel Paris",
-    "kids": 0,
+    "visitorId": 2,
+    "firstname": "Bob",
     "lastname": "Jones",
-    "price": 1000.0,
+    "adults": 2,
+    "kids": 0,
+    "babies": 0,
     "rooms": 1,
-    "visitorId": 2
+    "price": 1000.0
   }
 ]
 ```
