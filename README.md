@@ -45,7 +45,7 @@
 | 400 | Bad Request (Invalid input data) |
 | 500 | Internal Server Error (Server side processing error) |
 
-**Example Body (Success - 200):**
+**Example Response Body (Success - 200):**
 ```json
 [
   {
@@ -56,7 +56,7 @@
 ]
 ```
 
-**Example Body (Failure - 400 or 500):**
+**Example Response Body (Failure - 400 or 500):**
 ```json
 { 
    "success" : false,
@@ -81,7 +81,7 @@
 | 400 | Bad Request (Invalid input data) |
 | 500 | Internal Server Error (Server side processing error) |
 
-**Example Body (Success - 200):**
+**Example Response Body (Success - 200):**
 ```json
 [
   {
@@ -92,7 +92,7 @@
 ]
 ```
 
-**Example Body (Failure - 400 or 500):**
+**Example Response Body (Failure - 400 or 500):**
 ```json
 { 
    "success" : false,
@@ -120,7 +120,7 @@
 | 400 | Bad Request (Invalid input data) |
 | 500 | Internal Server Error (Server side processing error) |
 
-**Example Body (Success - 200):**
+**Example Response Body (Success - 200):**
 ```json
 [
   {
@@ -141,7 +141,7 @@
 ]
 ```
 
-**Example Body (Failure - 400 or 500):**
+**Example Response Body (Failure - 400 or 500):**
 ```json
 { 
    "success" : false,
@@ -162,7 +162,7 @@
 | 400 | Bad Request (Invalid input data) |
 | 500 | Internal Server Error (Server side processing error) |
 
-**Example Body (Success - 200):**
+**Example Response Body (Success - 200):**
 ```json
 {
    "hotelId": 6,
@@ -171,7 +171,7 @@
 }
 ```
 
-**Example Body (Failure - 400 or 500):**
+**Example Response Body (Failure - 400 or 500):**
 ```json
 { 
    "success" : false,
@@ -191,7 +191,7 @@
 | 400 | Bad Request (Invalid input data) |
 | 500 | Internal Server Error (Server side processing error) |
 
-**Example Body (Success - 200):**
+**Example Response Body (Success - 200):**
 ```json
 {
    "firstname": "Frank",
@@ -200,7 +200,7 @@
 }
 ```
 
-**Example Body (Failure - 400 or 500):**
+**Example Response Body (Failure - 400 or 500):**
 ```json
 { 
    "success" : false,
@@ -220,7 +220,7 @@
 | 400 | Bad Request (Invalid input data) |
 | 500 | Internal Server Error (Server side processing error) |
 
-**Example Body (Success - 200):**
+**Example Response Body (Success - 200):**
 ```json
 {
    "bookingId": 2,
@@ -236,7 +236,7 @@
 }
 ```
 
-**Example Body (Failure - 400 or 500):**
+**Example Response Body (Failure - 400 or 500):**
 ```json
 { 
    "success" : false,
@@ -264,7 +264,7 @@
 | 400 | Bad Request (Invalid input data) |
 | 500 | Internal Server Error (Server side processing error) |
 
-**Example Body (Success - 200):**
+**Example Response Body (Success - 200):**
 ```json
 {
    "hotelId": 6,
@@ -273,7 +273,7 @@
 }
 ```
 
-**Example Body (Failure - 400 or 500):**
+**Example Response Body (Failure - 400 or 500):**
 ```json
 { 
    "success" : false,
@@ -301,7 +301,7 @@
 | 400 | Bad Request (Invalid input data) |
 | 500 | Internal Server Error (Server side processing error) |
 
-**Example Body (Success - 200):**
+**Example Response Body (Success - 200):**
 ```json
 {
    "visitorId": 6,
@@ -310,7 +310,7 @@
 }
 ```
 
-**Example Body (Failure - 400 or 500):**
+**Example Response Body (Failure - 400 or 500):**
 ```json
 { 
    "success" : false,
@@ -344,7 +344,7 @@
 | 400 | Bad Request (Invalid input data) |
 | 500 | Internal Server Error (Server side processing error) |
 
-**Example Body (Success - 200):**
+**Example Response Body (Success - 200):**
 ```json
 {
    "bookingId": 2,
@@ -360,7 +360,7 @@
 }
 ```
 
-**Example Body (Failure - 400 or 500):**
+**Example Response Body (Failure - 400 or 500):**
 ```json
 { 
    "success" : false,
@@ -388,7 +388,7 @@
 | 400 | Bad Request (Invalid input data) |
 | 500 | Internal Server Error (Server side processing error) |
 
-**Example Body (Success - 200):**
+**Example Response Body (Success - 200):**
 ```json
 {
    "hotelId": 6,
@@ -397,7 +397,7 @@
 }
 ```
 
-**Example Body (Failure - 400 or 500):**
+**Example Response Body (Failure - 400 or 500):**
 ```json
 { 
    "success" : false,
@@ -426,7 +426,7 @@
 | 400 | Bad Request (Invalid input data) |
 | 500 | Internal Server Error (Server side processing error) |
 
-**Example Body (Success - 200):**
+**Example Response Body (Success - 200):**
 ```json
 {
    "visitorId": 6,
@@ -435,7 +435,7 @@
 }
 ```
 
-**Example Body (Failure - 400 or 500):**
+**Example Response Body (Failure - 400 or 500):**
 ```json
 { 
    "success" : false,
@@ -459,7 +459,7 @@
 | 400 | Bad Request (Invalid input data) |
 | 500 | Internal Server Error (Server side processing error) |
 
-**Example Body (Success - 200):**
+**Example Response Body (Success - 200):**
 ```json
 {
    "success": true,
@@ -468,7 +468,7 @@
 }
 ```
 
-**Example Body (Failure - 400 or 500):**
+**Example Response Body (Failure - 400 or 500):**
 ```json
 { 
    "success" : false,
@@ -492,7 +492,7 @@
 | 400 | Bad Request (Invalid input data) |
 | 500 | Internal Server Error (Server side processing error) |
 
-**Example Body (Success - 200):**
+**Example Response Body (Success - 200):**
 ```json
 {
    "success": true,
@@ -501,7 +501,7 @@
 }
 ```
 
-**Example Body (Failure - 400 or 500):**
+**Example Response Body (Failure - 400 or 500):**
 ```json
 { 
    "success" : false,
@@ -525,7 +525,7 @@
 | 400 | Bad Request (Invalid input data) |
 | 500 | Internal Server Error (Server side processing error) |
 
-**Example Body (Success - 200):**
+**Example Response Body (Success - 200):**
 ```json
 {
    "success": true,
@@ -534,7 +534,54 @@
 }
 ```
 
-**Example Body (Failure - 400 or 500):**
+**Example Response Body (Failure - 400 or 500):**
+```json
+{ 
+   "success" : false,
+   "error" : "Some error message here"
+}
+```
+
+
+## Setup the Database
+
+**Endpoint:** ``POST /api/setup``
+
+**Request Body:**
+```json
+{
+   "drop_schema"  : false,
+   "create_schema": true,
+   "populate_data": true
+}
+```
+
+**Response Codes:**
+| Code | Description |
+| --- | --- |
+| 200 | Success |
+| 400 | Bad Request (Invalid input data) |
+| 500 | Internal Server Error (Server side processing error) |
+
+**Example Response Body (Success - 200):**
+```json
+{
+   "success": true,
+   "drop_schema": false,
+   "create_schema": { 
+      "hotels": false,
+      "visitors": false,
+      "bookings": true 
+   },
+   "populate_data": { 
+      "hotels": false,
+      "visitors": true,
+      "bookings": true
+   }
+}
+```
+
+**Example Response Body (Failure - 400 or 500):**
 ```json
 { 
    "success" : false,
