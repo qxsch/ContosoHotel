@@ -193,13 +193,11 @@
 
 **Example Body (Success - 200):**
 ```json
-[
-  {
-    "firstname": "Frank",
-    "lastname": "Green",
-    "visitorId": 6
-  }
-]
+{
+   "firstname": "Frank",
+   "lastname": "Green",
+   "visitorId": 6
+}
 ```
 
 **Example Body (Failure - 400 or 500):**
@@ -225,19 +223,16 @@
 **Example Body (Success - 200):**
 ```json
 {
-   "adults": 2,
-   "babies": 0,
    "bookingId": 2,
+   "visitorId": 6,
+   "hotelId": 2,
    "checkin": "2024-07-05",
    "checkout": "2024-07-10",
-   "firstname": "Bob",
-   "hotelId": 2,
-   "hotelname": "Contoso Hotel Paris",
-   "kids": 0,
-   "lastname": "Jones",
-   "price": 1000.0,
    "rooms": 1,
-   "visitorId": 2
+   "adults": 2,
+   "kids": 0,
+   "babies": 0,
+   "price": 1000.0
 }
 ```
 
