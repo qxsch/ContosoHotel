@@ -21,9 +21,7 @@ RUN apt-get update ; apt-get install -y  apt-utils curl gpg dialog libterm-readl
     apt-get update
 RUN ACCEPT_EULA=Y apt-get install -y msodbcsql18 mssql-tools18 libgssapi-krb5-2
 
-# If you have additional requirements beyond Flask (which is included in the
-# base image), generate a requirements.txt file with pip freeze and uncomment
-# the next three lines.
+# installing python packages - requirements.txt
 COPY requirements.txt /
 RUN pip install --no-cache-dir -U pip
 RUN pip install --no-cache-dir -r /requirements.txt
