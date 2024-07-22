@@ -136,7 +136,7 @@ def api_manage_hotel():
                     record["hotelId"] = int(record["hotelId"])
             else:
                 record["hotelId"] = None
-            if record["hotelId"] is None and request.method == "PUT":
+            if record["hotelId"] is None and request.method == "POST":
                 return jsonify({ "success" : False, "error" : "hotelId is required" }), 400
             if "pricePerNight" in record:
                 record["pricePerNight"] = float(record["pricePerNight"])
@@ -196,7 +196,7 @@ def api_manage_visitor():
                     record["visitorId"] = int(record["visitorId"])
             else:
                 record["visitorId"] = None
-            if record["visitorId"] is None and request.method == "PUT":
+            if record["visitorId"] is None and request.method == "POST":
                 return jsonify({ "success" : False, "error" : "visitorId is required" }), 400
             for k in ["firstname", "lastname"]:
                 if k not in record:

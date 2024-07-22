@@ -64,6 +64,22 @@
 }
 ```
 
+### Example Code
+<details>
+<summary>Click to expand</summary>
+
+#### PowerShell
+
+```powershell
+Invoke-RestMethod -Uri 'http://localhost:8000/api/hotels'
+```
+
+#### Bash Curl
+```bash
+curl -X GET 'http://localhost:8000/api/hotels'
+```
+</details>
+
 
 ## Get Visitors
 
@@ -100,6 +116,21 @@
 }
 ```
 
+### Example Code
+<details>
+<summary>Click to expand</summary>
+
+#### PowerShell
+
+```powershell
+Invoke-RestMethod -Uri 'http://localhost:8000/api/visitors'
+```
+
+#### Bash Curl
+```bash
+curl -X GET 'http://localhost:8000/api/visitors'
+```
+</details>
 
 
 ## Get Bookings
@@ -149,6 +180,21 @@
 }
 ```
 
+### Example Code
+<details>
+<summary>Click to expand</summary>
+
+#### PowerShell
+
+```powershell
+Invoke-RestMethod -Uri 'http://localhost:8000/api/bookings'
+```
+
+#### Bash Curl
+```bash
+curl -X GET 'http://localhost:8000/api/bookings'
+```
+</details>
 
 
 ## Get a single Hotel
@@ -179,6 +225,22 @@
 }
 ```
 
+### Example Code
+<details>
+<summary>Click to expand</summary>
+
+#### PowerShell
+
+```powershell
+Invoke-RestMethod -Uri 'http://localhost:8000/api/hotel?hotelId=2'
+```
+
+#### Bash Curl
+```bash
+curl -X GET 'http://localhost:8000/api/hotel?hotelId=2'
+```
+</details>
+
 
 ## Get a single Visitor
 
@@ -207,6 +269,22 @@
    "error" : "Some error message here"
 }
 ```
+
+### Example Code
+<details>
+<summary>Click to expand</summary>
+
+#### PowerShell
+
+```powershell
+Invoke-RestMethod -Uri 'http://localhost:8000/api/visitor?visitorId=2'
+```
+
+#### Bash Curl
+```bash
+curl -X GET 'http://localhost:8000/api/visitor?visitorId=2'
+```
+</details>
 
 
 ## Get a single Booking
@@ -243,6 +321,22 @@
    "error" : "Some error message here"
 }
 ```
+
+### Example Code
+<details>
+<summary>Click to expand</summary>
+
+#### PowerShell
+
+```powershell
+Invoke-RestMethod -Uri 'http://localhost:8000/api/booking?bookingId=2'
+```
+
+#### Bash Curl
+```bash
+curl -X GET 'http://localhost:8000/api/booking?bookingId=2'
+```
+</details>
 
 
 ## Create Hotel
@@ -282,6 +376,28 @@
 ```
 
 
+### Example Code
+<details>
+<summary>Click to expand</summary>
+
+#### PowerShell
+
+```powershell
+Invoke-RestMethod -Uri 'http://localhost:8000/api/hotel' -Method Put -ContentType 'application/json' -Body (@{
+    hotelname = 'Contoso Hotel Los Angeles II'
+    pricePerNight = 350.0
+} | ConvertTo-Json)
+```
+
+#### Bash Curl
+```bash
+curl -X PUT 'http://localhost:8000/api/hotel' -H 'Content-Type: application/json' -d '{
+    "hotelname": "Contoso Hotel Los Angeles II",
+    "pricePerNight": 350.0
+}'
+```
+</details>
+
 ## Create Visitor
 
 **Endpoint:** ``PUT /api/visitor``
@@ -317,6 +433,28 @@
    "error" : "Some error message here"
 }
 ```
+
+### Example Code
+<details>
+<summary>Click to expand</summary>
+
+#### PowerShell
+
+```powershell
+Invoke-RestMethod -Uri 'http://localhost:8000/api/visitor' -Method Put -ContentType 'application/json' -Body (@{
+    firstname = 'Frank'
+    lastname = 'Blue'
+} | ConvertTo-Json)
+```
+
+#### Bash Curl
+```bash
+curl -X PUT 'http://localhost:8000/api/visitor' -H 'Content-Type: application/json' -d '{
+    "firstname": "Frank",
+    "lastname": "Blue"
+}'
+```
+</details>
 
 ## Create Booking
 
@@ -368,6 +506,42 @@
 }
 ```
 
+### Example Code
+<details>
+<summary>Click to expand</summary>
+
+#### PowerShell
+
+```powershell
+Invoke-RestMethod -Uri 'http://localhost:8000/api/booking' -Method Put -ContentType 'application/json' -Body (@{
+    visitorId = 6
+    hotelId = 2
+    checkin = '2025-07-05'
+    checkout = '2025-07-10'
+    adults = 2
+    kids = 0
+    babies = 0
+    rooms = 1
+    price = 1000.0
+} | ConvertTo-Json)
+```
+
+#### Bash Curl
+```bash
+curl -X PUT 'http://localhost:8000/api/booking' -H 'Content-Type: application/json' -d '{
+    "visitorId": 6,
+    "hotelId": 2,
+    "checkin": "2025-07-05",
+    "checkout": "2025-07-10",
+    "adults": 2,
+    "kids": 0,
+    "babies": 0,
+    "rooms": 1,
+    "price": 1000.0
+}'
+```
+</details>
+
 ## Update Hotel
 
 **Endpoint:** ``POST /api/hotel``
@@ -404,6 +578,30 @@
    "error" : "Some error message here"
 }
 ```
+
+### Example Code
+<details>
+<summary>Click to expand</summary>
+
+#### PowerShell
+
+```powershell
+Invoke-RestMethod -Uri 'http://localhost:8000/api/hotel' -Method Post -ContentType 'application/json' -Body (@{
+    hotelId = 6
+    hotelname = 'Contoso Hotel Los Angeles'
+    pricePerNight = 350.0
+} | ConvertTo-Json)
+```
+
+#### Bash Curl
+```bash
+curl -X POST 'http://localhost:8000/api/hotel' -H 'Content-Type: application/json' -d '{
+    "hotelId": 6,
+    "hotelname": "Contoso Hotel Los Angeles",
+    "pricePerNight": 350.0
+}'
+```
+</details>
 
 
 ## Update Visitor
@@ -443,6 +641,30 @@
 }
 ```
 
+### Example Code
+<details>
+<summary>Click to expand</summary>
+
+#### PowerShell
+
+```powershell
+Invoke-RestMethod -Uri 'http://localhost:8000/api/visitor' -Method Post -ContentType 'application/json' -Body (@{
+    visitorId = 6
+    firstname = 'Frank'
+    lastname = 'Green'
+} | ConvertTo-Json)
+```
+
+#### Bash Curl
+```bash
+curl -X POST 'http://localhost:8000/api/visitor' -H 'Content-Type: application/json' -d '{
+    "visitorId": 6,
+    "firstname": "Frank",
+    "lastname": "Green"
+}'
+```
+</details>
+
 
 ## Delete Hotel
 
@@ -475,6 +697,22 @@
    "error" : "Some error message here"
 }
 ```
+
+### Example Code
+<details>
+<summary>Click to expand</summary>
+
+#### PowerShell
+
+```powershell
+Invoke-RestMethod -Uri 'http://localhost:8000/api/hotel?hotelId=2' -Method Delete
+```
+
+#### Bash Curl
+```bash
+curl -X DELETE 'http://localhost:8000/api/hotel?hotelId=2'
+```
+</details>
 
 ## Delete Visitor
 
@@ -509,6 +747,22 @@
 }
 ```
 
+### Example Code
+<details>
+<summary>Click to expand</summary>
+
+#### PowerShell
+
+```powershell
+Invoke-RestMethod -Uri 'http://localhost:8000/api/visitor?visitorId=2' -Method Delete
+```
+
+#### Bash Curl
+```bash
+curl -X DELETE 'http://localhost:8000/api/visitor?visitorId=2'
+```
+</details>
+
 ## Delete Booking
 
 **Endpoint:** ``DELETE /api/booking?bookingId=<int>``
@@ -541,6 +795,23 @@
    "error" : "Some error message here"
 }
 ```
+
+### Example Code
+<details>
+<summary>Click to expand</summary>
+
+#### PowerShell
+
+```powershell
+Invoke-RestMethod -Uri 'http://localhost:8000/api/booking?bookingId=2' -Method Delete
+```
+
+#### Bash Curl
+```bash
+curl -X DELETE 'http://localhost:8000/api/booking?bookingId=2'
+```
+</details>
+
 
 
 ## Setup the Database
@@ -588,3 +859,27 @@
    "error" : "Some error message here"
 }
 ```
+
+### Example Code
+<details>
+<summary>Click to expand</summary>
+
+#### PowerShell
+
+```powershell
+Invoke-RestMethod -Uri 'http://localhost:8000/api/setup' -Method Post -ContentType 'application/json' -Body (@{
+    drop_schema = $true
+    create_schema = $true
+    populate_data = $true
+} | ConvertTo-Json)
+```
+
+#### Bash Curl
+```bash
+curl -X POST 'http://localhost:8000/api/setup' -H 'Content-Type: application/json' -d '{
+    "drop_schema": true,
+    "create_schema": true,
+    "populate_data": true
+}'
+```
+</details>
