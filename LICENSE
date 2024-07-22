@@ -20,18 +20,21 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE
 
+-----------------------------------------------------------------------
+
+Templates under contoso_hotel/static/assets, contoso_hotel/templates/layout.html and contoso_hotel/templates/homelayout.html are from the Aerial template by HTML5 UP:
+
+    Aerial by HTML5 UP
+    html5up.net | @ajlkn
+    Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
 
 -----------------------------------------------------------------------
 
-    Templates under contoso_hotel/static/assets are licensed under:
-        	Aerial by HTML5 UP
-            html5up.net | @ajlkn
-            Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+Icons are from Font Awesome Free 6.5.2 by Fonticons, Inc.:
 
-            Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com
-            License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License)
-            Copyright 2024 Fonticons, Inc.
-
+    Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com
+    License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License)
+    Copyright 2024 Fonticons, Inc.
 
 -----------------------------------------------------------------------
 
