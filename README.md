@@ -68,8 +68,10 @@ In case you do not have a test database, you can use the following steps to crea
                ```
  1. Populate Data:
     1.  **Either** go to: http://localhost:8000/setup
-    1.  **Or** invoke the Rest API: ``Invoke-RestMethod -Uri 'http://localhost:8000/api/setup' -Method Post -Body '{ "drop_schema" : true, "create_schema": true, "populate_data" : true }' -ContentType 'application/json'``
-
+    1.  **Or** invoke the Rest API:
+        ```pwsh
+        Invoke-RestMethod -Uri 'http://localhost:8000/api/setup' -Method Post -Body '{ "drop_schema" : true, "create_schema": true, "populate_data" : true }' -ContentType 'application/json'
+        ```
 
 
 # API documentation
