@@ -4,3 +4,4 @@ werkzeug
 requests
 Pillow
 pyodbc
+psycopg2-binary

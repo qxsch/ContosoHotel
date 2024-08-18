@@ -27,14 +27,12 @@ CREATE TABLE bookings (
     babies INT NOT NULL CHECK (babies >= 0 and babies <= 10),
     rooms INT NOT NULL CHECK (rooms > 0  and rooms <= 10),
     price FLOAT NOT NULL,
-    CONSTRAINT ck_checkdates CHECK
-    (
+    CONSTRAINT ck_checkdates CHECK (
         checkin < checkout and
         checkin >= cast(GETDATE() as date) and
         checkout >= cast(GETDATE() as date)
     ),
-    CONSTRAINT ck_rooms CHECK
-    (
+    CONSTRAINT ck_rooms CHECK (
         rooms >= cast(ROUND((adults / 2) + (kids / 4) + (babies / 8), 0) as int) 
     ),
     FOREIGN KEY (hotelId) REFERENCES hotels(hotelId) ON DELETE CASCADE,

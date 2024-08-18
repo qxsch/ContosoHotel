@@ -1,12 +1,16 @@
 # ![Contoso Hotel Icon](contoso_hotel/static/favicons/favicon-32x32.png) Contoso Hotel Demo in Python
 
-
+Supports MSSQL and PostgreSQL databases.
 
 ![Contoso Hotel Screenshot](contoso_hotel.jpg)
 
 ## General setup guidance
 
- 1. Configure Environment Variable ``MSSQL_CONNECTION_STRING`` or supply a file named ``./secrets-store/MSSQL_CONNECTION_STRING``
+ 1. Configure Environment Variable:
+    1. For MSSQL: ``MSSQL_CONNECTION_STRING`` or supply a file named ``./secrets-store/MSSQL_CONNECTION_STRING``
+       * Uses pyodbc, format is: ``DRIVER={ODBC Driver 18 for SQL Server};SERVER=MSSQLINSTANCENAME.database.windows.net;DATABASE=MSSQLDBNAME;UID=MSSQLUSERNAME``
+    1. For PostgreSQL: ``POSTGRES_CONNECTION_STRING`` or supply a file named ``./secrets-store/POSTGRES_CONNECTION_STRING``
+       * Uses psycopg2, format is: ``user=PGUSERNAME;password=*******;host=PGINSTANCENAME.postgres.database.azure.com;port=5432;database=PGDBNAME;``
  1. Run the app: ``gunicorn --bind=0.0.0.0 --workers=4 startup:app``
  1. Populate Data:
     1.  **Either** go to: http://localhost:8000/setup
@@ -17,10 +21,16 @@
 
  1. Build the Docker Image: ``docker build -t pycontosohotel:latest .``
  1. Run the Docker Container:
-    1. Using environment variable  ``docker run -p 8000:8000 -e MSSQL_CONNECTION_STRING='DRIVER={ODBC Driver 18 for SQL Server};SERVER=MSSQLINSTANCENAME.database.windows.net;DATABASE=MSSQLDBNAME;UID=MSSQLUSERNAME;PWD=*******' pycontosohotel:latest``
-    1. Using volume mount
-       1. Create a file ``MSSQL_CONNECTION_STRING`` with the connection string in the ``/path/to/secrets-store`` directory
-       1. ``docker run -p 8000:8000 -v '/path/to/secrets-store:/app/secrets-store' pycontosohotel:latest``
+    1. For MSSQL (uses pyodbc):
+       1. Using environment variable  ``docker run -p 8000:8000 -e MSSQL_CONNECTION_STRING='DRIVER={ODBC Driver 18 for SQL Server};SERVER=MSSQLINSTANCENAME.database.windows.net;DATABASE=MSSQLDBNAME;UID=MSSQLUSERNAME;PWD=*******' pycontosohotel:latest``
+       1. Using volume mount
+          1. Create a file ``MSSQL_CONNECTION_STRING`` with the connection string in the ``/path/to/secrets-store`` directory
+          1. ``docker run -p 8000:8000 -v '/path/to/secrets-store:/app/secrets-store' pycontosohotel:latest``
+    1. For PostgreSQL (uses psycopg2):
+         1. Using environment variable  ``docker run -p 8000:8000 -e POSTGRES_CONNECTION_STRING='user=PGUSERNAME;password=*******;host=PGINSTANCENAME.postgres.database.azure.com;port=5432;database=PGDBNAME;' pycontosohotel:latest``
+         1. Using volume mount
+            1. Create a file ``POSTGRES_CONNECTION_STRING`` with the connection string in the ``/path/to/secrets-store`` directory
+            1. ``docker run -p 8000:8000 -v '/path/to/secrets-store:/app/secrets-store' pycontosohotel:latest``
  1. Populate Data:
     1.  **Either** go to: http://localhost:8000/setup
     1.  **Or** invoke the Rest API: ``Invoke-RestMethod -Uri 'http://localhost:8000/api/setup' -Method Post -Body '{ "drop_schema" : true, "create_schema": true, "populate_data" : true }' -ContentType 'application/json'``

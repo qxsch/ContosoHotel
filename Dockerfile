@@ -6,7 +6,7 @@ ARG DEBIAN_FRONTEND=noninteractive
 ENV LISTEN_PORT=8000
 EXPOSE 8000
 
-ENV STATIC_URL /app/contoso_hotel/static
+ENV STATIC_URL=/app/contoso_hotel/static
 
 # Set the folder where uwsgi looks for the app
 WORKDIR /app

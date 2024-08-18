@@ -4,25 +4,17 @@ from datetime import datetime, timedelta
 from typing import Dict, Union, Iterable
 from enum import Enum
 
-class SQLMode(Enum):
-    INSERT = 1
-    UPDATE = 2
+from . import SQLMode, get_defined_database
 
 
 def get_mssql_connection() -> pyodbc.Connection:
-    connectionString = ""
-    secretStoreFile = os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))), 'secrets-store', 'MSSQL_CONNECTION_STRING')
-    if os.path.isfile(secretStoreFile):
-        #print("Reading connection string from secrets store")
-        with open(secretStoreFile, 'r') as file:
-            connectionString = file.read().strip()
-    else:
-        #print("Reading connection string from environment variable")
-        connectionString = os.getenv('MSSQL_CONNECTION_STRING', '')
-    if not connectionString:
+    connectionstring, connectionname = get_defined_database()
+    if connectionname != "MSSQL_CONNECTION_STRING":
+        raise ValueError("Connection string is not for MSSQL")
+    if not connectionstring:
         raise ValueError("Connection string is empty")
     
-    return pyodbc.connect(connectionString)
+    return pyodbc.connect(connectionstring)
 
 
 def longsqlrequest() -> int:
@@ -38,7 +30,7 @@ def longsqlrequest() -> int:
     connection.close()
     return 10 + 10
 
-def create_booking(hotelId : int, visitorId : int, checkin : datetime, checkout : datetime, adults : int, kids : int, babies : int, rooms : int, price : float = None, bookingId : int = None, sqlmode : SQLMode = 1) -> Dict[str, Union[int, str, float, bool]]:
+def create_booking(hotelId : int, visitorId : int, checkin : datetime, checkout : datetime, adults : int, kids : int, babies : int, rooms : int = None, price : float = None, bookingId : int = None) -> Dict[str, Union[int, str, float, bool]]:
     if adults <= 0:
         raise ValueError("At least one adult is required")
     if checkin >= checkout:
@@ -128,7 +120,7 @@ def get_booking(bookingId : int) -> Dict[str, Union[int, str, float, bool]]:
     connection.close()
     return booking
 
-def get_bookings(visitorId : int = 0, hotelId : int = 0, fromdate : datetime = None, untildate : datetime = None) -> Iterable[Dict[str, Union[int, str, float, bool]]]:
+def get_bookings(visitorId : int = None, hotelId : int = None, fromdate : datetime = None, untildate : datetime = None) -> Iterable[Dict[str, Union[int, str, float, bool]]]:
     params = []
     query = """
     select
