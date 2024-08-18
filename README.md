@@ -8,7 +8,7 @@ Supports MSSQL and PostgreSQL databases.
 
  1. Configure Environment Variable:
     1. For MSSQL: ``MSSQL_CONNECTION_STRING`` or supply a file named ``./secrets-store/MSSQL_CONNECTION_STRING``
-       * Uses pyodbc, format is: ``DRIVER={ODBC Driver 18 for SQL Server};SERVER=MSSQLINSTANCENAME.database.windows.net;DATABASE=MSSQLDBNAME;UID=MSSQLUSERNAME;PWD=*******``
+       * Uses pyodbc, format is: ``DRIVER={ODBC Driver 18 for SQL Server};SERVER=MSSQLINSTANCENAME.database.windows.net;DATABASE=MSSQLDBNAME;UID=MSSQLUSERNAME;PWD=*******;Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;``
     1. For PostgreSQL: ``POSTGRES_CONNECTION_STRING`` or supply a file named ``./secrets-store/POSTGRES_CONNECTION_STRING``
        * Uses psycopg2, format is: ``user=PGUSERNAME;password=*******;host=PGINSTANCENAME.postgres.database.azure.com;port=5432;database=PGDBNAME;``
  1. Run the app: ``gunicorn --bind=0.0.0.0 --workers=4 startup:app``
@@ -22,7 +22,7 @@ Supports MSSQL and PostgreSQL databases.
  1. Build the Docker Image: ``docker build -t pycontosohotel:latest .``
  1. Run the Docker Container:
     1. For MSSQL (uses pyodbc):
-       1. Using environment variable  ``docker run -p 8000:8000 -e MSSQL_CONNECTION_STRING='DRIVER={ODBC Driver 18 for SQL Server};SERVER=MSSQLINSTANCENAME.database.windows.net;DATABASE=MSSQLDBNAME;UID=MSSQLUSERNAME;PWD=*******' pycontosohotel:latest``
+       1. Using environment variable  ``docker run -p 8000:8000 -e MSSQL_CONNECTION_STRING='DRIVER={ODBC Driver 18 for SQL Server};SERVER=MSSQLINSTANCENAME.database.windows.net;DATABASE=MSSQLDBNAME;UID=MSSQLUSERNAME;PWD=*******;Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;' pycontosohotel:latest``
        1. Using volume mount
           1. Create a file ``MSSQL_CONNECTION_STRING`` with the connection string in the ``/path/to/secrets-store`` directory
           1. ``docker run -p 8000:8000 -v '/path/to/secrets-store:/app/secrets-store' pycontosohotel:latest``
