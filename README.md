@@ -8,7 +8,7 @@ Supports MSSQL and PostgreSQL databases.
 
  1. Configure Environment Variable:
     1. For MSSQL: ``MSSQL_CONNECTION_STRING`` or supply a file named ``./secrets-store/MSSQL_CONNECTION_STRING``
-       * Uses pyodbc, format is: ``DRIVER={ODBC Driver 18 for SQL Server};SERVER=MSSQLINSTANCENAME.database.windows.net;DATABASE=MSSQLDBNAME;UID=MSSQLUSERNAME``
+       * Uses pyodbc, format is: ``DRIVER={ODBC Driver 18 for SQL Server};SERVER=MSSQLINSTANCENAME.database.windows.net;DATABASE=MSSQLDBNAME;UID=MSSQLUSERNAME;PWD=*******``
     1. For PostgreSQL: ``POSTGRES_CONNECTION_STRING`` or supply a file named ``./secrets-store/POSTGRES_CONNECTION_STRING``
        * Uses psycopg2, format is: ``user=PGUSERNAME;password=*******;host=PGINSTANCENAME.postgres.database.azure.com;port=5432;database=PGDBNAME;``
  1. Run the app: ``gunicorn --bind=0.0.0.0 --workers=4 startup:app``
