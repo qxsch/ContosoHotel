@@ -6,20 +6,16 @@ Supports MSSQL and PostgreSQL databases.
 
 ## Setting up a test database
 In case you do not have a test database, you can use the following steps to create a test database in Azure.
- 1. Create a resource group:
-      ```pwsh
-      New-AzResourceGroup -Name "rg-name" -Location "North Europe"
-      ```
  1. Install the test database:
     1. For MSSQL run:
        ```pwsh
-       New-AzResourceGroupDeployment -ResourceGroupName "rg-name" -TemplateFile .\iac\deploy-sqlserver.bicep -administratorLoginPassword "myLittleSecret111!!!"
+       .\iac\manageIac.ps1 -iacAction create -passwd "myLittleSecret111!!!" -deploy "mssql"
        ```
     1. For PostgreSQL run:
        ```pwsh
-       New-AzResourceGroupDeployment -ResourceGroupName "rg-name" -TemplateFile .\iac\deploy-postgresql.bicep -administratorLoginPassword "myLittleSecret111!!!"
+       .\iac\manageIac.ps1 -iacAction create -passwd "myLittleSecret111!!!" -deploy "postgresql"
        ```
- 1. You can use the connection string from the output to connect to the test database as described below.
+ 1. You can use the connection string from the output (in green color) to connect to the test database as described below.
 
 ## General setup guidance
 

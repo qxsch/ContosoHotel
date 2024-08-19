@@ -33,7 +33,7 @@ CREATE TABLE bookings (
         checkout >= cast(GETDATE() as date)
     ),
     CONSTRAINT ck_rooms CHECK (
-        rooms >= cast(ROUND((adults / 2) + (kids / 4) + (babies / 8), 0) as int) 
+        rooms >= cast(CEILING((adults / 2) + (kids / 4) + (babies / 8)) as int) 
     ),
     FOREIGN KEY (hotelId) REFERENCES hotels(hotelId) ON DELETE CASCADE,
     FOREIGN KEY (visitorId) REFERENCES visitors(visitorId) ON DELETE CASCADE
