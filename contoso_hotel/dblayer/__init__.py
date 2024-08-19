@@ -7,7 +7,7 @@ class SQLMode(Enum):
     INSERT = 1
     UPDATE = 2
 
-print(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__)))), 'secrets-store'))
+
 
 def get_connection_string(name : str) -> str:
     name = str(name).strip().upper()
