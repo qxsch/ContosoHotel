@@ -42,7 +42,10 @@ In case you do not have a test database, you can use the following steps to crea
 
 ## Docker based setup
 
- 1. Build the Docker Image: ``docker build -t pycontosohotel:latest .``
+ 1. Build the Docker Image:
+    ```bash
+    docker build -t pycontosohotel:latest .
+    ```
  1. Choose one of the following methods to provide the connection string to the container:
     1. For MSSQL (uses pyodbc):
        1. Set environment variable when running the container:

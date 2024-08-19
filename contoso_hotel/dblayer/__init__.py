@@ -7,13 +7,14 @@ class SQLMode(Enum):
     INSERT = 1
     UPDATE = 2
 
+print(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__)))), 'secrets-store'))
 
 def get_connection_string(name : str) -> str:
     name = str(name).strip().upper()
     if name != "MSSQL_CONNECTION_STRING" and name != "POSTGRES_CONNECTION_STRING":
         raise ValueError("Invalid database name (only 'MSSQL_CONNECTION_STRING' and 'POSTGRES_CONNECTION_STRING' are supported)")
     connectionString = ""
-    secretStoreFile = os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))), 'secrets-store', name)
+    secretStoreFile = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__)))), 'secrets-store', name)
     if os.path.isfile(secretStoreFile):
         #print("Reading connection string from secrets store")
         with open(secretStoreFile, 'r') as file:
