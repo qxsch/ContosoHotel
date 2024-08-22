@@ -10,10 +10,12 @@ In case you do not have a test database, you can use the following steps to crea
     1. For MSSQL run:
        ```pwsh
        .\iac\manageIac.ps1 -iacAction create -passwd "myLittleSecret111!!!" -deploy "mssql"
+       # for more options use: Get-Help .\iac\manageIac.ps1
        ```
     1. For PostgreSQL run:
        ```pwsh
        .\iac\manageIac.ps1 -iacAction create -passwd "myLittleSecret111!!!" -deploy "postgresql"
+       # for more options use: Get-Help .\iac\manageIac.ps1
        ```
  1. You can use the connection string from the output (in green color) to connect to the test database as described below.
 
