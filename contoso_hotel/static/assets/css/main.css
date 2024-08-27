@@ -1258,3 +1258,28 @@ p.multiboxes span {
 p.multiboxes span:last-child {
 	margin-right:0;
 }
+
+
+div.autocompletelist {
+	position: absolute;
+	background: rgba(255, 255, 255, 0.9);
+	border: 0.15em solid #3D7B94;
+	border-radius: 0.15em;
+	color: #194457;
+	min-width: 100px;
+	overflow-y: auto;
+}
+div.autocompletelist div.autocompleteitem {
+	padding: 5px;
+	overflow: hidden;
+}
+div.autocompletelist div.autocompleteitem:hover {
+	background: #3D7B94;
+	color: white;
+	cursor: default;
+}
+
+div.autocompletelist div.autocompleteitem i {
+	font-style: italic;
+	float:right;
+}

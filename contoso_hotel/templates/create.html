@@ -13,20 +13,12 @@ Contoso Hotel Bookings
 <br>
 <p>
 <label for="hotel">Hotel: &nbsp;</label>
-<select id="hotel" name="hotel">
-    {% for hotel in hotels %}
-    <option value="{{ hotel["hotelId"] }}">{{ hotel["hotelname"] }} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (Per night: {{ hotel["pricePerNight"] }})</option>
-    {% endfor %}
-</select>
+<input type="text" id="hotel" name="hotel" value="" style="min-width: 400px;">
 </p>
 <br>
 <p>
-<label for="visitor">Visitor: &nbsp;</label>
-<select id="visitor" name="visitor">
-    {% for visitor in visitors %}
-    <option value="{{ visitor["visitorId"] }}">{{ visitor["firstname"] }} {{ visitor["lastname"] }}</option>
-    {% endfor %}
-</select>
+    <label for="visitor">Visitor: &nbsp;</label>
+    <input type="text" id="visitor" name="visitor" value="" style="min-width: 400px;">
 </p>
 <br>
 <p class="multiboxes">
@@ -69,10 +61,77 @@ Contoso Hotel Bookings
 {% endblock %}
 
 {% block bottomloadscript %}
+<script src="{{ url_for('static', filename='assets/js/autocomplete.js') }}"></script>
 <script src="{{ url_for('static', filename='assets/js/createbooking.js') }}"></script>
 <script type="text/javascript">
 document.getElementById("listbooking").onclick = function() {
     window.location.href = "{{ url_for('list') }}";
 };
+
+
+document.getElementById("visitor").autocompleteclass = new AutoCompleteInput(
+    document.getElementById("visitor"),
+    function(search) {
+        if(search.length < 1) {
+            return Promise.resolve([]);
+        }
+        return fetch("/api/visitors?" + (new URLSearchParams([ ...Object.entries({"name" : search }) ])).toString())
+            .then(response => response.json())
+            .then(function(data) {
+                // is it an array?
+                if(Array.isArray(data)) {
+                    var results = [];
+                    data.forEach(function(item) {
+                        results.push({
+                            "text": item.firstname + " " + item.lastname,
+                            "value": item.visitorId
+                        });
+                    });
+                    return results;
+                }
+                else {
+                    return data;
+                }
+            });
+    }
+);
+
+function escapeHtml(text) { return String(text).replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/'/g, "&#039;"); }
+
+fetch("/api/hotels")
+    .then(response => response.json())
+    .then(function(data) {
+        if(Array.isArray(data)) {
+            var hotels = [];
+            data.forEach(function(item) {
+                hotels.push({
+                    "text": item.hotelname + " (Per night: " + item.pricePerNight + ")",
+                    "html": escapeHtml(item.hotelname) + " &nbsp;&nbsp; <i>(Per night: " + escapeHtml(item.pricePerNight) + ")</i>",
+                    "value": item.hotelId
+                });
+            });
+            console.log(hotels);
+            document.getElementById("hotel").autocompleteclass = new AutoCompleteInput(
+                document.getElementById("hotel"),
+                hotels
+            );
+            // does the hotel field have a focus?
+            if(document.activeElement === document.getElementById("hotel")) {
+                // fire a key up event, so that the dropdown is shown
+                document.getElementById("visitor").onKeyUp();
+            }
+            else {
+                // set it to the first hotel
+                document.getElementById("hotel").autocompleteclass.setValue(hotels[0]);
+            }
+            return true;
+        }
+        else {
+            return false;
+        }
+    });
 </script>
+<style>
+
+</style>
 {% endblock %}

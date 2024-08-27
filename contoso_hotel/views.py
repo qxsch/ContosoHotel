@@ -253,4 +253,4 @@ def list():
 
 @app.route("/create")
 def create():
-    return render_template("create.html", hotels=dblayer.get_hotels(), visitors=dblayer.get_visitors(), checkin=datetime.now().strftime('%Y-%m-%d'), checkout=(datetime.now() + timedelta(days=1)).strftime('%Y-%m-%d'))
+    return render_template("create.html", checkin=datetime.now().strftime('%Y-%m-%d'), checkout=(datetime.now() + timedelta(days=1)).strftime('%Y-%m-%d'))

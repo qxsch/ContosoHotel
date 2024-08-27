@@ -7,8 +7,8 @@ document.getElementById("createbooking").addEventListener("click", function() {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            "hotelId": parseInt(document.getElementById("hotel").value),
-            "visitorId": parseInt(document.getElementById("visitor").value),
+            "hotelId": parseInt(document.getElementById("hotel").dataset.value),
+            "visitorId": parseInt(document.getElementById("visitor").dataset.value),
             "checkin": document.getElementById("checkin").value,
             "checkout": document.getElementById("checkout").value,
             "adults": parseInt(document.getElementById("adults").value),
