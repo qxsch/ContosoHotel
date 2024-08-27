@@ -14,10 +14,14 @@ def api_setup():
             if k not in record:
                 record[k] = False
             record[k] = bool(record[k])
+        for k, v in { "number_of_visitors" : 100, "min_bookings_per_visitor" : 1, "max_bookings_per_visitor" : 5 }.items():
+            if k not in record:
+                record[k] = v
+            record[k] = int(record[k])
     except Exception as e:
         return jsonify({ "success" : False, "error" : str(e) }), 400
     try:
-        return jsonify(dblayer.setupDb(record["drop_schema"], record["create_schema"], record["populate_data"])), 201
+        return jsonify(dblayer.setupDb(record["drop_schema"], record["create_schema"], record["populate_data"], record["number_of_visitors"], record["min_bookings_per_visitor"], record["max_bookings_per_visitor"])), 201
     except Exception as e:
         return jsonify({ "success" : False, "error" : str(e) }), 500
 

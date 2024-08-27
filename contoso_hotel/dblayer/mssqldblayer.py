@@ -1,5 +1,5 @@
 import pyodbc
-import os, time
+import os, time, math
 from datetime import datetime, timedelta
 from typing import Dict, Union, Iterable
 from enum import Enum
@@ -36,8 +36,8 @@ def create_booking(hotelId : int, visitorId : int, checkin : datetime, checkout 
     if checkin >= checkout:
         raise ValueError("Checkin date must be before checkout date")
     if rooms is None:
-        rooms = int(round((adults / 2) + (kids / 4) + (babies / 8), 0))
-    elif rooms < int(round((adults / 2) + (kids / 4) + (babies / 8), 0)):
+        rooms = int(math.ceil((adults / 2) + (kids / 4) + (babies / 8)))
+    elif rooms < int(math.ceil((adults / 2) + (kids / 4) + (babies / 8))):
         raise ValueError("Not enough rooms for the number of guests")
 
     connection = get_mssql_connection()
@@ -168,7 +168,7 @@ def get_bookings(visitorId : int = None, hotelId : int = None, fromdate : dateti
             query += " and "
         query += "bookings.checkin <= ?"
         params.append(untildate.strftime('%Y-%m-%d'))
-    query += " order by bookings.bookingId desc"
+    query += " order by bookings.checkin desc, bookings.checkout desc, bookings.bookingId desc"
     connection = get_mssql_connection()
     cursor = connection.cursor()
     cursor.execute(query, params)
@@ -429,14 +429,34 @@ def allTablesExists() -> bool:
     except Exception as e:
         return False
 
-def setupDb(drop_schema : bool, create_schema : bool, populate_data : bool):
+def setupDb(drop_schema : bool, create_schema : bool, populate_data : bool, number_of_visitors : int, min_bookings_per_visitor : int, max_bookings_per_visitor : int):
+    number_of_visitors = int(number_of_visitors)
+    min_bookings_per_visitor = int(min_bookings_per_visitor)
+    max_bookings_per_visitor = int(max_bookings_per_visitor)
+    if number_of_visitors < 2:
+        number_of_visitors = 2
+    if number_of_visitors > 10000:
+        number_of_visitors = 10000
+    if min_bookings_per_visitor < 0:
+        min_bookings_per_visitor = 0
+    if min_bookings_per_visitor > 10:
+        min_bookings_per_visitor = 10
+    if  max_bookings_per_visitor < min_bookings_per_visitor:
+        max_bookings_per_visitor = min_bookings_per_visitor
+    if max_bookings_per_visitor < 1:
+        max_bookings_per_visitor = 1
+    if max_bookings_per_visitor > 20:
+        max_bookings_per_visitor = 20
     if drop_schema and not create_schema:
         raise Exception("Cannot drop schema without creating schema")
     responseDict = {
         "success" : True,
         "drop_schema" : False,
         "create_schema" : { "hotels" : False, "visitors" : False, "bookings" : False },
-        "populate_data" : { "hotels" : False, "visitors" : False, "bookings" : False }
+        "populate_data" : { "hotels" : False, "visitors" : False, "bookings" : False },
+        "number_of_visitors" : number_of_visitors,
+        "min_bookings_per_visitor" : min_bookings_per_visitor,
+        "max_bookings_per_visitor" : max_bookings_per_visitor
     }
     connection = get_mssql_connection()
     if drop_schema:
@@ -515,19 +535,28 @@ def setupDb(drop_schema : bool, create_schema : bool, populate_data : bool):
         if not doesTableHaveRows(connection, "visitors"):
             responseDict["populate_data"]["visitors"] = True
             cursor = connection.cursor()
-            cursor.execute("INSERT INTO visitors (visitorId, firstname, lastname) VALUES (1, 'Alice', 'Smith')")
-            cursor.execute("INSERT INTO visitors (visitorId, firstname, lastname) VALUES (2, 'Bob', 'Jones')")
-            cursor.execute("INSERT INTO visitors (visitorId, firstname, lastname) VALUES (3, 'Charlotte', 'Brown')")
-            cursor.execute("INSERT INTO visitors (visitorId, firstname, lastname) VALUES (4, 'David', 'White')")
-            cursor.execute("INSERT INTO visitors (visitorId, firstname, lastname) VALUES (5, 'Eve', 'Black')")
-            cursor.execute("INSERT INTO visitors (visitorId, firstname, lastname) VALUES (6, 'Frank', 'Green')")
+            from .datagenerators import generateVisitorData
+            nextId = 1
+            for visitor in generateVisitorData(number_of_visitors):
+                cursor.execute("INSERT INTO visitors (visitorId, firstname, lastname) VALUES (?, ?, ?)", (nextId, visitor["firstname"], visitor["lastname"]))
+                nextId += 1
             cursor.close()
         if not doesTableHaveRows(connection, "bookings"):
             responseDict["populate_data"]["bookings"] = True
             cursor = connection.cursor()
-            n = datetime.now()
-            cursor.execute("INSERT INTO bookings (bookingId, hotelId, visitorId, checkin, checkout, adults, kids, babies, rooms, price) VALUES (1, 1, 1, '" + (n + timedelta(days=10)).strftime('%Y-%m-%d') + "', '" + (n + timedelta(days=14)).strftime('%Y-%m-%d') + "', 2, 1, 0, 2, 3900.0)")
-            cursor.execute("INSERT INTO bookings (bookingId, hotelId, visitorId, checkin, checkout, adults, kids, babies, rooms, price) VALUES (2, 2, 2, '" + (n + timedelta(days=2)).strftime('%Y-%m-%d') + "', '" + (n + timedelta(days=7)).strftime('%Y-%m-%d') + "', 2, 0, 0, 1, 1000.0)")
+            # getting required data
+            startDate = datetime.now() + timedelta(days=4)
+            cursor.execute("SELECT hotelId FROM hotels where hotelId <= 1000")
+            hotelIds = [row.hotelId for row in cursor.fetchall()]
+            cursor.execute("SELECT visitorId FROM visitors where visitorId <= 10000")
+            visitorIds = [row.visitorId for row in cursor.fetchall()]
+            # generating bookings
+            from .datagenerators import generateBookings
+            bookingId = 1
+            for visitorId in visitorIds:
+                for booking in generateBookings(visitorId, hotelIds, min_bookings_per_visitor, max_bookings_per_visitor, startDate):
+                    cursor.execute("INSERT INTO bookings (bookingId, hotelId, visitorId, checkin, checkout, adults, kids, babies, rooms, price) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", (bookingId, booking["hotelid"], booking["visitorid"], booking["checkin"], booking["checkout"], booking["adults"], booking["kids"], booking["babies"], booking["rooms"], booking["price"]))
+                    bookingId += 1
             cursor.close()
         connection.commit()
     connection.close()

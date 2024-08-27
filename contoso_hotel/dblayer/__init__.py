@@ -128,8 +128,8 @@ if dbconnectionstringname == "MSSQL_CONNECTION_STRING":
     def allTablesExists() -> bool:
         return mssqldblayer.allTablesExists()
 
-    def setupDb(drop_schema : bool, create_schema : bool, populate_data : bool):
-        return mssqldblayer.setupDb(drop_schema, create_schema, populate_data)
+    def setupDb(drop_schema : bool, create_schema : bool, populate_data : bool, number_of_visitors : int = 100, min_bookings_per_visitor : int = 1, max_bookings_per_visitor : int = 5):
+        return mssqldblayer.setupDb(drop_schema, create_schema, populate_data, number_of_visitors, min_bookings_per_visitor, max_bookings_per_visitor)
 
 elif dbconnectionstringname == "POSTGRES_CONNECTION_STRING":
     from . import postgresdblayer
@@ -187,5 +187,5 @@ elif dbconnectionstringname == "POSTGRES_CONNECTION_STRING":
     def allTablesExists() -> bool:
         return postgresdblayer.allTablesExists()
 
-    def setupDb(drop_schema : bool, create_schema : bool, populate_data : bool):
-        return postgresdblayer.setupDb(drop_schema, create_schema, populate_data)
+    def setupDb(drop_schema : bool, create_schema : bool, populate_data : bool, number_of_visitors : int = 100, min_bookings_per_visitor : int = 1, max_bookings_per_visitor : int = 5):
+        return postgresdblayer.setupDb(drop_schema, create_schema, populate_data, number_of_visitors, min_bookings_per_visitor, max_bookings_per_visitor)

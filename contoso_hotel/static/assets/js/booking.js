@@ -43,15 +43,21 @@ class Booking {
         // add the new data
         this.#data.forEach(entry => {
             if(this.#search.length > 0) {
-                var found = false;
-                for(const k of tableCols.keys()) {
-                    if(String(entry[k]).toLowerCase().indexOf(this.#search) !== -1) {
-                        found = true;
-                        break;
+                for(var part of this.#search.toLowerCase().split(' ')) {
+                    part = part.trim();
+                    if(part.length === 0) {
+                        continue;
                     }
-                }
-                if(!found) {
-                    return;
+                    var found = false;
+                    for(const k of tableCols.keys()) {
+                        if(String(entry[k]).toLowerCase().indexOf(part) !== -1) {
+                            found = true;
+                            break;
+                        }
+                    }
+                    if(!found) {
+                        return;
+                    }
                 }
             }
             /* bookingId,checkin, checkout, adults, kids, babies, rooms, price, hotelId, hotelname, visitorId, firstname, lastname */

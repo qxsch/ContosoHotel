@@ -871,7 +871,10 @@ curl -X DELETE 'http://localhost:8000/api/booking?bookingId=2'
 {
    "drop_schema"  : false,
    "create_schema": true,
-   "populate_data": true
+   "populate_data": true,
+   "number_of_visitors": 100,       // any number 2 - 10000, default is 100
+   "min_bookings_per_visitor": 2,   // any number 0 - 10, default is 2
+   "max_bookings_per_visitor" : 5   // any number 1 - 20, default is 5
 }
 ```
 
@@ -896,7 +899,10 @@ curl -X DELETE 'http://localhost:8000/api/booking?bookingId=2'
       "hotels": false,
       "visitors": true,
       "bookings": true
-   }
+   },
+   "number_of_visitors": 100,
+   "min_bookings_per_visitor": 2,
+   "max_bookings_per_visitor" : 5
 }
 ```
 
