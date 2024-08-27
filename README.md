@@ -1,6 +1,6 @@
 # ![Contoso Hotel Icon](contoso_hotel/static/favicons/favicon-32x32.png) Contoso Hotel Demo in Python
 
-Supports MSSQL and PostgreSQL databases.
+This is a Demo Application for Contoso Hotel internal Booking Management. It supports MSSQL and PostgreSQL databases and offers Rest APIs to integrate it with the larger IT landscape of Contoso Hotel.
 
 ![Contoso Hotel Screenshot](contoso_hotel.jpg)
 
