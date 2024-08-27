@@ -70,7 +70,6 @@ class AutoCompleteInput {
         });
 
         this.#inputElement.addEventListener("keyup", function() {
-            console.log("keyup");
             that.onKeyUp();
         });
 
@@ -138,8 +137,6 @@ class AutoCompleteInput {
                 console.log(data);
             }
         }
-
-        console.log(this.#listItems);
 
         this.#dropdownList.innerHTML = "";
         var that = this;
