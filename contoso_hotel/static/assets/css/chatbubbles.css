@@ -19,7 +19,7 @@ Created by Temani Afif https://github.com/Afif13/
     border-radius: 1.2em;
     border-bottom-left-radius: 0;
     background: 100% 0/calc(100% + var(--h)) calc(100% + var(--h)) 
-      linear-gradient(60deg,rgba(120, 209, 247, 0.9), rgba(51, 137, 174, 0.9)); /* the gradient */
+      linear-gradient(60deg,rgb(120, 209, 247), rgb(51, 137, 174)); /* the gradient */
     position: relative;
   }
   .humanbubble:before {
@@ -48,7 +48,7 @@ Created by Temani Afif https://github.com/Afif13/
     border-radius: 1.2em;
     border-bottom-right-radius: 0;
     background: 0 0/calc(100% + var(--h)) calc(100% + var(--h)) 
-      linear-gradient(-30deg,rgba(217, 91, 67, 0.9),rgba(236, 208, 120, 0.9)); /* the gradient */
+      linear-gradient(-30deg,rgb(217, 91, 67),rgb(236, 208, 120)); /* the gradient */
     position: relative;
   }
   .robotbubble:before {
