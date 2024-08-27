@@ -1,6 +1,26 @@
 document.getElementById("createbooking").addEventListener("click", function() {
     document.getElementById('log').innerHTML = 'Running...';
 
+    errorMsgs = [];
+    if(!document.getElementById("hotel").dataset.value   || document.getElementById("hotel").dataset.value == "") {
+        errorMsgs.push("Please select a hotel");
+    }
+    if(!document.getElementById("visitor").dataset.value || document.getElementById("visitor").dataset.value == "") {
+        errorMsgs.push("Please select a visitor");
+    }
+    if(errorMsgs.length > 0) {
+        document.getElementById('log').innerHTML = '';
+        var el = document.createElement('h2');
+        el.innerHTML = 'Please provide all required data';
+        document.getElementById('log').appendChild(el);
+        errorMsgs.forEach(msg => {
+            var p = document.createElement('p');
+            p.textContent = msg;
+            document.getElementById('log').appendChild(p);
+        });
+        return;
+    }
+
     fetch('/api/booking', {
         method: 'PUT',
         headers: {
