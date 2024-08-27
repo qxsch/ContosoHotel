@@ -10,6 +10,7 @@
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="{{ url_for('static', filename='assets/css/main.css') }}" />
+		<link rel="stylesheet" href="{{ url_for('static', filename='assets/css/chatbubbles.css') }}" />
 		<noscript><link rel="stylesheet" href="{{ url_for('static', filename='assets/css/noscript.css') }}" /></noscript>
 		<link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='favicon/apple-touch-icon.png') }}">
 		<link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicons/favicon.ico') }}" />
@@ -41,11 +42,26 @@
 
 			</div>
 		</div>
+		<div id="chatbotLogo">
+			<i class="fa-solid fa-robot"></i>
+		</div>
+		<div id="chatbotBar" class="closed">
+			<div class="chat-topbar"><div class="closebtn" id="chatbotClose"><i class="fa-solid fa-xmark"></i></div></div>
+			<div class="chat-content" id="chatbotContent">
+			</div>
+			<div class="chat-bottombar">
+				<div class="sendmsg">
+					<input type="text" id="chatbotInput" placeholder="Type a message..." />
+				</div>
+				<div id="chatbotSubmit" class="sendbtn"><i class="fa-regular fa-paper-plane"></i></div>
+			</div>
+		</div>
 		<script>
 			window.onload = function() { document.body.classList.remove('is-preload'); }
 			window.ontouchmove = function() { return false; }
 			window.onorientationchange = function() { document.body.scrollTop = 0; }
 		</script>
+		<script src="{{ url_for('static', filename='assets/js/chatbot.js') }}"></script>
 		{% block bottomloadscript %}
 		{% endblock %}
 	</body>

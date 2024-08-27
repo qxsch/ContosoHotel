@@ -32,6 +32,23 @@ def api_longsqlrequest():
     except Exception as e:
         return jsonify({ "success" : False, "error" : str(e) }), 500
 
+@app.route("/api/chat", methods=["POST"])
+def api_chat():
+    try:
+        record = json.loads(request.data)
+        # get the last message
+        lastMessage = record[-1]
+        if "content" not in lastMessage:
+            return jsonify({ "success" : False, "error" : "content is required" }), 400
+        if "role" not in lastMessage:
+            return jsonify({ "success" : False, "error" : "role is required" }), 400
+        if lastMessage["role"] not in ["user"]:
+            return jsonify({ "success" : False, "error" : "wrong chat message" }), 400
+        return jsonify({ "success" : True, "content" : "You asked: " +  str(lastMessage["content"]) }), 200
+    except Exception as e:
+        return jsonify({ "success" : False, "error" : str(e) }), 500
+
+
 @app.route("/api/booking", methods=["DELETE", "PUT", "POST"])
 def api_manage_booking():
     try:
