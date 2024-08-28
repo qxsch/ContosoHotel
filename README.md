@@ -74,6 +74,20 @@ In case you do not have a test database, you can use the following steps to crea
         Invoke-RestMethod -Uri 'http://localhost:8000/api/setup' -Method Post -Body '{ "drop_schema" : true, "create_schema": true, "populate_data" : true }' -ContentType 'application/json'
         ```
 
+# Supported Environment Variables
+You can either set the environemnt variables or provide a file with the connection string in the ``./secrets-store`` directory. (e.g. ``./secrets-store/MSSQL_CONNECTION_STRING``)
+
+In the docker container, the path is ``/app/secrets-store``.
+
+All variables are optional, but at least one of the database connection strings must be provided.
+
+| Variable Name |  Description | Example |
+| --- | --- | --- |
+| ``MSSQL_CONNECTION_STRING`` | Connection string for MSSQL (uses pyodbc) | ``DRIVER={ODBC Driver 18 for SQL Server};SERVER=MSSQLINSTANCENAME.database.windows.net;DATABASE=MSSQLDBNAME;UID=MSSQLUSERNAME;PWD=*******;Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;`` |
+| ``POSTGRES_CONNECTION_STRING`` | Connection string for PostgreSQL (uses psycopg2) | ``user=PGUSERNAME;password=*******;host=PGINSTANCENAME.postgres.database.azure.com;port=5432;database=PGDBNAME;`` |
+| ``API_BASEURL`` | Base URL for the API | ``http://localhost:8000`` |
+| ``CHATBOT_BASEURL`` | Base URL for the Chatbot  (use ``/`` to active chatbot demo interface) | ``http://localhost:8001`` |
+
 
 # API documentation
 

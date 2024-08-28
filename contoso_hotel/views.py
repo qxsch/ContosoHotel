@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 import json
 from flask import Flask, render_template, request, jsonify, redirect, url_for
-from . import app, dblayer
+from . import app, dblayer, config
 
 
 
@@ -270,8 +270,8 @@ def home():
 
 @app.route("/list")
 def list():
-    return render_template("list.html")
+    return render_template("list.html", config=config.get_layout_configuration())
 
 @app.route("/create")
 def create():
-    return render_template("create.html", checkin=datetime.now().strftime('%Y-%m-%d'), checkout=(datetime.now() + timedelta(days=1)).strftime('%Y-%m-%d'))
+    return render_template("create.html", config=config.get_layout_configuration(), checkin=datetime.now().strftime('%Y-%m-%d'), checkout=(datetime.now() + timedelta(days=1)).strftime('%Y-%m-%d'))

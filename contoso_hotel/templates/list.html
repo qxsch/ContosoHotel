@@ -27,7 +27,7 @@ async function runLongRequests() {
     while(true) {
         console.log("Running long requests");
         try {
-            await fetch("{{ url_for('api_longsqlrequest') }}").then(response => response.json());
+            await fetch(window.getContosoUrl(window.contoso_configuration.api_baseurl, '/api/longsqlrequest')).then(response => response.json());
         }
         catch (e) {
             console.error(e);

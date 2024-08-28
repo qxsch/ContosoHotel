@@ -10,7 +10,7 @@ document.getElementById('setupdb').addEventListener('click', function() {
         document.getElementById('log').appendChild(el);
         return;
     }
-    fetch('/api/setup', {
+    fetch(window.getContosoUrl(window.contoso_configuration.api_baseurl, '/api/setup'), {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

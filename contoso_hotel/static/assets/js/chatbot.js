@@ -21,7 +21,7 @@ function getChatbotHistory(text) {
     return result;
 };
 
-if(document.getElementById("chatbotLogo")) {
+if(document.getElementById("chatbotLogo") && document.getElementById("chatbotBar")) {
     console.log('Enabling chatbot integration');
     // closing and opening chatbot sidebar
     document.getElementById("chatbotLogo").addEventListener("click", function() {
@@ -57,7 +57,7 @@ if(document.getElementById("chatbotLogo")) {
         ask.innerText = text;
         document.getElementById("chatbotContent").appendChild(ask);
 
-        fetch('/api/chat', {
+        fetch(window.getContosoUrl(window.contoso_configuration.chatbot_baseurl, '/api/chat'), {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

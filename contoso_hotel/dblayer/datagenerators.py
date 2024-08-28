@@ -29,7 +29,7 @@ def generateBookings(visitorId : int, hotelIds : List[int], min_bookings : int =
         adults = random.randint(1, 2)
         kids = random.randint(0, 4)
         rooms = int(math.ceil((adults / 2) + (kids / 4)))
-        price = (random.randint(1000, 100000) / 100) * nights * rooms
+        price = (random.randint(1000, 80000) / 100) * nights * rooms
         results.append({
             "visitorid" : visitorId,
             "hotelid": random.choice(hotelIds),

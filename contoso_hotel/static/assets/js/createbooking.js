@@ -21,7 +21,7 @@ document.getElementById("createbooking").addEventListener("click", function() {
         return;
     }
 
-    fetch('/api/booking', {
+    fetch(window.getContosoUrl(window.contoso_configuration.api_baseurl, '/api/booking'), {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json'
