@@ -14,12 +14,13 @@ WORKDIR /app
 # Copy the app contents to the image
 COPY . /app
 
-# Installing mssql odbc driver 18
+# ------- START: Installing mssql odbc driver 18 -------
 RUN apt-get update ; apt-get install -y  apt-utils curl gpg dialog libterm-readline-gnu-perl libterm-readline-perl-perl ; \
     curl -fsSL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor -o /usr/share/keyrings/microsoft-prod.gpg ; \
     curl https://packages.microsoft.com/config/debian/12/prod.list > /etc/apt/sources.list.d/mssql-release.list ; \
     apt-get update
 RUN ACCEPT_EULA=Y apt-get install -y msodbcsql18 mssql-tools18 libgssapi-krb5-2
+# ------- END: Installing mssql odbc driver 18 -------
 
 # installing python packages - requirements.txt
 COPY requirements.txt /
