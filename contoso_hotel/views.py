@@ -267,7 +267,7 @@ def setup():
 
 @app.route("/")
 def home():
-    # ------- START: IF THE DATABASE IS SETUP -------
+    # ------- START: CHECK IF THE DATABASE IS SETUP -------
     if not dblayer.allTablesExists():
         return redirect(url_for("setup"))
     # ------- END: CHECK IF THE DATABASE IS SETUP -------
