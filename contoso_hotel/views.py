@@ -4,7 +4,7 @@ from flask import Flask, render_template, request, jsonify, redirect, url_for
 from . import app, dblayer, config
 
 
-
+#region -------- BACKEND API ENDPOINTS --------
 
 @app.route("/api/setup", methods=["POST"])
 def api_setup():
@@ -255,6 +255,10 @@ def api_get_visitors(name : str = ""):
     except Exception as e:
         return jsonify({ "success" : False, "error" : str(e) }), 500
 
+#endregion -------- BACKEND API ENDPOINTS --------
+
+
+#region -------- FRONTEND API ENDPOINTS --------
 
 @app.route("/setup")
 def setup():
@@ -275,3 +279,5 @@ def list():
 @app.route("/create")
 def create():
     return render_template("create.html", config=config.get_layout_configuration(), checkin=datetime.now().strftime('%Y-%m-%d'), checkout=(datetime.now() + timedelta(days=1)).strftime('%Y-%m-%d'))
+
+#endregion -------- FRONTEND API ENDPOINTS --------
