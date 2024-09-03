@@ -167,10 +167,36 @@ def api_manage_hotel():
                 record["hotelname"] = str(record["hotelname"])
             else:
                 return jsonify({ "success" : False, "error" : "hotelname is required" }), 400
-            if request.method == "PUT":
-                return jsonify(dblayer.create_hotel(record["hotelname"], record["pricePerNight"], record["hotelId"])), 200
+            if "country" in record:
+                record["country"] = str(record["country"])
             else:
-                return jsonify(dblayer.update_hotel(record["hotelname"], record["pricePerNight"], record["hotelId"])), 200
+                record["country"] = None
+            for k in [
+                "skiing", "suites", "inRoomEntertainment", "conciergeServices", "housekeeping", "petFriendlyOptions", "laundryServices",
+                "roomService", "indoorPool", "outdoorPool", "fitnessCenter", "complimentaryBreakfast", "businessCenter", "freeGuestParking",
+                "complimentaryCoffeaAndTea", "climateControl", "bathroomEssentials"
+            ]:
+                if k not in record:
+                    record[k] = None
+                elif not (record[k] is None):
+                    record[k] = str(record[k]).strip().lower() in ['true', '1', 'yes', 'y', 't']
+            
+            if request.method == "PUT":
+                return jsonify(dblayer.create_hotel(
+                    record["hotelname"], record["pricePerNight"], record["hotelId"], record["country"],
+                    record["skiing"], record["suites"], record["inRoomEntertainment"], record["conciergeServices"], record["housekeeping"],
+                    record["petFriendlyOptions"], record["laundryServices"], record["roomService"], record["indoorPool"], record["outdoorPool"],
+                    record["fitnessCenter"], record["complimentaryBreakfast"], record["businessCenter"], record["freeGuestParking"],
+                    record["complimentaryCoffeaAndTea"], record["climateControl"], record["bathroomEssentials"]
+                )), 200
+            else:
+                return jsonify(dblayer.update_hotel(
+                    record["hotelname"], record["pricePerNight"], record["hotelId"], record["country"],
+                    record["skiing"], record["suites"], record["inRoomEntertainment"], record["conciergeServices"], record["housekeeping"],
+                    record["petFriendlyOptions"], record["laundryServices"], record["roomService"], record["indoorPool"], record["outdoorPool"],
+                    record["fitnessCenter"], record["complimentaryBreakfast"], record["businessCenter"], record["freeGuestParking"],
+                    record["complimentaryCoffeaAndTea"], record["climateControl"], record["bathroomEssentials"]
+                )), 200
         else:
             return jsonify({ "success" : False, "error" : "Method not allowed" }), 405 
     except Exception as e:

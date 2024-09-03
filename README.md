@@ -113,7 +113,8 @@ All variables are optional, but at least one of the database connection strings 
   {
     "hotelId": 6,
     "hotelname": "Contoso Hotel Los Angeles",
-    "pricePerNight": 350.0
+    "pricePerNight": 350.0,
+    "country": "United States"
   }
 ]
 ```
@@ -275,7 +276,25 @@ curl -X GET 'http://localhost:8000/api/bookings'
 {
    "hotelId": 6,
    "hotelname": "Contoso Hotel Los Angeles",
-   "pricePerNight": 350.0
+   "pricePerNight": 350.0,
+   "country": "United States",
+   "skiing" : true,
+   "suites" : true,
+   "inRoomEntertainment" : true,
+   "conciergeServices" : true,
+   "housekeeping" : true,
+   "petFriendlyOptions" : true,
+   "laundryServices" : true,
+   "roomService" : true,
+   "indoorPool" : true,
+   "outdoorPool" : true,
+   "fitnessCenter" : true,
+   "complimentaryBreakfast" : true,
+   "businessCenter" : true,
+   "freeGuestParking" : true,
+   "complimentaryCoffeaAndTea" : true,
+   "climateControl" : true,
+   "bathroomEssentials" : true
 }
 ```
 
@@ -409,7 +428,25 @@ curl -X GET 'http://localhost:8000/api/booking?bookingId=2'
 ```json
 {
    "hotelname": "Contoso Hotel Los Angeles",
-   "pricePerNight": 350.0
+   "pricePerNight": 350.0,
+   "country": "United States",
+   "skiing" : true,
+   "suites" : true,
+   "inRoomEntertainment" : true,
+   "conciergeServices" : true,
+   "housekeeping" : true,
+   "petFriendlyOptions" : true,
+   "laundryServices" : true,
+   "roomService" : true,
+   "indoorPool" : true,
+   "outdoorPool" : true,
+   "fitnessCenter" : true,
+   "complimentaryBreakfast" : true,
+   "businessCenter" : true,
+   "freeGuestParking" : true,
+   "complimentaryCoffeaAndTea" : true,
+   "climateControl" : true,
+   "bathroomEssentials" : true
 }
 ```
 
@@ -425,7 +462,25 @@ curl -X GET 'http://localhost:8000/api/booking?bookingId=2'
 {
    "hotelId": 6,
    "hotelname": "Contoso Hotel Los Angeles",
-   "pricePerNight": 350.0
+   "pricePerNight": 350.0,
+   "country": "United States",
+   "skiing" : true,
+   "suites" : true,
+   "inRoomEntertainment" : true,
+   "conciergeServices" : true,
+   "housekeeping" : true,
+   "petFriendlyOptions" : true,
+   "laundryServices" : true,
+   "roomService" : true,
+   "indoorPool" : true,
+   "outdoorPool" : true,
+   "fitnessCenter" : true,
+   "complimentaryBreakfast" : true,
+   "businessCenter" : true,
+   "freeGuestParking" : true,
+   "complimentaryCoffeaAndTea" : true,
+   "climateControl" : true,
+   "bathroomEssentials" : true
 }
 ```
 
@@ -448,6 +503,24 @@ curl -X GET 'http://localhost:8000/api/booking?bookingId=2'
 Invoke-RestMethod -Uri 'http://localhost:8000/api/hotel' -Method Put -ContentType 'application/json' -Body (@{
     hotelname = 'Contoso Hotel Los Angeles II'
     pricePerNight = 350.0
+    country = "United States"
+    skiing =  $true
+    suites =  $true
+    inRoomEntertainment =  $true
+    conciergeServices =  $true
+    housekeeping =  $true
+    petFriendlyOptions =  $true
+    laundryServices =  $true
+    roomService =  $true
+    indoorPool =  $true
+    outdoorPool =  $true
+    fitnessCenter =  $true
+    complimentaryBreakfast =  $true
+    businessCenter =  $true
+    freeGuestParking =  $true
+    complimentaryCoffeaAndTea =  $true
+    climateControl =  $true
+    bathroomEssentials =  $true
 } | ConvertTo-Json)
 ```
 
@@ -455,7 +528,25 @@ Invoke-RestMethod -Uri 'http://localhost:8000/api/hotel' -Method Put -ContentTyp
 ```bash
 curl -X PUT 'http://localhost:8000/api/hotel' -H 'Content-Type: application/json' -d '{
     "hotelname": "Contoso Hotel Los Angeles II",
-    "pricePerNight": 350.0
+    "pricePerNight": 350.0,
+    "country": "United States",
+    "skiing" : true,
+    "suites" : true,
+    "inRoomEntertainment" : true,
+    "conciergeServices" : true,
+    "housekeeping" : true,
+    "petFriendlyOptions" : true,
+    "laundryServices" : true,
+    "roomService" : true,
+    "indoorPool" : true,
+    "outdoorPool" : true,
+    "fitnessCenter" : true,
+    "complimentaryBreakfast" : true,
+    "businessCenter" : true,
+    "freeGuestParking" : true,
+    "complimentaryCoffeaAndTea" : true,
+    "climateControl" : true,
+    "bathroomEssentials" : true
 }'
 ```
 </details>
@@ -613,7 +704,25 @@ curl -X PUT 'http://localhost:8000/api/booking' -H 'Content-Type: application/js
 {
    "hotelId": 6,
    "hotelname": "Contoso Hotel Los Angeles",
-   "pricePerNight": 350.0
+   "pricePerNight": 350.0,
+   "country": "United States",
+   "skiing" : true,
+   "suites" : true,
+   "inRoomEntertainment" : true,
+   "conciergeServices" : true,
+   "housekeeping" : true,
+   "petFriendlyOptions" : true,
+   "laundryServices" : true,
+   "roomService" : true,
+   "indoorPool" : true,
+   "outdoorPool" : true,
+   "fitnessCenter" : true,
+   "complimentaryBreakfast" : true,
+   "businessCenter" : true,
+   "freeGuestParking" : true,
+   "complimentaryCoffeaAndTea" : true,
+   "climateControl" : true,
+   "bathroomEssentials" : true
 }
 ```
 
@@ -629,7 +738,25 @@ curl -X PUT 'http://localhost:8000/api/booking' -H 'Content-Type: application/js
 {
    "hotelId": 6,
    "hotelname": "Contoso Hotel Los Angeles",
-   "pricePerNight": 350.0
+   "pricePerNight": 350.0,
+   "country": "United States",
+   "skiing" : true,
+   "suites" : true,
+   "inRoomEntertainment" : true,
+   "conciergeServices" : true,
+   "housekeeping" : true,
+   "petFriendlyOptions" : true,
+   "laundryServices" : true,
+   "roomService" : true,
+   "indoorPool" : true,
+   "outdoorPool" : true,
+   "fitnessCenter" : true,
+   "complimentaryBreakfast" : true,
+   "businessCenter" : true,
+   "freeGuestParking" : true,
+   "complimentaryCoffeaAndTea" : true,
+   "climateControl" : true,
+   "bathroomEssentials" : true
 }
 ```
 
@@ -652,6 +779,24 @@ Invoke-RestMethod -Uri 'http://localhost:8000/api/hotel' -Method Post -ContentTy
     hotelId = 6
     hotelname = 'Contoso Hotel Los Angeles'
     pricePerNight = 350.0
+    country = "United States"
+    skiing = $true
+    suites = $true
+    inRoomEntertainment = $true
+    conciergeServices = $true
+    housekeeping = $true
+    petFriendlyOptions = $true
+    laundryServices = $true
+    roomService = $true
+    indoorPool = $true
+    outdoorPool = $true
+    fitnessCenter = $true
+    complimentaryBreakfast = $true
+    businessCenter = $true
+    freeGuestParking = $true
+    complimentaryCoffeaAndTea = $true
+    climateControl = $true
+    bathroomEssentials = $true
 } | ConvertTo-Json)
 ```
 
@@ -660,7 +805,25 @@ Invoke-RestMethod -Uri 'http://localhost:8000/api/hotel' -Method Post -ContentTy
 curl -X POST 'http://localhost:8000/api/hotel' -H 'Content-Type: application/json' -d '{
     "hotelId": 6,
     "hotelname": "Contoso Hotel Los Angeles",
-    "pricePerNight": 350.0
+    "pricePerNight": 350.0,
+    "country": "United States",
+    "skiing" : true,
+    "suites" : true,
+    "inRoomEntertainment" : true,
+    "conciergeServices" : true,
+    "housekeeping" : true,
+    "petFriendlyOptions" : true,
+    "laundryServices" : true,
+    "roomService" : true,
+    "indoorPool" : true,
+    "outdoorPool" : true,
+    "fitnessCenter" : true,
+    "complimentaryBreakfast" : true,
+    "businessCenter" : true,
+    "freeGuestParking" : true,
+    "complimentaryCoffeaAndTea" : true,
+    "climateControl" : true,
+    "bathroomEssentials" : true
 }'
 ```
 </details>

@@ -6,7 +6,7 @@ from typing import Dict, Union, Iterable
 from enum import Enum
 
 
-from . import SQLMode, get_defined_database, parse_connection_string_to_dict
+from . import SQLMode, get_defined_database, parse_connection_string_to_dict, get_bool_value
 
 
 def get_postgres_connection() -> psycopg2.extensions.connection:
@@ -297,11 +297,124 @@ def get_visitors(name : str = "", exactMatch : bool = False) -> Iterable[Dict[st
     return visitors
 
 
-def create_hotel(hotelname : str, pricePerNight : float, hotelId : int = None) -> Dict[str, Union[int, str, float, bool]]:
-    return manage_hotel(hotelname, pricePerNight, hotelId, SQLMode.INSERT)
-def update_hotel(hotelname : str, pricePerNight : float, hotelId : int) -> Dict[str, Union[int, str, float, bool]]:
-    return manage_hotel(hotelname, pricePerNight, hotelId, SQLMode.UPDATE)
-def manage_hotel(hotelname : str, pricePerNight : float, hotelId : int = None, sqlmode : SQLMode = 1) -> Dict[str, Union[int, str, float, bool]]:
+def create_hotel(
+    hotelname : str,
+    pricePerNight : float,
+    hotelId : int = None,
+    country : str = 'Unknown',
+    skiing : bool = False,
+    suites : bool = False,
+    inRoomEntertainment : bool = False,
+    conciergeServices : bool = False,
+    housekeeping : bool = False,
+    petFriendlyOptions : bool = False,
+    laundryServices : bool = False,
+    roomService : bool = False,
+    indoorPool : bool = False,
+    outdoorPool : bool = False,
+    fitnessCenter : bool = False,
+    complimentaryBreakfast : bool = False,
+    businessCenter : bool = False,
+    freeGuestParking : bool = False,
+    complimentaryCoffeaAndTea : bool = False,
+    climateControl : bool = False,
+    bathroomEssentials : bool = False
+) -> Dict[str, Union[int, str, float, bool]]:
+    return manage_hotel(
+        hotelname,
+        pricePerNight,
+        hotelId,
+        country,
+        skiing,
+        suites,
+        inRoomEntertainment,
+        conciergeServices,
+        housekeeping,
+        petFriendlyOptions,
+        laundryServices,
+        roomService,
+        indoorPool,
+        outdoorPool,
+        fitnessCenter,
+        complimentaryBreakfast,
+        businessCenter,
+        freeGuestParking,
+        complimentaryCoffeaAndTea,
+        climateControl,
+        bathroomEssentials,
+        SQLMode.INSERT
+    )
+def update_hotel(
+    hotelname : str,
+    pricePerNight : float,
+    hotelId : int,
+    country : str = None,
+    skiing : bool = None,
+    suites : bool = None,
+    inRoomEntertainment : bool = None,
+    conciergeServices : bool = None,
+    housekeeping : bool = None,
+    petFriendlyOptions : bool = None,
+    laundryServices : bool = None,
+    roomService : bool = None,
+    indoorPool : bool = None,
+    outdoorPool : bool = None,
+    fitnessCenter : bool = None,
+    complimentaryBreakfast : bool = None,
+    businessCenter : bool = None,
+    freeGuestParking : bool = None,
+    complimentaryCoffeaAndTea : bool = None,
+    climateControl : bool = None,
+    bathroomEssentials : bool = None
+) -> Dict[str, Union[int, str, float, bool]]:
+    return manage_hotel(
+        hotelname,
+        pricePerNight,
+        hotelId,
+        country,
+        skiing,
+        suites,
+        inRoomEntertainment,
+        conciergeServices,
+        housekeeping,
+        petFriendlyOptions,
+        laundryServices,
+        roomService,
+        indoorPool,
+        outdoorPool,
+        fitnessCenter,
+        complimentaryBreakfast,
+        businessCenter,
+        freeGuestParking,
+        complimentaryCoffeaAndTea,
+        climateControl,
+        bathroomEssentials,
+        SQLMode.UPDATE
+    )
+def manage_hotel(
+    hotelname : str,
+    pricePerNight : float,
+    hotelId : int = None,
+    country : str = None,
+    skiing : bool = None,
+    suites : bool = None,
+    inRoomEntertainment : bool = None,
+    conciergeServices : bool = None,
+    housekeeping : bool = None,
+    petFriendlyOptions : bool = None,
+    laundryServices : bool = None,
+    roomService : bool = None,
+    indoorPool : bool = None,
+    outdoorPool : bool = None,
+    fitnessCenter : bool = None,
+    complimentaryBreakfast : bool = None,
+    businessCenter : bool = None,
+    freeGuestParking : bool = None,
+    complimentaryCoffeaAndTea : bool = None,
+    climateControl : bool = None,
+    bathroomEssentials : bool = None,
+    sqlmode : SQLMode = 1
+) -> Dict[str, Union[int, str, float, bool]]:
     connection = get_postgres_connection()
     cursor = connection.cursor()
     if hotelId is None:
@@ -328,18 +441,130 @@ def manage_hotel(hotelname : str, pricePerNight : float, hotelId : int = None, s
     if nextId <= 0:
         nextId = 1
     
-    cursor = connection.cursor()
+    hotelname = str(hotelname).strip()
+
     if sqlmode == SQLMode.UPDATE:
+        cursor = connection.cursor()
         nextId = hotelId
-        cursor.execute("UPDATE hotels SET hotelname = %s, pricePerNight = %s WHERE hotelId = %s", (hotelname, pricePerNight, hotelId))
+        parts = [ hotelname, pricePerNight ]
+        setPartStmt = ""
+        if country is not None:
+            setPartStmt += ", country = %s"
+            parts.append(country)
+        if skiing is not None:
+            setPartStmt += ", skiing = %s"
+            parts.append(get_bool_value(skiing))
+        if suites is not None:
+            setPartStmt += ", suites = %s"
+            parts.append(get_bool_value(suites))
+        if inRoomEntertainment is not None:
+            setPartStmt += ", inRoomEntertainment = %s"
+            parts.append(get_bool_value(inRoomEntertainment))
+        if conciergeServices is not None:
+            setPartStmt += ", conciergeServices = %s"
+            parts.append(get_bool_value(conciergeServices))
+        if housekeeping is not None:
+            setPartStmt += ", housekeeping = %s"
+            parts.append(get_bool_value(housekeeping))
+        if petFriendlyOptions is not None:
+            setPartStmt += ", petFriendlyOptions = %s"
+            parts.append(get_bool_value(petFriendlyOptions))
+        if laundryServices is not None:
+            setPartStmt += ", laundryServices = %s"
+            parts.append(get_bool_value(laundryServices))
+        if roomService is not None:
+            setPartStmt += ", roomService = %s"
+            parts.append(get_bool_value(roomService))
+        if indoorPool is not None:
+            setPartStmt += ", indoorPool = %s"
+            parts.append(get_bool_value(indoorPool))
+        if outdoorPool is not None:
+            setPartStmt += ", outdoorPool = %s"
+            parts.append(get_bool_value(outdoorPool))
+        if fitnessCenter is not None:
+            setPartStmt += ", fitnessCenter = %s"
+            parts.append(get_bool_value(fitnessCenter))
+        if complimentaryBreakfast is not None:
+            setPartStmt += ", complimentaryBreakfast = %s"
+            parts.append(get_bool_value(complimentaryBreakfast))
+        if businessCenter is not None:
+            setPartStmt += ", businessCenter = %s"
+            parts.append(get_bool_value(businessCenter))
+        if freeGuestParking is not None:
+            setPartStmt += ", freeGuestParking = %s"
+            parts.append(get_bool_value(freeGuestParking))
+        if complimentaryCoffeaAndTea is not None:
+            setPartStmt += ", complimentaryCoffeaAndTea = %s"
+            parts.append(get_bool_value(complimentaryCoffeaAndTea))
+        if climateControl is not None:
+            setPartStmt += ", climateControl = %s"
+            parts.append(get_bool_value(climateControl))
+        if bathroomEssentials is not None:
+            setPartStmt += ", bathroomEssentials = %s"
+            parts.append(get_bool_value(bathroomEssentials))
+        parts.append(hotelId)
+        cursor.execute("UPDATE hotels SET hotelname = %s, pricePerNight = %s " + setPartStmt + " WHERE hotelId = %s", tuple(parts))
+        cursor.close()
+        connection.commit()
+        connection.close()
+        hotelResult = get_hotel(hotelId)
     elif sqlmode == SQLMode.INSERT:
-        cursor.execute("INSERT INTO hotels (hotelId, hotelname, pricePerNight) VALUES (%s, %s, %s)", (nextId, hotelname, pricePerNight))
+        cursor = connection.cursor()
+        hotelId = nextId
+        if country is None:
+            country = 'Unknown'
+        country = str(country).strip()
+        skiing = get_bool_value(skiing)
+        suites = get_bool_value(suites)
+        inRoomEntertainment = get_bool_value(inRoomEntertainment)
+        conciergeServices = get_bool_value(conciergeServices)
+        housekeeping = get_bool_value(housekeeping)
+        petFriendlyOptions = get_bool_value(petFriendlyOptions)
+        laundryServices = get_bool_value(laundryServices)
+        roomService = get_bool_value(roomService)
+        indoorPool = get_bool_value(indoorPool)
+        outdoorPool = get_bool_value(outdoorPool)
+        fitnessCenter = get_bool_value(fitnessCenter)
+        complimentaryBreakfast = get_bool_value(complimentaryBreakfast)
+        businessCenter = get_bool_value(businessCenter)
+        freeGuestParking = get_bool_value(freeGuestParking)
+        complimentaryCoffeaAndTea = get_bool_value(complimentaryCoffeaAndTea)
+        climateControl = get_bool_value(climateControl)
+        bathroomEssentials = get_bool_value(bathroomEssentials)
+        cursor.execute(
+            "INSERT INTO hotels (hotelId, hotelname, pricePerNight, country, skiing, suites, inRoomEntertainment, conciergeServices, housekeeping, petFriendlyOptions, laundryServices, roomService, indoorPool, outdoorPool, fitnessCenter, complimentaryBreakfast, businessCenter, freeGuestParking, complimentaryCoffeaAndTea, climateControl, bathroomEssentials) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
+            (hotelId, hotelname, pricePerNight, country, skiing, suites, inRoomEntertainment, conciergeServices, housekeeping, petFriendlyOptions, laundryServices, roomService, indoorPool, outdoorPool, fitnessCenter, complimentaryBreakfast, businessCenter, freeGuestParking, complimentaryCoffeaAndTea, climateControl, bathroomEssentials)
+        )
+        cursor.close()
+        connection.commit()
+        connection.close()
+        hotelResult = {
+            "hotelId" : hotelId,
+            "hotelname" : hotelname,
+            "pricePerNight" : pricePerNight,
+            "country" : country,
+            "skiing" : skiing,
+            "suites" : suites,
+            "inRoomEntertainment" : inRoomEntertainment,
+            "conciergeServices" : conciergeServices,
+            "housekeeping" : housekeeping,
+            "petFriendlyOptions" : petFriendlyOptions,
+            "laundryServices" : laundryServices,
+            "roomService" : roomService,
+            "indoorPool" : indoorPool,
+            "outdoorPool" : outdoorPool,
+            "fitnessCenter" : fitnessCenter,
+            "complimentaryBreakfast" : complimentaryBreakfast,
+            "businessCenter" : businessCenter,
+            "freeGuestParking" : freeGuestParking,
+            "complimentaryCoffeaAndTea" : complimentaryCoffeaAndTea,
+            "climateControl" : climateControl,
+            "bathroomEssentials" : bathroomEssentials
+        }
     else:
+        connection.close()
         raise ValueError("Invalid SQL mode")
-    cursor.close()
-    connection.commit()
-    connection.close()
-    return { "hotelId" : nextId, "hotelname" : hotelname, "pricePerNight" : pricePerNight }
+    return hotelResult
 
 
 def delete_hotel(hotelId : int) -> bool:
@@ -356,15 +581,34 @@ def delete_hotel(hotelId : int) -> bool:
 def get_hotel(hotelId : int) -> Dict[str, Union[int, str, float, bool]]:
     connection = get_postgres_connection()
     cursor = connection.cursor(cursor_factory=RealDictCursor)
-    cursor.execute("SELECT hotelId, hotelname, pricePerNight FROM hotels WHERE hotelId = %s", (hotelId,))
+    cursor.execute("SELECT * FROM hotels WHERE hotelId = %s", (hotelId,))
     row = cursor.fetchone()
     if row is None:
         return {}
     hotel = {
         "hotelId" : row['hotelid'],
         "hotelname" : row['hotelname'],
-        "pricePerNight" : row['pricepernight']
+        "pricePerNight" : row['pricepernight'],
+        "country" : row['country'],
+        "skiing" : get_bool_value(row['skiing']),
+        "suites" : get_bool_value(row['suites']),
+        "inRoomEntertainment" : get_bool_value(row['inroomentertainment']),
+        "conciergeServices" : get_bool_value(row['conciergeservices']),
+        "housekeeping" : get_bool_value(row['housekeeping']),
+        "petFriendlyOptions" : get_bool_value(row['petfriendlyoptions']),
+        "laundryServices" : get_bool_value(row['laundryservices']),
+        "roomService" : get_bool_value(row['roomservice']),
+        "indoorPool" : get_bool_value(row['indoorpool']),
+        "outdoorPool" : get_bool_value(row['outdoorpool']),
+        "fitnessCenter" : get_bool_value(row['fitnesscenter']),
+        "complimentaryBreakfast" : get_bool_value(row['complimentarybreakfast']),
+        "businessCenter" : get_bool_value(row['businesscenter']),
+        "freeGuestParking" : get_bool_value(row['freeguestparking']),
+        "complimentaryCoffeaAndTea" : get_bool_value(row['complimentarycoffeaandtea']),
+        "climateControl" : get_bool_value(row['climatecontrol']),
+        "bathroomEssentials" : get_bool_value(row['bathroomessentials'])
     }
+
     cursor.close()
     connection.close()
     return hotel
@@ -375,18 +619,19 @@ def get_hotels(name : str = "", exactMatch : bool = False) -> Iterable[Dict[str,
     name = str(name).strip()
     if name != "":
         if exactMatch:
-            cursor.execute("SELECT hotelId, hotelname, pricePerNight FROM hotels WHERE hotelname = %s order by hotelId desc", (name,))
+            cursor.execute("SELECT hotelId, hotelname, pricePerNight, country FROM hotels WHERE hotelname = %s order by hotelId desc", (name,))
         else:
             name = "%" + name + "%"
-            cursor.execute("SELECT hotelId, hotelname, pricePerNight FROM hotels WHERE hotelname like %s order by hotelId desc", (name,))
+            cursor.execute("SELECT hotelId, hotelname, pricePerNight, country FROM hotels WHERE hotelname like %s order by hotelId desc", (name,))
     else:
-        cursor.execute("SELECT hotelId, hotelname, pricePerNight FROM hotels order by hotelId desc")
+        cursor.execute("SELECT hotelId, hotelname, pricePerNight, country FROM hotels order by hotelId desc")
     hotels = []
     for row in cursor.fetchall():
         hotels.append({
             "hotelId" : row['hotelid'],
             "hotelname" : row['hotelname'],
-            "pricePerNight" : row['pricepernight']
+            "pricePerNight" : row['pricepernight'],
+            "country" : row['country']
         })
     cursor.close()
     connection.close()
@@ -481,6 +726,24 @@ def setupDb(drop_schema : bool, create_schema : bool, populate_data : bool, numb
                     hotelId SERIAL PRIMARY KEY,
                     hotelname VARCHAR(200) NOT NULL,
                     pricePerNight FLOAT NOT NULL CHECK (pricePerNight > 0),
+                    country VARCHAR(200) NOT NULL DEFAULT 'Unknown',
+                    skiing BOOLEAN NOT NULL DEFAULT TRUE,
+                    suites BOOLEAN NOT NULL DEFAULT TRUE,
+                    inRoomEntertainment BOOLEAN NOT NULL DEFAULT TRUE,
+                    conciergeServices BOOLEAN NOT NULL DEFAULT TRUE,
+                    housekeeping BOOLEAN NOT NULL DEFAULT TRUE,
+                    petFriendlyOptions BOOLEAN NOT NULL DEFAULT TRUE,
+                    laundryServices BOOLEAN NOT NULL DEFAULT TRUE,
+                    roomService BOOLEAN NOT NULL DEFAULT TRUE,
+                    indoorPool BOOLEAN NOT NULL DEFAULT TRUE,
+                    outdoorPool BOOLEAN NOT NULL DEFAULT TRUE,
+                    fitnessCenter BOOLEAN NOT NULL DEFAULT TRUE,
+                    complimentaryBreakfast BOOLEAN NOT NULL DEFAULT TRUE,
+                    businessCenter BOOLEAN NOT NULL DEFAULT TRUE,
+                    freeGuestParking BOOLEAN NOT NULL DEFAULT TRUE,
+                    complimentaryCoffeaAndTea BOOLEAN NOT NULL DEFAULT TRUE,
+                    climateControl BOOLEAN NOT NULL DEFAULT TRUE,
+                    bathroomEssentials BOOLEAN NOT NULL DEFAULT TRUE,
                     CONSTRAINT hotelnameUq UNIQUE(hotelname)
                 )
             """)
@@ -530,12 +793,47 @@ def setupDb(drop_schema : bool, create_schema : bool, populate_data : bool, numb
         if not doesTableHaveRows(connection, "hotels"):
             responseDict["populate_data"]["hotels"] = True
             cursor = connection.cursor()
-            cursor.execute("INSERT INTO hotels (hotelId, hotelname, pricePerNight) VALUES (1, 'Contoso Hotel Zurich', 400.0)")
-            cursor.execute("INSERT INTO hotels (hotelId, hotelname, pricePerNight) VALUES (2, 'Contoso Hotel Paris', 200.0)")
-            cursor.execute("INSERT INTO hotels (hotelId, hotelname, pricePerNight) VALUES (3, 'Contoso Hotel London', 250.0)")
-            cursor.execute("INSERT INTO hotels (hotelId, hotelname, pricePerNight) VALUES (4, 'Contoso Hotel Berlin', 150.0)")
-            cursor.execute("INSERT INTO hotels (hotelId, hotelname, pricePerNight) VALUES (5, 'Contoso Hotel Chicago', 300.0)")
-            cursor.execute("INSERT INTO hotels (hotelId, hotelname, pricePerNight) VALUES (6, 'Contoso Hotel Los Angeles', 350.0)")
+            startCmd = "INSERT INTO hotels (hotelId, hotelname, country, pricePerNight, skiing, suites, inRoomEntertainment, conciergeServices, housekeeping, petFriendlyOptions, laundryServices, roomService, indoorPool, outdoorPool, fitnessCenter, complimentaryBreakfast, businessCenter, freeGuestParking, complimentaryCoffeaAndTea, climateControl, bathroomEssentials) VALUES "
+            cursor.execute(startCmd + " (1, 'Contoso Hotel Zurich', 'Switzerland', 400, '0', '0', '1', '1', '1', '0', '1', '1', '0', '1', '1', '0', '1', '1', '1', '1', '1')")
+            cursor.execute(startCmd + " (2, 'Contoso Hotel Paris', 'France', 200, '0', '1', '1', '1', '1', '1', '1', '1', '0', '0', '1', '1', '0', '0', '1', '1', '0')")
+            cursor.execute(startCmd + " (3, 'Contoso Hotel London', 'England', 250, '0', '0', '1', '1', '1', '0', '1', '1', '0', '1', '1', '0', '1', '1', '1', '1', '1')")
+            cursor.execute(startCmd + " (4, 'Contoso Hotel Berlin', 'Germany', 150, '0', '0', '1', '0', '1', '0', '1', '1', '0', '0', '1', '1', '1', '0', '1', '1', '0')")
+            cursor.execute(startCmd + " (5, 'Contoso Hotel Chicago', 'United States', 300, '0', '0', '1', '0', '1', '0', '1', '1', '1', '1', '1', '0', '1', '0', '1', '1', '1')")
+            cursor.execute(startCmd + " (6, 'Contoso Hotel Las Vegas', 'United States', 350, '0', '0', '1', '1', '1', '1', '0', '1', '0', '1', '0', '0', '1', '0', '1', '1', '0')")
+            cursor.execute(startCmd + " (7, 'Contoso Suites Boston', 'United States', 400, '0', '1', '1', '1', '1', '0', '0', '1', '0', '1', '0', '1', '0', '0', '1', '1', '1')")
+            cursor.execute(startCmd + " (8, 'Contoso Suites New York', 'United States', 400, '0', '1', '1', '1', '1', '0', '0', '1', '1', '1', '0', '1', '0', '0', '1', '1', '1')")
+            cursor.execute(startCmd + " (9, 'Contoso Suites Tokyo', 'Japan', 350, '0', '1', '1', '1', '1', '0', '0', '1', '1', '1', '1', '0', '0', '0', '1', '1', '1')")
+            cursor.execute(startCmd + " (10, 'Contoso Suites Munich', 'Germany', 375, '0', '1', '1', '1', '1', '0', '0', '1', '1', '1', '0', '0', '0', '0', '1', '1', '1')")
+            cursor.execute(startCmd + " (11, 'Contoso Suites London', 'England', 350, '0', '1', '1', '1', '1', '0', '0', '1', '0', '1', '0', '0', '0', '0', '1', '1', '1')")
+            cursor.execute(startCmd + " (12, 'Contoso Suites Paris', 'France', 375, '0', '1', '1', '1', '1', '0', '0', '1', '1', '1', '1', '1', '0', '1', '1', '1', '1')")
+            cursor.execute(startCmd + " (13, 'Alpine Ski House Zermatt', 'Switzerland', 525, '1', '1', '0', '0', '0', '0', '1', '0', '0', '0', '1', '0', '0', '1', '1', '1', '1')")
+            cursor.execute(startCmd + " (14, 'Alpine Ski House Lake Tahoe', 'United States', 500, '1', '1', '0', '0', '0', '0', '1', '0', '0', '0', '1', '0', '0', '1', '1', '1', '1')")
+            cursor.execute(startCmd + " (15, 'Alpine Ski House Aspen', 'United States', 500, '1', '1', '0', '0', '0', '0', '1', '0', '0', '0', '1', '0', '0', '1', '1', '1', '1')")
+            cursor.execute(startCmd + " (16, 'Alpine Ski House Whistler', 'Canada', 500, '1', '1', '0', '0', '0', '0', '1', '0', '0', '0', '1', '0', '0', '1', '1', '1', '1')")
+            cursor.execute(startCmd + " (17, 'Apline Ski House Niseko', 'Japan', 600, '1', '1', '0', '0', '0', '0', '1', '0', '0', '0', '1', '0', '0', '1', '1', '1', '1')")
+            cursor.execute(startCmd + " (18, 'Contoso Hotel Toronto', 'Canada', 400, '1', '0', '1', '1', '1', '1', '0', '1', '1', '0', '0', '1', '1', '0', '1', '1', '0')")
+            cursor.execute(startCmd + " (19, 'Contoso Hotel Sydney', 'Australia', 350, '0', '0', '1', '0', '1', '1', '1', '1', '0', '1', '1', '1', '0', '1', '1', '1', '1')")
+            cursor.execute(startCmd + " (20, 'Contoso Hotel Auckland', 'New Zealand', 350, '0', '0', '1', '1', '1', '1', '1', '1', '0', '0', '1', '1', '0', '0', '1', '1', '1')")
+            cursor.execute(startCmd + " (21, 'Contoso Suites Gold Coast', 'ustralia', 350, '0', '1', '1', '1', '1', '0', '0', '1', '1', '0', '1', '1', '0', '1', '1', '1', '1')")
+            cursor.execute(startCmd + " (22, 'Contoso Hotel Los Angeles', 'United States', 250, '0', '0', '1', '0', '1', '1', '1', '1', '0', '1', '1', '0', '1', '0', '1', '1', '1')")
+            cursor.execute(startCmd + " (23, 'Contoso Suites Orlando', 'United States', 250, '0', '1', '1', '1', '1', '0', '0', '1', '1', '1', '0', '1', '0', '0', '1', '1', '1')")
+            cursor.execute(startCmd + " (24, 'Contoso Hotel Bangkok', 'Thailand', 350, '0', '0', '1', '0', '1', '0', '1', '1', '1', '0', '0', '0', '0', '1', '1', '1', '1')")
+            cursor.execute(startCmd + " (25, 'Contoso Hotel Rome', 'Italy', 450, '0', '0', '1', '1', '1', '0', '1', '1', '0', '1', '1', '1', '0', '1', '1', '1', '0')")
+            cursor.execute(startCmd + " (26, 'Contoso Hotel Brussels', 'Belgium', 450, '0', '0', '1', '1', '1', '0', '1', '1', '0', '0', '1', '1', '1', '0', '1', '1', '1')")
+            cursor.execute(startCmd + " (27, 'Contoso Suites Madrid', 'Spain', 400, '0', '1', '1', '1', '1', '0', '0', '1', '1', '1', '0', '0', '0', '0', '1', '1', '1')")
+            cursor.execute(startCmd + " (28, 'Contoso Suites Athens', 'Greece', 400, '0', '1', '1', '1', '1', '0', '0', '1', '1', '0', '0', '0', '0', '1', '1', '1', '1')")
+            cursor.execute(startCmd + " (29, 'Alpine Ski House Oslo', 'Norway', 500, '1', '1', '0', '0', '0', '0', '1', '0', '0', '0', '1', '0', '0', '1', '1', '1', '1')")
+            cursor.execute(startCmd + " (30, 'Contoso Suites Kathmandu', 'Nepal', 200, '0', '1', '1', '1', '1', '0', '0', '1', '1', '0', '1', '1', '0', '1', '1', '1', '1')")
+            cursor.execute(startCmd + " (31, 'Contoso Hotel Doha', 'Qatar', 500, '0', '0', '1', '1', '1', '0', '0', '1', '1', '0', '1', '1', '1', '1', '1', '1', '0')")
+            cursor.execute(startCmd + " (32, 'Contoso Hotel Jakarta', 'Indonesia', 400, '0', '0', '0', '0', '1', '0', '1', '1', '1', '0', '1', '0', '0', '1', '1', '1', '0')")
+            cursor.execute(startCmd + " (33, 'Contoso Suites Jakarta', 'Indonesia', 350, '0', '1', '1', '1', '1', '0', '0', '1', '1', '0', '1', '1', '0', '1', '1', '1', '1')")
+            cursor.execute(startCmd + " (34, 'Contoso Suites Reykjavik', 'Iceland', 300, '1', '1', '1', '1', '1', '0', '0', '1', '1', '1', '1', '0', '0', '1', '1', '1', '1')")
+            cursor.execute(startCmd + " (35, 'Contoso Hotel Seoul', 'South Korea', 200, '0', '0', '1', '0', '1', '0', '0', '1', '0', '0', '0', '1', '1', '1', '1', '1', '0')")
+            cursor.execute(startCmd + " (36, 'Contoso Hotel Beijing', 'China', 250, '0', '0', '1', '1', '1', '0', '1', '1', '1', '0', '1', '1', '1', '0', '1', '1', '0')")
+            cursor.execute(startCmd + " (37, 'Contoso Hotel New Dehli', 'India', 200, '0', '0', '0', '1', '1', '0', '0', '1', '0', '1', '0', '0', '1', '1', '1', '1', '0')")
+            cursor.execute(startCmd + " (38, 'Contoso Suites Abu Dhabi', 'United Arab Emirates', 600, '0', '1', '1', '1', '1', '0', '0', '1', '1', '0', '1', '1', '0', '1', '1', '1', '1')")
+            cursor.execute(startCmd + " (39, 'Contoso Hotel Riyadh', 'Saudi Arabia', 500, '0', '1', '1', '1', '1', '0', '1', '1', '0', '1', '0', '0', '0', '1', '1', '1', '0')")
+            cursor.execute(startCmd + " (40, 'Contoso Suites Kuala Lumpur', 'Malaysia', 200, '0', '1', '1', '1', '1', '0', '0', '1', '1', '0', '0', '0', '0', '1', '1', '1', '1')")
             cursor.close()
         if not doesTableHaveRows(connection, "visitors"):
             responseDict["populate_data"]["visitors"] = True

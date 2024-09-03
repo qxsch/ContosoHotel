@@ -7,7 +7,16 @@ class SQLMode(Enum):
     INSERT = 1
     UPDATE = 2
 
-
+def get_bool_value(value, defautValue = False) -> bool:
+    if value is None:
+        return defautValue
+    if isinstance(value, bool):
+        return value
+    if isinstance(value, int):
+        return value != 0
+    if isinstance(value, str):
+        return value.strip().lower() in ['true', '1', 'yes', 'y', 't']
+    return defautValue
 
 def get_connection_string(name : str) -> str:
     name = str(name).strip().upper()
@@ -108,14 +117,147 @@ if dbconnectionstringname == "MSSQL_CONNECTION_STRING":
     def get_visitors(name : str = "", exactMatch : bool = False) -> Iterable[Dict[str, Union[int, str, float, bool]]]:
         return mssqldblayer.get_visitors(name, exactMatch)
 
-    def create_hotel(hotelname : str, pricePerNight : float, hotelId : int = None) -> Dict[str, Union[int, str, float, bool]]:
-        return mssqldblayer.create_hotel(hotelname, pricePerNight, hotelId)
+    def create_hotel(
+        hotelname : str,
+        pricePerNight : float,
+        hotelId : int = None,
+        country : str = 'Unknown',
+        skiing : bool = False,
+        suites : bool = False,
+        inRoomEntertainment : bool = False,
+        conciergeServices : bool = False,
+        housekeeping : bool = False,
+        petFriendlyOptions : bool = False,
+        laundryServices : bool = False,
+        roomService : bool = False,
+        indoorPool : bool = False,
+        outdoorPool : bool = False,
+        fitnessCenter : bool = False,
+        complimentaryBreakfast : bool = False,
+        businessCenter : bool = False,
+        freeGuestParking : bool = False,
+        complimentaryCoffeaAndTea : bool = False,
+        climateControl : bool = False,
+        bathroomEssentials : bool = False
+    ) -> Dict[str, Union[int, str, float, bool]]:
+        return mssqldblayer.create_hotel(
+            hotelname,
+            pricePerNight,
+            hotelId,
+            country,
+            skiing,
+            suites,
+            inRoomEntertainment,
+            conciergeServices,
+            housekeeping,
+            petFriendlyOptions,
+            laundryServices,
+            roomService,
+            indoorPool,
+            outdoorPool,
+            fitnessCenter,
+            complimentaryBreakfast,
+            businessCenter,
+            freeGuestParking,
+            complimentaryCoffeaAndTea,
+            climateControl,
+            bathroomEssentials
+        )
+    def update_hotel(
+        hotelname : str,
+        pricePerNight : float,
+        hotelId : int,
+        country : str = None,
+        skiing : bool = None,
+        suites : bool = None,
+        inRoomEntertainment : bool = None,
+        conciergeServices : bool = None,
+        housekeeping : bool = None,
+        petFriendlyOptions : bool = None,
+        laundryServices : bool = None,
+        roomService : bool = None,
+        indoorPool : bool = None,
+        outdoorPool : bool = None,
+        fitnessCenter : bool = None,
+        complimentaryBreakfast : bool = None,
+        businessCenter : bool = None,
+        freeGuestParking : bool = None,
+        complimentaryCoffeaAndTea : bool = None,
+        climateControl : bool = None,
+        bathroomEssentials : bool = None
+    ) -> Dict[str, Union[int, str, float, bool]]:
+        return mssqldblayer.update_hotel(
+            hotelname,
+            pricePerNight,
+            hotelId,
+            country,
+            skiing,
+            suites,
+            inRoomEntertainment,
+            conciergeServices,
+            housekeeping,
+            petFriendlyOptions,
+            laundryServices,
+            roomService,
+            indoorPool,
+            outdoorPool,
+            fitnessCenter,
+            complimentaryBreakfast,
+            businessCenter,
+            freeGuestParking,
+            complimentaryCoffeaAndTea,
+            climateControl,
+            bathroomEssentials
+        )
+    def manage_hotel(
+        hotelname : str,
+        pricePerNight : float,
+        hotelId : int = None,
+        country : str = None,
+        skiing : bool = None,
+        suites : bool = None,
+        inRoomEntertainment : bool = None,
+        conciergeServices : bool = None,
+        housekeeping : bool = None,
+        petFriendlyOptions : bool = None,
+        laundryServices : bool = None,
+        roomService : bool = None,
+        indoorPool : bool = None,
+        outdoorPool : bool = None,
+        fitnessCenter : bool = None,
+        complimentaryBreakfast : bool = None,
+        businessCenter : bool = None,
+        freeGuestParking : bool = None,
+        complimentaryCoffeaAndTea : bool = None,
+        climateControl : bool = None,
+        bathroomEssentials : bool = None,
+        sqlmode : SQLMode = 1
+    ) -> Dict[str, Union[int, str, float, bool]]:
+        return mssqldblayer.manage_hotel(hotelname,
+            pricePerNight,
+            hotelId,
+            country,
+            skiing,
+            suites,
+            inRoomEntertainment,
+            conciergeServices,
+            housekeeping,
+            petFriendlyOptions,
+            laundryServices,
+            roomService,
+            indoorPool,
+            outdoorPool,
+            fitnessCenter,
+            complimentaryBreakfast,
+            businessCenter,
+            freeGuestParking,
+            complimentaryCoffeaAndTea,
+            climateControl,
+            bathroomEssentials,
+            sqlmode
+        )
 
-    def update_hotel(hotelname : str, pricePerNight : float, hotelId : int) -> Dict[str, Union[int, str, float, bool]]:
-        return mssqldblayer.update_hotel(hotelname, pricePerNight, hotelId)
-
-    def manage_hotel(hotelname : str, pricePerNight : float, hotelId : int = None, sqlmode : SQLMode = 1) -> Dict[str, Union[int, str, float, bool]]:
-        return mssqldblayer.manage_hotel(hotelname, pricePerNight, hotelId, sqlmode)
+    
     def delete_hotel(hotelId : int) -> bool:
         return mssqldblayer.delete_hotel(hotelId)
 
@@ -167,14 +309,146 @@ elif dbconnectionstringname == "POSTGRES_CONNECTION_STRING":
     def get_visitors(name : str = "", exactMatch : bool = False) -> Iterable[Dict[str, Union[int, str, float, bool]]]:
         return postgresdblayer.get_visitors(name, exactMatch)
 
-    def create_hotel(hotelname : str, pricePerNight : float, hotelId : int = None) -> Dict[str, Union[int, str, float, bool]]:
-        return postgresdblayer.create_hotel(hotelname, pricePerNight, hotelId)
-
-    def update_hotel(hotelname : str, pricePerNight : float, hotelId : int) -> Dict[str, Union[int, str, float, bool]]:
-        return postgresdblayer.update_hotel(hotelname, pricePerNight, hotelId)
-
-    def manage_hotel(hotelname : str, pricePerNight : float, hotelId : int = None, sqlmode : SQLMode = 1) -> Dict[str, Union[int, str, float, bool]]:
-        return postgresdblayer.manage_hotel(hotelname, pricePerNight, hotelId, sqlmode)
+    def create_hotel(
+        hotelname : str,
+        pricePerNight : float,
+        hotelId : int = None,
+        country : str = 'Unknown',
+        skiing : bool = False,
+        suites : bool = False,
+        inRoomEntertainment : bool = False,
+        conciergeServices : bool = False,
+        housekeeping : bool = False,
+        petFriendlyOptions : bool = False,
+        laundryServices : bool = False,
+        roomService : bool = False,
+        indoorPool : bool = False,
+        outdoorPool : bool = False,
+        fitnessCenter : bool = False,
+        complimentaryBreakfast : bool = False,
+        businessCenter : bool = False,
+        freeGuestParking : bool = False,
+        complimentaryCoffeaAndTea : bool = False,
+        climateControl : bool = False,
+        bathroomEssentials : bool = False
+    ) -> Dict[str, Union[int, str, float, bool]]:
+        return postgresdblayer.create_hotel(
+            hotelname,
+            pricePerNight,
+            hotelId,
+            country,
+            skiing,
+            suites,
+            inRoomEntertainment,
+            conciergeServices,
+            housekeeping,
+            petFriendlyOptions,
+            laundryServices,
+            roomService,
+            indoorPool,
+            outdoorPool,
+            fitnessCenter,
+            complimentaryBreakfast,
+            businessCenter,
+            freeGuestParking,
+            complimentaryCoffeaAndTea,
+            climateControl,
+            bathroomEssentials
+        )
+    def update_hotel(
+        hotelname : str,
+        pricePerNight : float,
+        hotelId : int,
+        country : str = None,
+        skiing : bool = None,
+        suites : bool = None,
+        inRoomEntertainment : bool = None,
+        conciergeServices : bool = None,
+        housekeeping : bool = None,
+        petFriendlyOptions : bool = None,
+        laundryServices : bool = None,
+        roomService : bool = None,
+        indoorPool : bool = None,
+        outdoorPool : bool = None,
+        fitnessCenter : bool = None,
+        complimentaryBreakfast : bool = None,
+        businessCenter : bool = None,
+        freeGuestParking : bool = None,
+        complimentaryCoffeaAndTea : bool = None,
+        climateControl : bool = None,
+        bathroomEssentials : bool = None
+    ) -> Dict[str, Union[int, str, float, bool]]:
+        return postgresdblayer.update_hotel(
+            hotelname,
+            pricePerNight,
+            hotelId,
+            country,
+            skiing,
+            suites,
+            inRoomEntertainment,
+            conciergeServices,
+            housekeeping,
+            petFriendlyOptions,
+            laundryServices,
+            roomService,
+            indoorPool,
+            outdoorPool,
+            fitnessCenter,
+            complimentaryBreakfast,
+            businessCenter,
+            freeGuestParking,
+            complimentaryCoffeaAndTea,
+            climateControl,
+            bathroomEssentials
+        )
+    def manage_hotel(
+        hotelname : str,
+        pricePerNight : float,
+        hotelId : int = None,
+        country : str = None,
+        skiing : bool = None,
+        suites : bool = None,
+        inRoomEntertainment : bool = None,
+        conciergeServices : bool = None,
+        housekeeping : bool = None,
+        petFriendlyOptions : bool = None,
+        laundryServices : bool = None,
+        roomService : bool = None,
+        indoorPool : bool = None,
+        outdoorPool : bool = None,
+        fitnessCenter : bool = None,
+        complimentaryBreakfast : bool = None,
+        businessCenter : bool = None,
+        freeGuestParking : bool = None,
+        complimentaryCoffeaAndTea : bool = None,
+        climateControl : bool = None,
+        bathroomEssentials : bool = None,
+        sqlmode : SQLMode = 1
+    ) -> Dict[str, Union[int, str, float, bool]]:
+        return postgresdblayer.manage_hotel(hotelname,
+            pricePerNight,
+            hotelId,
+            country,
+            skiing,
+            suites,
+            inRoomEntertainment,
+            conciergeServices,
+            housekeeping,
+            petFriendlyOptions,
+            laundryServices,
+            roomService,
+            indoorPool,
+            outdoorPool,
+            fitnessCenter,
+            complimentaryBreakfast,
+            businessCenter,
+            freeGuestParking,
+            complimentaryCoffeaAndTea,
+            climateControl,
+            bathroomEssentials,
+            sqlmode
+        )
+    
     def delete_hotel(hotelId : int) -> bool:
         return postgresdblayer.delete_hotel(hotelId)
 
