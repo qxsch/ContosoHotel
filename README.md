@@ -1038,6 +1038,64 @@ curl -X DELETE 'http://localhost:8000/api/booking?bookingId=2'
 </details>
 
 
+## Get the amenities
+
+**Endpoint:** ``GET /api/amenities``
+
+**Response Codes:**
+| Code | Description |
+| --- | --- |
+| 200 | Success |
+| 400 | Bad Request (Invalid input data) |
+| 500 | Internal Server Error (Server side processing error) |
+
+**Example Response Body (Success - 200):**
+```json
+{
+   "skiing" : "Skiiing available nearby",
+   "suites" : "Has suites available",
+   "inRoomEntertainment" : "Flat-screen TVs, streaming services, high-speed Wi-Fi, and Bluetooth speakers",
+   "conciergeServices" : "Concierge Services: Assistance with booking tours, restaurant reservations, and other activities",
+   "housekeeping" : "Regular cleaning services, often with eco-friendly options",
+   "petFriendlyOptions" : "Amenities and services for guests traveling with pets",
+   "laundryServices" : "On-site laundry and dry-cleaning services",
+   "roomService" : "In-room dining options (available 24/7 in some hotels)",
+   "indoorPool" : "Indoor or outdoor pools, hot tubs, saunas, and spa services",
+   "outdoorPool" : "Outdoor pools and hot tubs",
+   "fitnessCenter" : "Equipped with modern exercise machines and sometimes offering fitness classes",
+   "complimentaryBreakfast" : "Often includes a variety of hot and cold options",
+   "businessCenter" : "Facilities with computers, printers, and meeting rooms for business travelers",
+   "freeGuestParking" : "On-site parking facilities for guests",
+   "complimentaryCoffeaAndTea" : "Complimentary coffee and tea kits, along with stocked mini-bars",
+   "climateControl" : "Adjustable air conditioning and heating systems",
+   "bathroomEssentials" : "Premium toiletries, hair dryers, bathrobes, and slippers"
+}
+```
+
+**Example Response Body (Failure - 400 or 500):**
+```json
+{ 
+   "success" : false,
+   "error" : "Some error message here"
+}
+```
+
+### Example Code
+<details>
+<summary>Click to expand</summary>
+
+#### PowerShell
+
+```powershell
+Invoke-RestMethod -Uri 'http://localhost:8000/api/amenities'
+```
+
+#### Bash Curl
+```bash
+curl 'http://localhost:8000/api/amenities'
+```
+</details>
+
 
 ## Setup the Database
 

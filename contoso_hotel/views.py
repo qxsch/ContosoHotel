@@ -281,6 +281,14 @@ def api_get_visitors(name : str = ""):
     except Exception as e:
         return jsonify({ "success" : False, "error" : str(e) }), 500
 
+@app.route("/api/amenities", methods=["GET"])
+def api_get_amenities():
+    try:
+        amenities = dblayer.get_amenities()
+        return jsonify(amenities), 200
+    except Exception as e:
+        return jsonify({ "success" : False, "error" : str(e) }), 500
+
 #endregion -------- BACKEND API ENDPOINTS --------
 
 

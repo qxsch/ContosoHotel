@@ -81,6 +81,28 @@ def split_string_with_escaping(s):
 dbconnectionstring, dbconnectionstringname = get_defined_database()
 
 
+def get_amenities():
+    return {
+        "skiing" : "Skiiing available nearby",
+        "suites" : "Has suites available",
+        "inRoomEntertainment" : "Flat-screen TVs, streaming services, high-speed Wi-Fi, and Bluetooth speakers",
+        "conciergeServices" : "Concierge Services: Assistance with booking tours, restaurant reservations, and other activities",
+        "housekeeping" : "Regular cleaning services, often with eco-friendly options",
+        "petFriendlyOptions" : "Amenities and services for guests traveling with pets",
+        "laundryServices" : "On-site laundry and dry-cleaning services",
+        "roomService" : "In-room dining options (available 24/7 in some hotels)",
+        "indoorPool" : "Indoor or outdoor pools, hot tubs, saunas, and spa services",
+        "outdoorPool" : "Outdoor pools and hot tubs",
+        "fitnessCenter" : "Equipped with modern exercise machines and sometimes offering fitness classes",
+        "complimentaryBreakfast" : "Often includes a variety of hot and cold options",
+        "businessCenter" : "Facilities with computers, printers, and meeting rooms for business travelers",
+        "freeGuestParking" : "On-site parking facilities for guests",
+        "complimentaryCoffeaAndTea" : "Complimentary coffee and tea kits, along with stocked mini-bars",
+        "climateControl" : "Adjustable air conditioning and heating systems",
+        "bathroomEssentials" : "Premium toiletries, hair dryers, bathrobes, and slippers"
+    }
+
+
 if dbconnectionstringname == "MSSQL_CONNECTION_STRING":
     from . import mssqldblayer
 
