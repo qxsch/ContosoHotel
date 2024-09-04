@@ -121,7 +121,7 @@ class Booking {
 
     async refresh() {
         try {
-            var data = await fetch(window.getContosoUrl(window.contoso_configuration.api_baseurl, '/api/booking')).then(response => response.json())
+            var data = await fetch(window.getContosoUrl(window.contoso_configuration.api_baseurl, '/api/bookings')).then(response => response.json())
             if (Array.isArray(data)) {
                 this.#data = data;
             }
