@@ -81,7 +81,7 @@ class Booking {
             });
             deleteButton.addEventListener('click', async () => {
                 try {
-                    var response = await fetch('/api/booking?bookingId=' + String(entry.bookingId), {method: 'DELETE'}).then(response => response.json());
+                    var response = await fetch(window.getContosoUrl(window.contoso_configuration.api_baseurl, '/api/booking') + '?bookingId=' + String(entry.bookingId), {method: 'DELETE'}).then(response => response.json());
                     if(typeof(response) == "object" && "success" in response && response.success) {
                         this.refresh();
                     }

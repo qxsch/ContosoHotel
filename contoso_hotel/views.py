@@ -296,7 +296,7 @@ def api_get_amenities():
 
 @app.route("/setup")
 def setup():
-    return render_template("setup.html")
+    return render_template("setup.html", config=config.get_layout_configuration())
 
 
 @app.route("/")
@@ -305,7 +305,7 @@ def home():
     if not dblayer.allTablesExists():
         return redirect(url_for("setup"))
     # ------- END: CHECK IF THE DATABASE IS SETUP -------
-    return render_template("home.html")
+    return render_template("home.html", config=config.get_layout_configuration())
 
 
 @app.route("/list")
