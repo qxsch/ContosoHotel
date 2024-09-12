@@ -17,9 +17,11 @@ def get_configuration(name : str) -> str:
 class LayoutConfiguration:
     api_baseurl = ''
     chatbot_baseurl = ''
+    chatbot_key = ''
     def __init__(self):
         self.api_baseurl = get_configuration('API_BASEURL')
         self.chatbot_baseurl = get_configuration('CHATBOT_BASEURL')
+        self.chatbot_key = get_configuration('CHATBOT_KEY')
 
     def _sanitizeBaseUrl(value: str) -> str:
         value = str(value)
@@ -37,6 +39,7 @@ class LayoutConfiguration:
         return {
             'api_baseurl': str(self.api_baseurl),
             'chatbot_baseurl': str(self.chatbot_baseurl),
+            'chatbot_key': str(self.chatbot_key),
             'chatbot_enabled': self.isChatbotEnabled()
         }
     def items(self):

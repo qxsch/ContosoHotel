@@ -292,7 +292,7 @@ def api_get_amenities():
 #endregion -------- BACKEND API ENDPOINTS --------
 
 
-#region -------- FRONTEND API ENDPOINTS --------
+#region -------- FRONTEND ROUTES --------
 
 @app.route("/setup")
 def setup():
@@ -302,6 +302,7 @@ def setup():
 @app.route("/")
 def home():
     # ------- START: CHECK IF THE DATABASE IS SETUP -------
+    #TODO: remove this check when splitting frontend and backend as dblayer doesn't exist in frontend
     if not dblayer.allTablesExists():
         return redirect(url_for("setup"))
     # ------- END: CHECK IF THE DATABASE IS SETUP -------
@@ -316,4 +317,4 @@ def list():
 def create():
     return render_template("create.html", config=config.get_layout_configuration(), checkin=datetime.now().strftime('%Y-%m-%d'), checkout=(datetime.now() + timedelta(days=1)).strftime('%Y-%m-%d'))
 
-#endregion -------- FRONTEND API ENDPOINTS --------
+#endregion -------- FRONTEND ROUTES --------
