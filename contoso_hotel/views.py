@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 import json
+import requests
 from flask import Flask, render_template, request, jsonify, redirect, url_for
 from . import app, dblayer, config
 
@@ -316,5 +317,20 @@ def list():
 @app.route("/create")
 def create():
     return render_template("create.html", config=config.get_layout_configuration(), checkin=datetime.now().strftime('%Y-%m-%d'), checkout=(datetime.now() + timedelta(days=1)).strftime('%Y-%m-%d'))
+
+## This view is needed to act as a proxy as AI Studio flow deployments don't support CORS
+@app.route("/chat", methods=["POST"])
+def chat():
+    conf = config.get_layout_configuration()
+    try:
+        record = json.loads(request.data)
+        headers = {
+            'Content-Type': 'application/json',
+            'Authorization': f'Bearer {conf.getChatbotApiKey()}'
+        }
+        response = requests.post(conf.getChatbotBaseurl()+'/score', json=record, headers=headers)
+        return jsonify(response.json()), response.status_code
+    except Exception as e:
+        return jsonify({ "success" : False, "error" : str(e) }), 500
 
 #endregion -------- FRONTEND ROUTES --------

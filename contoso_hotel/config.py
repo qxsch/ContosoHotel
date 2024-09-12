@@ -29,6 +29,8 @@ class LayoutConfiguration:
             return value[:-1]
         return value
     
+    def getChatbotApiKey(self) -> str:
+        return str(self.chatbot_key)
     def getChatbotBaseurl(self) -> str:
         return  LayoutConfiguration._sanitizeBaseUrl(self.chatbot_baseurl)
     def getApiBaseurl(self) -> str:

@@ -66,15 +66,9 @@ if(document.getElementById("chatbotLogo") && document.getElementById("chatbotBar
         ask.innerText = text;
         document.getElementById("chatbotContent").appendChild(ask);
 
-        let headers_list = {
-            'Content-Type': 'application/json',
-        };
-        if(window.contoso_configuration.chatbot_key) {
-            headers_list['Authorization'] = 'Bearer ' + window.contoso_configuration.chatbot_key;
-        }
-        fetch(window.getContosoUrl(window.contoso_configuration.chatbot_baseurl, '/score'), {
+        fetch('/chat', {
             method: 'POST',
-            headers: headers_list,
+            headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(data),
         })
         .then(data => data.json())
