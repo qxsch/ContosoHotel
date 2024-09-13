@@ -60,7 +60,6 @@
 			window.contoso_configuration = {
 				api_baseurl: JSON.parse('{% if config.api_baseurl is string %}{{ config.api_baseurl | tojson }}{% else %}""{% endif %}'),
 				chatbot_baseurl: JSON.parse('{% if config.chatbot_baseurl is string %}{{ config.chatbot_baseurl | tojson }}{% else %}""{% endif %}'),
-				chatbot_key: JSON.parse('{% if config.chatbot_key is string %}{{ config.chatbot_key | tojson }}{% else %}""{% endif %}')
 			};
 		</script>
 		{% if config.chatbot_baseurl %}
