@@ -293,7 +293,7 @@ def api_get_amenities():
 #endregion -------- BACKEND API ENDPOINTS --------
 
 
-#region -------- FRONTEND ROUTES --------
+#region -------- FRONTEND API ENDPOINTS --------
 
 @app.route("/setup")
 def setup():
@@ -333,4 +333,4 @@ def chat():
     except Exception as e:
         return jsonify({ "success" : False, "error" : str(e) }), 500
 
-#endregion -------- FRONTEND ROUTES --------
+#endregion -------- FRONTEND API ENDPOINTS --------
