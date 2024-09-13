@@ -66,7 +66,7 @@ if(document.getElementById("chatbotLogo") && document.getElementById("chatbotBar
         ask.innerText = text;
         document.getElementById("chatbotContent").appendChild(ask);
 
-        fetch('/chat', {
+        fetch(window.getContosoUrl(window.contoso_configuration.api_baseurl, '/api/chat'), {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(data),

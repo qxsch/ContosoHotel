@@ -86,7 +86,7 @@ All variables are optional, but at least one of the database connection strings 
 | ``MSSQL_CONNECTION_STRING`` | Connection string for MSSQL (uses pyodbc) | ``DRIVER={ODBC Driver 18 for SQL Server};SERVER=MSSQLINSTANCENAME.database.windows.net;DATABASE=MSSQLDBNAME;UID=MSSQLUSERNAME;PWD=*******;Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;`` |
 | ``POSTGRES_CONNECTION_STRING`` | Connection string for PostgreSQL (uses psycopg2) | ``user=PGUSERNAME;password=*******;host=PGINSTANCENAME.postgres.database.azure.com;port=5432;database=PGDBNAME;`` |
 | ``API_BASEURL`` | Base URL for the API | ``http://localhost:8000`` |
-| ``CHATBOT_BASEURL`` | Base URL for the Chatbot  (use ``/`` to active chatbot demo interface) | ``http://localhost:8001`` |
+| ``CHATBOT_BASEURL`` | Base URL for the Chatbot  (use ``/`` to activate chatbot demo interface) | ``http://localhost:8001`` |
 | ``CHATBOT_KEY`` | The chatbot authorization key if any was set (usually for deployment through AI Studio) | ``1234567890`` |
 
 

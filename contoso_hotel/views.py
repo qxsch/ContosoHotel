@@ -35,17 +35,25 @@ def api_longsqlrequest():
 
 @app.route("/api/chat", methods=["POST"])
 def api_chat():
+    conf = config.get_layout_configuration()
     try:
         record = json.loads(request.data)
-        # get the last message
-        lastMessage = record[-1]
-        if "content" not in lastMessage:
-            return jsonify({ "success" : False, "error" : "content is required" }), 400
-        if "role" not in lastMessage:
-            return jsonify({ "success" : False, "error" : "role is required" }), 400
-        if lastMessage["role"] not in ["user"]:
-            return jsonify({ "success" : False, "error" : "wrong chat message" }), 400
-        return jsonify({ "success" : True, "content" : "You asked: " +  str(lastMessage["content"]) }), 200
+        # validate data
+        if "question" not in record:
+            return jsonify({ "success" : False, "error" : "question is required" }), 400
+        record["question"] = str(record["question"])
+        if "chat_history" not in record:
+            record["chat_history"] = []
+        # do we have a demo chatbot?
+        if conf.chatbot_baseurl == '/':
+            return jsonify({ "answer" : "you said: " + record["question"] }), 200
+
+        headers = {
+            'Content-Type': 'application/json',
+            'Authorization': f'Bearer {conf.getChatbotApiKey()}'
+        }
+        response = requests.post(conf.getChatbotBaseurl()+'/score', json=record, headers=headers)
+        return jsonify(response.json()), response.status_code
     except Exception as e:
         return jsonify({ "success" : False, "error" : str(e) }), 500
 
@@ -317,20 +325,5 @@ def list():
 @app.route("/create")
 def create():
     return render_template("create.html", config=config.get_layout_configuration(), checkin=datetime.now().strftime('%Y-%m-%d'), checkout=(datetime.now() + timedelta(days=1)).strftime('%Y-%m-%d'))
-
-## This view is needed to act as a proxy as AI Studio flow deployments don't support CORS
-@app.route("/chat", methods=["POST"])
-def chat():
-    conf = config.get_layout_configuration()
-    try:
-        record = json.loads(request.data)
-        headers = {
-            'Content-Type': 'application/json',
-            'Authorization': f'Bearer {conf.getChatbotApiKey()}'
-        }
-        response = requests.post(conf.getChatbotBaseurl()+'/score', json=record, headers=headers)
-        return jsonify(response.json()), response.status_code
-    except Exception as e:
-        return jsonify({ "success" : False, "error" : str(e) }), 500
 
 #endregion -------- FRONTEND API ENDPOINTS --------
