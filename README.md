@@ -88,6 +88,7 @@ All variables are optional, but at least one of the database connection strings 
 | ``API_BASEURL`` | Base URL for the API | ``http://localhost:8000`` |
 | ``CHATBOT_BASEURL`` | Base URL for the Chatbot  (use ``/`` to activate chatbot demo interface) | ``http://localhost:8001`` |
 | ``CHATBOT_KEY`` | The chatbot authorization key if any was set (usually for deployment through AI Studio) | ``1234567890`` |
+| ``CHATBOT_FRONTEND_USE_CHATBOT_BASEURL`` | If set to ``true`` the chatbot JS frontend will directly send requests to the ``CHATBOT_BASEURL``. (**default is** ``false``, that sends everything to the backend and the backend will then send it to the CHATBOT_BASEURL) | ``true`` |
 
 
 # API documentation

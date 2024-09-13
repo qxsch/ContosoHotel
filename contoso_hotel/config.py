@@ -18,11 +18,13 @@ class LayoutConfiguration:
     api_baseurl = ''
     chatbot_baseurl = ''
     chatbot_key = ''
+    chatbot_frontend_use_chatbot_baseurl = False
+
     def __init__(self):
         self.api_baseurl = get_configuration('API_BASEURL')
         self.chatbot_baseurl = get_configuration('CHATBOT_BASEURL')
         self.chatbot_key = get_configuration('CHATBOT_KEY')
-
+        self.chatbot_frontend_use_chatbot_baseurl = (get_configuration('CHATBOT_FRONTEND_USE_CHATBOT_BASEURL').lower().strip() in ['true', 't', '1', 'yes', 'y'])
     def _sanitizeBaseUrl(value: str) -> str:
         value = str(value)
         if value.endswith('/'):
@@ -42,7 +44,8 @@ class LayoutConfiguration:
             'api_baseurl': str(self.api_baseurl),
             'chatbot_baseurl': str(self.chatbot_baseurl),
             'chatbot_key': str(self.chatbot_key),
-            'chatbot_enabled': self.isChatbotEnabled()
+            'chatbot_enabled': self.isChatbotEnabled(),
+            'chatbot_frontend_use_chatbot_baseurl': self.chatbot_frontend_use_chatbot_baseurl
         }
     def items(self):
         return self.getDict().items()

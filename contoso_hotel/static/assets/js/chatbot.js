@@ -66,6 +66,18 @@ if(document.getElementById("chatbotLogo") && document.getElementById("chatbotBar
         ask.innerText = text;
         document.getElementById("chatbotContent").appendChild(ask);
 
+        var chatUrl = "";
+        if(window.contoso_configuration.chatbot_frontend_use_chatbot_baseurl) {
+            chatUrl = window.contoso_configuration.chatbot_baseurl;
+            if(chatUrl == "" || chatUrl == "/") {
+                console.error("chatbot_baseurl is not properly set in configuration");
+                return;
+            }
+        }
+        else {
+            chatUrl = window.getContosoUrl(window.contoso_configuration.api_baseurl, '/api/chat');
+        }
+
         fetch(window.getContosoUrl(window.contoso_configuration.api_baseurl, '/api/chat'), {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
