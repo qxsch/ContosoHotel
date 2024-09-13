@@ -87,6 +87,7 @@ All variables are optional, but at least one of the database connection strings 
 | ``POSTGRES_CONNECTION_STRING`` | Connection string for PostgreSQL (uses psycopg2) | ``user=PGUSERNAME;password=*******;host=PGINSTANCENAME.postgres.database.azure.com;port=5432;database=PGDBNAME;`` |
 | ``API_BASEURL`` | Base URL for the API | ``http://localhost:8000`` |
 | ``CHATBOT_BASEURL`` | Base URL for the Chatbot  (use ``/`` to active chatbot demo interface) | ``http://localhost:8001`` |
+| ``CHATBOT_KEY`` | The chatbot authorization key if any was set (usually for deployment through AI Studio) | ``1234567890`` |
 
 
 # API documentation

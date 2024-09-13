@@ -1,22 +1,31 @@
 
 function getChatbotHistory(text) {
     const chatbotContent = document.getElementById("chatbotContent");
-    var result = [];
+    var result = {};
+    result.chat_history = [];
+    var last_history = null;
     chatbotContent.childNodes.forEach(function(el) {
         // is it an element node?
         if(el.nodeType === 1 && el.nodeName === 'DIV') {
+            history = {};
             console.log("FOUND DIV", el);
             if(el.classList.contains('humanbubble')) {
-                result.push({content: el.innerText, role: 'user'});
+                if(last_history) {
+                    result.chat_history.push(last_history);
+                }
+                last_history = {inputs: {content: el.innerText}, outputs: {}};
             }
             else if(el.classList.contains('robotbubble')) {
-                result.push({content: el.innerText, role: 'assistant'});
+                last_history.outputs.answer = el.innerText;
             }
         }
     });
+    if(last_history) {
+        result.chat_history.push(last_history);
+    }
     text = String(text).trim();
     if(text.length > 0) {
-        result.push({content: text, role: 'user'});
+        result.question = text;
     }
     return result;
 };
@@ -57,19 +66,17 @@ if(document.getElementById("chatbotLogo") && document.getElementById("chatbotBar
         ask.innerText = text;
         document.getElementById("chatbotContent").appendChild(ask);
 
-        fetch(window.getContosoUrl(window.contoso_configuration.chatbot_baseurl, '/api/chat'), {
+        fetch('/chat', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
+            headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(data),
         })
         .then(data => data.json())
         .then(function(data) {
-            if("content" in data) {
+            if("answer" in data) {
                 var resp = document.createElement("div");
                 resp.className ="chat-message robotbubble";
-                resp.innerText = data.content;
+                resp.innerText = data.answer;
                 document.getElementById("chatbotContent").appendChild(resp);
             }
         });
