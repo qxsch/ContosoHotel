@@ -62,9 +62,9 @@ CREATE TABLE bookings (
 
 
 
-DROP FUNCTION IF EXISTS dbo.GetRoomsUsageWithinTimeSpan
+DROP FUNCTION IF EXISTS GetRoomsUsageWithinTimeSpan
 
-CREATE FUNCTION dbo.GetRoomsUsageWithinTimeSpan (@StartDate DATE, @EndDate DATE)
+CREATE FUNCTION GetRoomsUsageWithinTimeSpan (@StartDate DATE, @EndDate DATE)
 RETURNS @RoomUsageTable TABLE (
     hotelId INT,
     hotelname VARCHAR(200),
