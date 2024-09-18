@@ -293,6 +293,7 @@ def get_visitors(name : str = "", exactMatch : bool = False) -> Iterable[Dict[st
 def create_hotel(
     hotelname : str,
     pricePerNight : float,
+    totalRooms : int,
     hotelId : int = None,
     country : str = 'Unknown',
     skiing : bool = False,
@@ -316,6 +317,7 @@ def create_hotel(
     return manage_hotel(
         hotelname,
         pricePerNight,
+        totalRooms,
         hotelId,
         country,
         skiing,
@@ -340,6 +342,7 @@ def create_hotel(
 def update_hotel(
     hotelname : str,
     pricePerNight : float,
+    totalRooms : int,
     hotelId : int,
     country : str = None,
     skiing : bool = None,
@@ -363,6 +366,7 @@ def update_hotel(
     return manage_hotel(
         hotelname,
         pricePerNight,
+        totalRooms,
         hotelId,
         country,
         skiing,
@@ -387,6 +391,7 @@ def update_hotel(
 def manage_hotel(
     hotelname : str,
     pricePerNight : float,
+    totalRooms : int,
     hotelId : int = None,
     country : str = None,
     skiing : bool = None,
@@ -439,7 +444,7 @@ def manage_hotel(
     if sqlmode == SQLMode.UPDATE:
         cursor = connection.cursor()
         nextId = hotelId
-        parts = [ hotelname, pricePerNight ]
+        parts = [ hotelname, pricePerNight, totalRooms ]
         setPartStmt = ""
         if country is not None:
             setPartStmt += ", country = ?"
@@ -496,7 +501,7 @@ def manage_hotel(
             setPartStmt += ", bathroomEssentials = ?"
             parts.append(get_bool_value(bathroomEssentials))
         parts.append(hotelId)
-        cursor.execute("UPDATE hotels SET hotelname = ?, pricePerNight = ? " + setPartStmt + " WHERE hotelId =?", tuple(parts))
+        cursor.execute("UPDATE hotels SET hotelname = ?, pricePerNight = ?, totalRooms = ? " + setPartStmt + " WHERE hotelId =?", tuple(parts))
         cursor.close()
         connection.commit()
         connection.close()
@@ -525,8 +530,8 @@ def manage_hotel(
         climateControl = get_bool_value(climateControl)
         bathroomEssentials = get_bool_value(bathroomEssentials)
         cursor.execute(
-            "INSERT INTO hotels (hotelId, hotelname, pricePerNight, country, skiing, suites, inRoomEntertainment, conciergeServices, housekeeping, petFriendlyOptions, laundryServices, roomService, indoorPool, outdoorPool, fitnessCenter, complimentaryBreakfast, businessCenter, freeGuestParking, complimentaryCoffeaAndTea, climateControl, bathroomEssentials) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-            (hotelId, hotelname, pricePerNight, country, skiing, suites, inRoomEntertainment, conciergeServices, housekeeping, petFriendlyOptions, laundryServices, roomService, indoorPool, outdoorPool, fitnessCenter, complimentaryBreakfast, businessCenter, freeGuestParking, complimentaryCoffeaAndTea, climateControl, bathroomEssentials)
+            "INSERT INTO hotels (hotelId, hotelname, pricePerNight, totalRooms, country, skiing, suites, inRoomEntertainment, conciergeServices, housekeeping, petFriendlyOptions, laundryServices, roomService, indoorPool, outdoorPool, fitnessCenter, complimentaryBreakfast, businessCenter, freeGuestParking, complimentaryCoffeaAndTea, climateControl, bathroomEssentials) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            (hotelId, hotelname, pricePerNight, totalRooms, country, skiing, suites, inRoomEntertainment, conciergeServices, housekeeping, petFriendlyOptions, laundryServices, roomService, indoorPool, outdoorPool, fitnessCenter, complimentaryBreakfast, businessCenter, freeGuestParking, complimentaryCoffeaAndTea, climateControl, bathroomEssentials)
         )
         cursor.close()
         connection.commit()
@@ -535,6 +540,7 @@ def manage_hotel(
             "hotelId" : hotelId,
             "hotelname" : hotelname,
             "pricePerNight" : pricePerNight,
+            "totalRooms" : totalRooms,
             "country" : country,
             "skiing" : skiing,
             "suites" : suites,
@@ -582,6 +588,7 @@ def get_hotel(hotelId : int) -> Dict[str, Union[int, str, float, bool]]:
         "hotelId" : row.hotelId,
         "hotelname" : row.hotelname,
         "pricePerNight" : row.pricePerNight,
+        "totalRooms" : row.totalRooms,
         "country" : row.country,
         "skiing" : get_bool_value(row.skiing),
         "suites" : get_bool_value(row.suites),
@@ -611,18 +618,19 @@ def get_hotels(name : str = "", exactMatch : bool = False) -> Iterable[Dict[str,
     name = str(name).strip()
     if name != "":
         if exactMatch:
-            cursor.execute("SELECT hotelId, hotelname, pricePerNight, country FROM hotels WHERE hotelname = ? order by hotelId desc", (name))
+            cursor.execute("SELECT hotelId, hotelname, pricePerNight, totalRooms, country FROM hotels WHERE hotelname = ? order by hotelId desc", (name))
         else:
             name = "%" + name + "%"
-            cursor.execute("SELECT hotelId, hotelname, pricePerNight, country FROM hotels WHERE hotelname like ? order by hotelId desc", (name))
+            cursor.execute("SELECT hotelId, hotelname, pricePerNight, totalRooms, country FROM hotels WHERE hotelname like ? order by hotelId desc", (name))
     else:
-        cursor.execute("SELECT hotelId, hotelname, pricePerNight, country FROM hotels order by hotelId desc")
+        cursor.execute("SELECT hotelId, hotelname, pricePerNight, totalRooms, country FROM hotels order by hotelId desc")
     hotels = []
     for row in cursor.fetchall():
         hotels.append({
             "hotelId" : row.hotelId,
             "hotelname" : row.hotelname,
             "pricePerNight" : row.pricePerNight,
+            "totalRooms" : row.totalRooms,
             "country" : row.country
         })
     cursor.close()
@@ -657,6 +665,14 @@ def doesTableExist(connection, tableName : str) -> bool:
     tableName = str(tableName).strip()
     cursor = connection.cursor()
     cursor.execute("SELECT count(TABLE_NAME) as num FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' and TABLE_NAME = ?", (tableName))
+    exists = cursor.fetchone().num > 0
+    cursor.close()
+    return exists
+
+def doesFunctionExist(connection, functionName : str) -> bool:
+    functionName = str(functionName).strip()
+    cursor = connection.cursor()
+    cursor.execute("SELECT count(*) as num FROM sys.objects WHERE type IN ('FN', 'IF', 'TF') and name = ?", (functionName))
     exists = cursor.fetchone().num > 0
     cursor.close()
     return exists
@@ -696,7 +712,7 @@ def setupDb(drop_schema : bool, create_schema : bool, populate_data : bool, numb
     responseDict = {
         "success" : True,
         "drop_schema" : False,
-        "create_schema" : { "hotels" : False, "visitors" : False, "bookings" : False },
+        "create_schema" : { "hotels" : False, "visitors" : False, "bookings" : False, "GetRoomsUsageWithinTimeSpan" : False },
         "populate_data" : { "hotels" : False, "visitors" : False, "bookings" : False },
         "number_of_visitors" : number_of_visitors,
         "min_bookings_per_visitor" : min_bookings_per_visitor,
@@ -707,6 +723,7 @@ def setupDb(drop_schema : bool, create_schema : bool, populate_data : bool, numb
         responseDict["drop_schema"] = True
         cursor = connection.cursor()
         cursor.execute("DROP TABLE IF EXISTS bookings, hotels, visitors")
+        cursor.execute("DROP FUNCTION IF EXISTS GetRoomsUsageWithinTimeSpan")
         cursor.close()
         connection.commit()
     if create_schema:     
@@ -718,6 +735,7 @@ def setupDb(drop_schema : bool, create_schema : bool, populate_data : bool, numb
                     hotelId INT NOT NULL PRIMARY KEY,
                     hotelname VARCHAR(200) NOT NULL,
                     pricePerNight FLOAT NOT NULL CHECK (pricePerNight > 0),
+                    totalRooms INT NOT NULL CHECK (totalRooms > 0),
                     country VARCHAR(200) NOT NULL DEFAULT 'Unknown',
                     skiing BIT NOT NULL DEFAULT 0,
                     suites BIT NOT NULL DEFAULT 0,
@@ -782,52 +800,97 @@ def setupDb(drop_schema : bool, create_schema : bool, populate_data : bool, numb
                 )
             """)
             cursor.close()
+        if not doesFunctionExist(connection, "GetRoomsUsage"):
+            responseDict["create_schema"]["GetRoomsUsageWithinTimeSpan"] = True
+            cursor = connection.cursor()
+            cursor.execute("""
+                CREATE FUNCTION GetRoomsUsageWithinTimeSpan (@StartDate DATE, @EndDate DATE)
+                RETURNS @RoomUsageTable TABLE (
+                    hotelId INT,
+                    hotelname VARCHAR(200),
+                    country VARCHAR(200),
+                    date DATE,
+                    usedRooms INT,
+                    freeRooms INT
+                )
+                AS
+                BEGIN
+                    -- Generate the dates in the range using a recursive CTE
+                    WITH DateSeries AS (
+                        SELECT @StartDate AS Date
+                        UNION ALL
+                        SELECT DATEADD(DAY, 1, Date)
+                        FROM DateSeries
+                        WHERE Date < @EndDate
+                    )
+                    -- Calculate room usage for each hotel and date
+                    INSERT INTO @RoomUsageTable (hotelId, hotelname, country, date, usedRooms, freeRooms)
+                    SELECT 
+                        h.hotelId,
+                        h.hotelname,
+                        h.country,
+                        d.Date,
+                        ISNULL(SUM(b.rooms), 0) AS usedRooms,
+                        h.totalRooms - ISNULL(SUM(b.rooms), 0) AS freeRooms
+                    FROM 
+                        hotels h
+                    CROSS JOIN 
+                        DateSeries d
+                    LEFT JOIN 
+                        bookings b ON h.hotelId = b.hotelId AND d.Date BETWEEN b.checkin AND b.checkout
+                    GROUP BY 
+                        h.hotelId, h.hotelname, h.country, d.Date, h.totalRooms
+                    OPTION (MAXRECURSION 0);
+                    RETURN;
+                END;
+            """)
+            cursor.close()
         connection.commit()
     if populate_data:
         if not doesTableHaveRows(connection, "hotels"):
             responseDict["populate_data"]["hotels"] = True
             cursor = connection.cursor()
-            startCmd = "INSERT INTO hotels (hotelId, hotelname, country, pricePerNight, Skiing, Suites, inRoomEntertainment, conciergeServices, housekeeping, petFriendlyOptions, laundryServices, roomService, indoorPool, outdoorPool, fitnessCenter, complimentaryBreakfast, businessCenter, freeGuestParking, complimentaryCoffeaAndTea, climateControl, bathroomEssentials) VALUES "
-            cursor.execute(startCmd + " (1, 'Contoso Hotel Zurich', 'Switzerland', 400, 0, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1)")
-            cursor.execute(startCmd + " (2, 'Contoso Hotel Paris', 'France', 200, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0)")
-            cursor.execute(startCmd + " (3, 'Contoso Hotel London', 'England', 250, 0, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1)")
-            cursor.execute(startCmd + " (4, 'Contoso Hotel Berlin', 'Germany', 150, 0, 0, 1, 0, 1, 0, 1, 1, 0, 0, 1, 1, 1, 0, 1, 1, 0)")
-            cursor.execute(startCmd + " (5, 'Contoso Hotel Chicago', 'United States', 300, 0, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1)")
-            cursor.execute(startCmd + " (6, 'Contoso Hotel Las Vegas', 'United States', 350, 0, 0, 1, 1, 1, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 1, 0)")
-            cursor.execute(startCmd + " (7, 'Contoso Suites Boston', 'United States', 400, 0, 1, 1, 1, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1, 1, 1)")
-            cursor.execute(startCmd + " (8, 'Contoso Suites New York', 'United States', 400, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 0, 1, 0, 0, 1, 1, 1)")
-            cursor.execute(startCmd + " (9, 'Contoso Suites Tokyo', 'Japan', 350, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1)")
-            cursor.execute(startCmd + " (10, 'Contoso Suites Munich', 'Germany', 375, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1)")
-            cursor.execute(startCmd + " (11, 'Contoso Suites London', 'England', 350, 0, 1, 1, 1, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 1, 1)")
-            cursor.execute(startCmd + " (12, 'Contoso Suites Paris', 'France', 375, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1)")
-            cursor.execute(startCmd + " (13, 'Alpine Ski House Zermatt', 'Switzerland', 525, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1)")
-            cursor.execute(startCmd + " (14, 'Alpine Ski House Lake Tahoe', 'United States', 500, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1)")
-            cursor.execute(startCmd + " (15, 'Alpine Ski House Aspen', 'United States', 500, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1)")
-            cursor.execute(startCmd + " (16, 'Alpine Ski House Whistler', 'Canada', 500, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1)")
-            cursor.execute(startCmd + " (17, 'Apline Ski House Niseko', 'Japan', 600, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1)")
-            cursor.execute(startCmd + " (18, 'Contoso Hotel Toronto', 'Canada', 400, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1, 1, 0)")
-            cursor.execute(startCmd + " (19, 'Contoso Hotel Sydney', 'Australia', 350, 0, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1)")
-            cursor.execute(startCmd + " (20, 'Contoso Hotel Auckland', 'New Zealand', 350, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1)")
-            cursor.execute(startCmd + " (21, 'Contoso Suites Gold Coast', 'ustralia', 350, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1)")
-            cursor.execute(startCmd + " (22, 'Contoso Hotel Los Angeles', 'United States', 250, 0, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 1)")
-            cursor.execute(startCmd + " (23, 'Contoso Suites Orlando', 'United States', 250, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 0, 1, 0, 0, 1, 1, 1)")
-            cursor.execute(startCmd + " (24, 'Contoso Hotel Bangkok', 'Thailand', 350, 0, 0, 1, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1)")
-            cursor.execute(startCmd + " (25, 'Contoso Hotel Rome', 'Italy', 450, 0, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0)")            
-            cursor.execute(startCmd + " (26, 'Contoso Hotel Brussels', 'Belgium', 450, 0, 0, 1, 1, 1, 0, 1, 1, 0, 0, 1, 1, 1, 0, 1, 1, 1)")
-            cursor.execute(startCmd + " (27, 'Contoso Suites Madrid', 'Spain', 400, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1)")
-            cursor.execute(startCmd + " (28, 'Contoso Suites Athens', 'Greece', 400, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1)")
-            cursor.execute(startCmd + " (29, 'Alpine Ski House Oslo', 'Norway', 500, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1)")
-            cursor.execute(startCmd + " (30, 'Contoso Suites Kathmandu', 'Nepal', 200, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1)")
-            cursor.execute(startCmd + " (31, 'Contoso Hotel Doha', 'Qatar', 500, 0, 0, 1, 1, 1, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0)")
-            cursor.execute(startCmd + " (32, 'Contoso Hotel Jakarta', 'Indonesia', 400, 0, 0, 0, 0, 1, 0, 1, 1, 1, 0, 1, 0, 0, 1, 1, 1, 0)")
-            cursor.execute(startCmd + " (33, 'Contoso Suites Jakarta', 'Indonesia', 350, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1)")
-            cursor.execute(startCmd + " (34, 'Contoso Suites Reykjavik', 'Iceland', 300, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1)")
-            cursor.execute(startCmd + " (35, 'Contoso Hotel Seoul', 'South Korea', 200, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 0)")
-            cursor.execute(startCmd + " (36, 'Contoso Hotel Beijing', 'China', 250, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0)")
-            cursor.execute(startCmd + " (37, 'Contoso Hotel New Dehli', 'India', 200, 0, 0, 0, 1, 1, 0, 0, 1, 0, 1, 0, 0, 1, 1, 1, 1, 0)")
-            cursor.execute(startCmd + " (38, 'Contoso Suites Abu Dhabi', 'United Arab Emirates', 600, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1)")
-            cursor.execute(startCmd + " (39, 'Contoso Hotel Riyadh', 'Saudi Arabia', 500, 0, 1, 1, 1, 1, 0, 1, 1, 0, 1, 0, 0, 0, 1, 1, 1, 0)")
-            cursor.execute(startCmd + " (40, 'Contoso Suites Kuala Lumpur', 'Malaysia', 200, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1)")
+            startCmd = "INSERT INTO hotels (hotelId, hotelname, country, pricePerNight, totalRooms, Skiing, Suites, inRoomEntertainment, conciergeServices, housekeeping, petFriendlyOptions, laundryServices, roomService, indoorPool, outdoorPool, fitnessCenter, complimentaryBreakfast, businessCenter, freeGuestParking, complimentaryCoffeaAndTea, climateControl, bathroomEssentials) VALUES "
+            cursor.execute(startCmd + " (1, 'Contoso Hotel Zurich', 'Switzerland', 400, 100, 0, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1)")
+            cursor.execute(startCmd + " (2, 'Contoso Hotel Paris', 'France', 200, 55, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0)")
+            cursor.execute(startCmd + " (3, 'Contoso Hotel London', 'England', 250, 39, 0, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1)")
+            cursor.execute(startCmd + " (4, 'Contoso Hotel Berlin', 'Germany', 150, 89, 0, 0, 1, 0, 1, 0, 1, 1, 0, 0, 1, 1, 1, 0, 1, 1, 0)")
+            cursor.execute(startCmd + " (5, 'Contoso Hotel Chicago', 'United States', 300, 157, 0, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1)")
+            cursor.execute(startCmd + " (6, 'Contoso Hotel Las Vegas', 'United States', 350, 210, 0, 0, 1, 1, 1, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 1, 0)")
+            cursor.execute(startCmd + " (7, 'Contoso Suites Boston', 'United States', 400, 134, 0, 1, 1, 1, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1, 1, 1)")
+            cursor.execute(startCmd + " (8, 'Contoso Suites New York', 'United States', 400, 168, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 0, 1, 0, 0, 1, 1, 1)")
+            cursor.execute(startCmd + " (9, 'Contoso Suites Tokyo', 'Japan', 350, 44, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1)")
+            cursor.execute(startCmd + " (10, 'Contoso Suites Munich', 'Germany', 375, 76, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1)")
+            cursor.execute(startCmd + " (11, 'Contoso Suites London', 'England', 350, 64, 0, 1, 1, 1, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 1, 1)")
+            cursor.execute(startCmd + " (12, 'Contoso Suites Paris', 'France', 375, 81, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1)")
+            cursor.execute(startCmd + " (13, 'Alpine Ski House Zermatt', 'Switzerland', 525, 92, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1)")
+            cursor.execute(startCmd + " (14, 'Alpine Ski House Lake Tahoe', 'United States', 500, 67, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1)")
+            cursor.execute(startCmd + " (15, 'Alpine Ski House Aspen', 'United States', 500, 42, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1)")
+            cursor.execute(startCmd + " (16, 'Alpine Ski House Whistler', 'Canada', 500, 31, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1)")
+            cursor.execute(startCmd + " (17, 'Apline Ski House Niseko', 'Japan', 600, 45, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1)")
+            cursor.execute(startCmd + " (18, 'Contoso Hotel Toronto', 'Canada', 400, 59, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1, 1, 0)")
+            cursor.execute(startCmd + " (19, 'Contoso Hotel Sydney', 'Australia', 350, 78, 0, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1)")
+            cursor.execute(startCmd + " (20, 'Contoso Hotel Auckland', 'New Zealand', 350, 94, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1)")
+            cursor.execute(startCmd + " (21, 'Contoso Suites Gold Coast', 'Australia', 350, 111, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1)")
+            cursor.execute(startCmd + " (22, 'Contoso Hotel Los Angeles', 'United States', 250, 131, 0, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 1)")
+            cursor.execute(startCmd + " (23, 'Contoso Suites Orlando', 'United States', 250, 41, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 0, 1, 0, 0, 1, 1, 1)")
+            cursor.execute(startCmd + " (24, 'Contoso Hotel Bangkok', 'Thailand', 350, 52, 0, 0, 1, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1)")
+            cursor.execute(startCmd + " (25, 'Contoso Hotel Rome', 'Italy', 450, 54, 0, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0)")            
+            cursor.execute(startCmd + " (26, 'Contoso Hotel Brussels', 'Belgium', 450, 21, 0, 0, 1, 1, 1, 0, 1, 1, 0, 0, 1, 1, 1, 0, 1, 1, 1)")
+            cursor.execute(startCmd + " (27, 'Contoso Suites Madrid', 'Spain', 400, 63, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1)")
+            cursor.execute(startCmd + " (28, 'Contoso Suites Athens', 'Greece', 400, 87, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1)")
+            cursor.execute(startCmd + " (29, 'Alpine Ski House Oslo', 'Norway', 500, 81, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1)")
+            cursor.execute(startCmd + " (30, 'Contoso Suites Kathmandu', 'Nepal', 200, 43, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1)")
+            cursor.execute(startCmd + " (31, 'Contoso Hotel Doha', 'Qatar', 500, 86, 0, 0, 1, 1, 1, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0)")
+            cursor.execute(startCmd + " (32, 'Contoso Hotel Jakarta', 'Indonesia', 400, 109, 0, 0, 0, 0, 1, 0, 1, 1, 1, 0, 1, 0, 0, 1, 1, 1, 0)")
+            cursor.execute(startCmd + " (33, 'Contoso Suites Jakarta', 'Indonesia', 350, 33, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1)")
+            cursor.execute(startCmd + " (34, 'Contoso Suites Reykjavik', 'Iceland', 300, 36, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1)")
+            cursor.execute(startCmd + " (35, 'Contoso Hotel Seoul', 'South Korea', 200, 75, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 0)")
+            cursor.execute(startCmd + " (36, 'Contoso Hotel Beijing', 'China', 250, 142, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0)")
+            cursor.execute(startCmd + " (37, 'Contoso Hotel New Dehli', 'India', 200, 88, 0, 0, 0, 1, 1, 0, 0, 1, 0, 1, 0, 0, 1, 1, 1, 1, 0)")
+            cursor.execute(startCmd + " (38, 'Contoso Suites Abu Dhabi', 'United Arab Emirates', 600, 39, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1)")
+            cursor.execute(startCmd + " (39, 'Contoso Hotel Riyadh', 'Saudi Arabia', 500, 67, 0, 1, 1, 1, 1, 0, 1, 1, 0, 1, 0, 0, 0, 1, 1, 1, 0)")
+            cursor.execute(startCmd + " (40, 'Contoso Suites Kuala Lumpur', 'Malaysia', 200, 27, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1)")
             cursor.close()
         if not doesTableHaveRows(connection, "visitors"):
             responseDict["populate_data"]["visitors"] = True

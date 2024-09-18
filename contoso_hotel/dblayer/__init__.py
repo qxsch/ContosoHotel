@@ -142,6 +142,7 @@ if dbconnectionstringname == "MSSQL_CONNECTION_STRING":
     def create_hotel(
         hotelname : str,
         pricePerNight : float,
+        totalRooms : int,
         hotelId : int = None,
         country : str = 'Unknown',
         skiing : bool = False,
@@ -165,6 +166,7 @@ if dbconnectionstringname == "MSSQL_CONNECTION_STRING":
         return mssqldblayer.create_hotel(
             hotelname,
             pricePerNight,
+            totalRooms,
             hotelId,
             country,
             skiing,
@@ -188,6 +190,7 @@ if dbconnectionstringname == "MSSQL_CONNECTION_STRING":
     def update_hotel(
         hotelname : str,
         pricePerNight : float,
+        totalRooms : int,
         hotelId : int,
         country : str = None,
         skiing : bool = None,
@@ -211,6 +214,7 @@ if dbconnectionstringname == "MSSQL_CONNECTION_STRING":
         return mssqldblayer.update_hotel(
             hotelname,
             pricePerNight,
+            totalRooms,
             hotelId,
             country,
             skiing,
@@ -234,6 +238,7 @@ if dbconnectionstringname == "MSSQL_CONNECTION_STRING":
     def manage_hotel(
         hotelname : str,
         pricePerNight : float,
+        totalRooms : int,
         hotelId : int = None,
         country : str = None,
         skiing : bool = None,
@@ -255,8 +260,10 @@ if dbconnectionstringname == "MSSQL_CONNECTION_STRING":
         bathroomEssentials : bool = None,
         sqlmode : SQLMode = 1
     ) -> Dict[str, Union[int, str, float, bool]]:
-        return mssqldblayer.manage_hotel(hotelname,
+        return mssqldblayer.manage_hotel(
+            hotelname,
             pricePerNight,
+            totalRooms,
             hotelId,
             country,
             skiing,
@@ -334,6 +341,7 @@ elif dbconnectionstringname == "POSTGRES_CONNECTION_STRING":
     def create_hotel(
         hotelname : str,
         pricePerNight : float,
+        totalRooms : int,
         hotelId : int = None,
         country : str = 'Unknown',
         skiing : bool = False,
@@ -357,6 +365,7 @@ elif dbconnectionstringname == "POSTGRES_CONNECTION_STRING":
         return postgresdblayer.create_hotel(
             hotelname,
             pricePerNight,
+            totalRooms,
             hotelId,
             country,
             skiing,
@@ -380,6 +389,7 @@ elif dbconnectionstringname == "POSTGRES_CONNECTION_STRING":
     def update_hotel(
         hotelname : str,
         pricePerNight : float,
+        totalRooms : int,
         hotelId : int,
         country : str = None,
         skiing : bool = None,
@@ -403,6 +413,7 @@ elif dbconnectionstringname == "POSTGRES_CONNECTION_STRING":
         return postgresdblayer.update_hotel(
             hotelname,
             pricePerNight,
+            totalRooms,
             hotelId,
             country,
             skiing,
@@ -426,6 +437,7 @@ elif dbconnectionstringname == "POSTGRES_CONNECTION_STRING":
     def manage_hotel(
         hotelname : str,
         pricePerNight : float,
+        totalRooms : int,
         hotelId : int = None,
         country : str = None,
         skiing : bool = None,
@@ -447,8 +459,10 @@ elif dbconnectionstringname == "POSTGRES_CONNECTION_STRING":
         bathroomEssentials : bool = None,
         sqlmode : SQLMode = 1
     ) -> Dict[str, Union[int, str, float, bool]]:
-        return postgresdblayer.manage_hotel(hotelname,
+        return postgresdblayer.manage_hotel(
+            hotelname,
             pricePerNight,
+            totalRooms,
             hotelId,
             country,
             skiing,

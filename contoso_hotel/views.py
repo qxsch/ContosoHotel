@@ -172,6 +172,10 @@ def api_manage_hotel():
                 record["pricePerNight"] = float(record["pricePerNight"])
             else:
                 return jsonify({ "success" : False, "error" : "pricePerNight is required" }), 400
+            if "totalRooms" in record:
+                record["totalRooms"] = int(record["totalRooms"])
+            else:
+                return jsonify({ "success" : False, "error" : "totalRooms is required" }), 400
             if "hotelname" in record:
                 record["hotelname"] = str(record["hotelname"])
             else:
@@ -192,7 +196,7 @@ def api_manage_hotel():
             
             if request.method == "PUT":
                 return jsonify(dblayer.create_hotel(
-                    record["hotelname"], record["pricePerNight"], record["hotelId"], record["country"],
+                    record["hotelname"], record["pricePerNight"], record["totalRooms"], record["hotelId"], record["country"],
                     record["skiing"], record["suites"], record["inRoomEntertainment"], record["conciergeServices"], record["housekeeping"],
                     record["petFriendlyOptions"], record["laundryServices"], record["roomService"], record["indoorPool"], record["outdoorPool"],
                     record["fitnessCenter"], record["complimentaryBreakfast"], record["businessCenter"], record["freeGuestParking"],
@@ -200,7 +204,7 @@ def api_manage_hotel():
                 )), 200
             else:
                 return jsonify(dblayer.update_hotel(
-                    record["hotelname"], record["pricePerNight"], record["hotelId"], record["country"],
+                    record["hotelname"], record["pricePerNight"], record["totalRooms"], record["hotelId"], record["country"],
                     record["skiing"], record["suites"], record["inRoomEntertainment"], record["conciergeServices"], record["housekeeping"],
                     record["petFriendlyOptions"], record["laundryServices"], record["roomService"], record["indoorPool"], record["outdoorPool"],
                     record["fitnessCenter"], record["complimentaryBreakfast"], record["businessCenter"], record["freeGuestParking"],

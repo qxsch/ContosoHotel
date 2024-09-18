@@ -6,6 +6,7 @@ CREATE TABLE hotels (
     hotelId INT NOT NULL PRIMARY KEY,
     hotelname VARCHAR(200) NOT NULL,
     pricePerNight FLOAT NOT NULL CHECK (pricePerNight > 0),
+    totalRooms INT NOT NULL CHECK (totalRooms > 0),
     country VARCHAR(200) NOT NULL DEFAULT 'Unknown',
     skiing BIT NOT NULL DEFAULT 0,
     suites BIT NOT NULL DEFAULT 0,
@@ -57,6 +58,52 @@ CREATE TABLE bookings (
     FOREIGN KEY (visitorId) REFERENCES visitors(visitorId) ON DELETE CASCADE
 );
 
+
+
+
+
+DROP FUNCTION IF EXISTS dbo.GetRoomsUsage
+
+CREATE FUNCTION dbo.GetRoomsUsage (@StartDate DATE, @EndDate DATE)
+RETURNS @RoomUsageTable TABLE (
+    hotelId INT,
+    hotelname VARCHAR(200),
+    country VARCHAR(200),
+    date DATE,
+    usedRooms INT,
+    freeRooms INT
+)
+AS
+BEGIN
+    -- Generate the dates in the range using a recursive CTE
+    WITH DateSeries AS (
+        SELECT @StartDate AS Date
+        UNION ALL
+        SELECT DATEADD(DAY, 1, Date)
+        FROM DateSeries
+        WHERE Date < @EndDate
+    )
+    -- Calculate room usage for each hotel and date
+    INSERT INTO @RoomUsageTable (hotelId, hotelname, country, date, usedRooms, freeRooms)
+    SELECT 
+        h.hotelId,
+        h.hotelname,
+        h.country,
+        d.Date,
+        ISNULL(SUM(b.rooms), 0) AS usedRooms,
+        h.totalRooms - ISNULL(SUM(b.rooms), 0) AS freeRooms
+    FROM 
+        hotels h
+    CROSS JOIN 
+        DateSeries d
+    LEFT JOIN 
+        bookings b ON h.hotelId = b.hotelId AND d.Date BETWEEN b.checkin AND b.checkout
+    GROUP BY 
+        h.hotelId, h.hotelname, h.country, d.Date, h.totalRooms
+    OPTION (MAXRECURSION 0);
+
+    RETURN;
+END;
 
 
 -- select TABLE_NAME, COLUMN_NAME, DATA_TYPE, CHARACTER_MAXIMUM_LENGTH, IS_NULLABLE, COLUMN_DEFAULT from INFORMATION_SCHEMA.COLUMNS where TABLE_NAME = 'hotels' or TABLE_NAME = 'visitors' or TABLE_NAME = 'bookings';

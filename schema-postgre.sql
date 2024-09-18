@@ -6,6 +6,7 @@ CREATE TABLE hotels (
     hotelId SERIAL PRIMARY KEY,
     hotelname VARCHAR(200) NOT NULL,
     pricePerNight FLOAT NOT NULL CHECK (pricePerNight > 0),
+    totalRooms INT NOT NULL CHECK (totalRooms > 0),
     country VARCHAR(200) NOT NULL DEFAULT 'Unknown',
     skiing BOOLEAN NOT NULL DEFAULT TRUE,
     suites BOOLEAN NOT NULL DEFAULT TRUE,
@@ -56,6 +57,41 @@ CREATE TABLE bookings (
     FOREIGN KEY (hotelId) REFERENCES hotels(hotelId) ON DELETE CASCADE,
     FOREIGN KEY (visitorId) REFERENCES visitors(visitorId) ON DELETE CASCADE
 );
+
+
+
+
+DROP FUNCTION IF EXISTS GetRoomsUsageWithinTimeSpan
+
+CREATE FUNCTION GetRoomsUsageWithinTimeSpan(StartDate DATE, EndDate DATE)
+RETURNS TABLE (
+    hotelId INT,
+    hotelname VARCHAR(200),
+    country VARCHAR(200),
+    date DATE,
+    usedRooms INT,
+    freeRooms INT
+) AS $$
+BEGIN
+    RETURN QUERY
+    SELECT 
+        h.hotelId,
+        h.hotelname,
+        h.country,
+        d.Date::date,
+        COALESCE(SUM(b.rooms), 0)::int AS usedRooms,
+        (h.totalRooms - COALESCE(SUM(b.rooms), 0))::int AS freeRooms
+    FROM 
+        hotels h
+    CROSS JOIN 
+        generate_series(StartDate, EndDate, '1 day'::interval) AS d(Date)
+    LEFT JOIN 
+        bookings b ON h.hotelId = b.hotelId AND d.Date::date BETWEEN b.checkin AND b.checkout
+    GROUP BY 
+        h.hotelId, h.hotelname, h.country, d.Date::date, h.totalRooms;
+END;
+$$ LANGUAGE plpgsql;
+
 
 
 
