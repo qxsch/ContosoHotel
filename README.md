@@ -1109,6 +1109,45 @@ curl 'http://localhost:8000/api/amenities'
 </details>
 
 
+## Chat with the Chatbot
+
+**Endpoint:** ``GET /api/chat``
+
+**Request Body:**
+```json
+{
+   "chat_history": [
+      {
+         "inputs": "Hello, how are you?",
+         "outputs": "I am fine, thank you. How can I help you today?"
+      }
+   ],
+   "question" : "Does the Contoso Hotel Los Angeles have a pool?"
+}
+```
+**Response Codes:**
+| Code | Description |
+| --- | --- |
+| 200 | Success |
+| 400 | Bad Request (Invalid input data) |
+| 500 | Internal Server Error (Server side processing error) |
+
+**Example Response Body (Success - 200):**
+```json
+{
+   "answer": "Yes, the Contoso Hotel Los Angeles has an indoor and outdoor pool."
+}
+```
+
+**Example Response Body (Failure - 400 or 500):**
+```json
+{ 
+   "success" : false,
+   "error" : "Some error message here"
+}
+```
+
+
 ## Setup the Database
 
 **Endpoint:** ``POST /api/setup``
