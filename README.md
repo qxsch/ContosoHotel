@@ -1116,13 +1116,17 @@ curl 'http://localhost:8000/api/amenities'
 **Request Body:**
 ```json
 {
-   "chat_history": [
-      {
-         "inputs": "Hello, how are you?",
-         "outputs": "I am fine, thank you. How can I help you today?"
+  "chat_history": [
+    {
+      "inputs": {
+        "content": "Hello, how are you?"
+      },
+      "outputs": {
+        "answer": "I am fine, thank you. How can I help you today?"
       }
-   ],
-   "question" : "Does the Contoso Hotel Los Angeles have a pool?"
+    },
+  ],
+  "question": "Does the Contoso Hotel Los Angeles have a pool?"
 }
 ```
 **Response Codes:**
