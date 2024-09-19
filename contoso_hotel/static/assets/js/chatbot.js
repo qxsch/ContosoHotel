@@ -1,33 +1,11 @@
+window.chatbotHistory = [
+];
 
 function getChatbotHistory(text) {
-    const chatbotContent = document.getElementById("chatbotContent");
-    var result = {};
-    result.chat_history = [];
-    var last_history = null;
-    chatbotContent.childNodes.forEach(function(el) {
-        // is it an element node?
-        if(el.nodeType === 1 && el.nodeName === 'DIV') {
-            history = {};
-            console.log("FOUND DIV", el);
-            if(el.classList.contains('humanbubble')) {
-                if(last_history) {
-                    result.chat_history.push(last_history);
-                }
-                last_history = {inputs: {content: el.innerText}, outputs: {}};
-            }
-            else if(el.classList.contains('robotbubble')) {
-                last_history.outputs.answer = el.innerText;
-            }
-        }
-    });
-    if(last_history) {
-        result.chat_history.push(last_history);
-    }
-    text = String(text).trim();
-    if(text.length > 0) {
-        result.question = text;
-    }
-    return result;
+    return {
+        chat_history: window.chatbotHistory,
+        question: text
+    };
 };
 
 if(document.getElementById("chatbotLogo") && document.getElementById("chatbotBar")) {
@@ -58,13 +36,16 @@ if(document.getElementById("chatbotLogo") && document.getElementById("chatbotBar
     // submit
     document.getElementById("chatbotSubmit").addEventListener("click", function() {
         var text = document.getElementById("chatbotInput").value;
-        var data = getChatbotHistory(text);
         document.getElementById("chatbotInput").value = '';
 
         var ask = document.createElement("div");
         ask.className ="chat-message humanbubble";
         ask.innerText = text;
         document.getElementById("chatbotContent").appendChild(ask);
+        window.chatbotHistory.push({
+            inputs: {content: text},
+            outputs: {}
+        });
 
         var chatUrl = "";
         if(window.contoso_configuration.chatbot_frontend_use_chatbot_baseurl) {
@@ -81,15 +62,26 @@ if(document.getElementById("chatbotLogo") && document.getElementById("chatbotBar
         fetch(window.getContosoUrl(window.contoso_configuration.api_baseurl, '/api/chat'), {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify(data),
+            body: JSON.stringify(getChatbotHistory(text)),
         })
         .then(data => data.json())
         .then(function(data) {
             if("answer" in data) {
                 var resp = document.createElement("div");
                 resp.className ="chat-message robotbubble";
-                resp.innerText = data.answer;
+                // resp.innerText = data.answer; // without markdown
+                
+                // adding markdown
+                var zmd = document.createElement("zero-md");
+                zmd.innerHTML ='<template data-append><style> .markdown-body { background-color:transparent; } </style></template>';
+                var md = document.createElement("script");
+                md.type = "text/markdown";
+                md.innerText = data.answer;
+                zmd.appendChild(md);
+                resp.appendChild(zmd);
+                
                 document.getElementById("chatbotContent").appendChild(resp);
+                window.chatbotHistory[window.chatbotHistory.length-1].outputs.answer = data.answer;
             }
         });
     });

@@ -17,6 +17,9 @@
 		<link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='favicons/favicon-32x32.png') }}">
 		<link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='favicons/favicon-16x16.png') }}">
 		<link rel="manifest" href="{{ url_for('static', filename='favicons/site.webmanifest') }}">
+		{% if config.chatbot_baseurl %}
+		<script type="module" src="https://cdn.jsdelivr.net/npm/zero-md@3?register"></script>
+		{% endif %}
 	</head>
 	<body class="is-preload">
 		<div id="wrapper">
