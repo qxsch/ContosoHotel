@@ -76,7 +76,7 @@ if(document.getElementById("chatbotLogo") && document.getElementById("chatbotBar
                 zmd.innerHTML ='<template data-append><style> .markdown-body { background-color:transparent; } </style></template>';
                 var md = document.createElement("script");
                 md.type = "text/markdown";
-                md.innerText = data.answer;
+                md.innerHTML = data.answer;
                 zmd.appendChild(md);
                 resp.appendChild(zmd);
                 

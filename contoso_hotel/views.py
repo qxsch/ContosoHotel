@@ -49,10 +49,13 @@ def api_chat():
             return jsonify({ "answer" : "you said: " + record["question"] }), 200
 
         headers = {
-            'Content-Type': 'application/json',
-            'Authorization': f'Bearer {conf.getChatbotApiKey()}'
+            'Content-Type': 'application/json'
         }
+        if conf.getChatbotApiKey() != '':
+            headers['Authorization'] = f'Bearer {conf.getChatbotApiKey()}'
         response = requests.post(conf.getChatbotBaseurl()+'/score', json=record, headers=headers)
+        if response.status_code >= 400:
+            return jsonify({ "success" : False, "error" : "Chatbot returned the following http error code: " + str(response.status_code) + "\n\n" + response.text }), 502
         return jsonify(response.json()), response.status_code
     except Exception as e:
         return jsonify({ "success" : False, "error" : str(e) }), 500

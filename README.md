@@ -1135,6 +1135,7 @@ curl 'http://localhost:8000/api/amenities'
 | 200 | Success |
 | 400 | Bad Request (Invalid input data) |
 | 500 | Internal Server Error (Server side processing error) |
+| 502 | Bad Gateway (Issue with prompflow) |
 
 **Example Response Body (Success - 200):**
 ```json
