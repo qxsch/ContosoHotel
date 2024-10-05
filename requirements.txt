@@ -1,7 +1,9 @@
 Flask
+flask-cors
 gunicorn
 werkzeug
 requests
 Pillow
 pyodbc
 psycopg2-binary
+
