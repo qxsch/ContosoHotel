@@ -1,5 +1,5 @@
 # Pull a pre-built alpine docker image with nginx and python3 installed
-FROM python:3.11-slim-bookworm
+FROM python:slim-bookworm
 
 ARG DEBIAN_FRONTEND=noninteractive
 
