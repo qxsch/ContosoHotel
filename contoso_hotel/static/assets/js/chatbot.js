@@ -73,7 +73,7 @@ if(document.getElementById("chatbotLogo") && document.getElementById("chatbotBar
                 
                 // adding markdown
                 var zmd = document.createElement("zero-md");
-                zmd.innerHTML ='<template data-append><style> .markdown-body { background-color:transparent; } </style></template>';
+                zmd.innerHTML ='<template data-append><style> .markdown-body { background-color:transparent; min-height: 10px; } </style></template>';
                 var md = document.createElement("script");
                 md.type = "text/markdown";
                 md.innerHTML = data.answer;
