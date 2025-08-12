@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 import json
 import requests
+import re
 from flask import Flask, render_template, request, jsonify, redirect, url_for
 from . import app, dblayer, config
 
@@ -85,7 +86,15 @@ def api_manage_booking():
             for k in ["checkin", "checkout"]:
                 if k not in record:
                     return jsonify({ "success" : False, "error" : f"{k} is required" }), 400
-                record[k] = datetime.fromisoformat(record[k])
+                try:
+                    record[k] = datetime.fromisoformat(record[k])
+                except ValueError:
+                    # regex string starts with month/day/year
+                    m = re.match(r"^(\d{1,2})/(\d{1,2})/(\d{4})", str(record[k]).strip())
+                    if m:
+                        record[k] = datetime.fromisoformat(f"{m.group(3)}-{m.group(1).zfill(2)}-{m.group(2).zfill(2)}")
+                    else:
+                        return jsonify({ "success" : False, "error" : f"{k} has an invalid date time specification" }), 400
             # optional values
             for k in ["kids", "babies"]:
                 if k not in record:
