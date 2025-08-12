@@ -84,7 +84,7 @@ def create_booking(hotelId : int, visitorId : int, checkin : datetime, checkout 
     cursor.close()
     connection.commit()
     connection.close()
-    return { "bookingId" : nextId, "hotelId" : hotelId, "visitorId" : visitorId, "checkin" : checkin, "checkout" : checkout, "adults" : adults, "kids" : kids, "babies" : babies, "rooms" : rooms, "price" : price }
+    return { "bookingId" : nextId, "hotelId" : hotelId, "visitorId" : visitorId, "checkin" : checkin.strftime('%Y-%m-%d'), "checkout" : checkout.strftime('%Y-%m-%d'), "adults" : adults, "kids" : kids, "babies" : babies, "rooms" : rooms, "price" : price }
 
 def delete_booking(bookingId : int) -> bool:
     connection = get_mssql_connection()
