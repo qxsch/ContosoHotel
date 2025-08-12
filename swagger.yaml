@@ -1,0 +1,1016 @@
+openapi: 3.0.0
+info:
+  title: Contoso Hotel API
+  description: API documentation for Contoso Hotel Demo Application - internal Booking Management
+  version: 1.0.0
+  contact:
+    name: Contoso Hotel
+    url: http://localhost:8000
+servers:
+  - url: http://localhost:8000
+    description: Local development server
+
+components:
+  schemas:
+    Hotel:
+      type: object
+      properties:
+        hotelId:
+          type: integer
+          description: Unique identifier for the hotel
+        hotelname:
+          type: string
+          description: Name of the hotel
+        pricePerNight:
+          type: number
+          format: float
+          description: Price per night
+        totalRooms:
+          type: integer
+          description: Total number of rooms
+        country:
+          type: string
+          description: Country where hotel is located
+        skiing:
+          type: boolean
+          description: Skiing available nearby
+        suites:
+          type: boolean
+          description: Has suites available
+        inRoomEntertainment:
+          type: boolean
+          description: Flat-screen TVs, streaming services, high-speed Wi-Fi, and Bluetooth speakers
+        conciergeServices:
+          type: boolean
+          description: Assistance with booking tours, restaurant reservations, and other activities
+        housekeeping:
+          type: boolean
+          description: Regular cleaning services, often with eco-friendly options
+        petFriendlyOptions:
+          type: boolean
+          description: Amenities and services for guests traveling with pets
+        laundryServices:
+          type: boolean
+          description: On-site laundry and dry-cleaning services
+        roomService:
+          type: boolean
+          description: In-room dining options (available 24/7 in some hotels)
+        indoorPool:
+          type: boolean
+          description: Indoor pools, hot tubs, saunas, and spa services
+        outdoorPool:
+          type: boolean
+          description: Outdoor pools and hot tubs
+        fitnessCenter:
+          type: boolean
+          description: Equipped with modern exercise machines and sometimes offering fitness classes
+        complimentaryBreakfast:
+          type: boolean
+          description: Often includes a variety of hot and cold options
+        businessCenter:
+          type: boolean
+          description: Facilities with computers, printers, and meeting rooms for business travelers
+        freeGuestParking:
+          type: boolean
+          description: On-site parking facilities for guests
+        complimentaryCoffeaAndTea:
+          type: boolean
+          description: Complimentary coffee and tea kits, along with stocked mini-bars
+        climateControl:
+          type: boolean
+          description: Adjustable air conditioning and heating systems
+        bathroomEssentials:
+          type: boolean
+          description: Premium toiletries, hair dryers, bathrobes, and slippers
+
+    HotelInput:
+      type: object
+      required:
+        - hotelname
+        - pricePerNight
+        - totalRooms
+        - country
+      properties:
+        hotelname:
+          type: string
+          description: Name of the hotel
+        pricePerNight:
+          type: number
+          format: float
+          description: Price per night
+        totalRooms:
+          type: integer
+          description: Total number of rooms
+        country:
+          type: string
+          description: Country where hotel is located
+        skiing:
+          type: boolean
+          default: false
+        suites:
+          type: boolean
+          default: false
+        inRoomEntertainment:
+          type: boolean
+          default: false
+        conciergeServices:
+          type: boolean
+          default: false
+        housekeeping:
+          type: boolean
+          default: false
+        petFriendlyOptions:
+          type: boolean
+          default: false
+        laundryServices:
+          type: boolean
+          default: false
+        roomService:
+          type: boolean
+          default: false
+        indoorPool:
+          type: boolean
+          default: false
+        outdoorPool:
+          type: boolean
+          default: false
+        fitnessCenter:
+          type: boolean
+          default: false
+        complimentaryBreakfast:
+          type: boolean
+          default: false
+        businessCenter:
+          type: boolean
+          default: false
+        freeGuestParking:
+          type: boolean
+          default: false
+        complimentaryCoffeaAndTea:
+          type: boolean
+          default: false
+        climateControl:
+          type: boolean
+          default: false
+        bathroomEssentials:
+          type: boolean
+          default: false
+
+    HotelUpdate:
+      type: object
+      required:
+        - hotelId
+        - hotelname
+        - pricePerNight
+        - totalRooms
+        - country
+      properties:
+        hotelId:
+          type: integer
+          description: Unique identifier for the hotel
+        hotelname:
+          type: string
+          description: Name of the hotel
+        pricePerNight:
+          type: number
+          format: float
+          description: Price per night
+        totalRooms:
+          type: integer
+          description: Total number of rooms
+        country:
+          type: string
+          description: Country where hotel is located
+        skiing:
+          type: boolean
+          default: false
+        suites:
+          type: boolean
+          default: false
+        inRoomEntertainment:
+          type: boolean
+          default: false
+        conciergeServices:
+          type: boolean
+          default: false
+        housekeeping:
+          type: boolean
+          default: false
+        petFriendlyOptions:
+          type: boolean
+          default: false
+        laundryServices:
+          type: boolean
+          default: false
+        roomService:
+          type: boolean
+          default: false
+        indoorPool:
+          type: boolean
+          default: false
+        outdoorPool:
+          type: boolean
+          default: false
+        fitnessCenter:
+          type: boolean
+          default: false
+        complimentaryBreakfast:
+          type: boolean
+          default: false
+        businessCenter:
+          type: boolean
+          default: false
+        freeGuestParking:
+          type: boolean
+          default: false
+        complimentaryCoffeaAndTea:
+          type: boolean
+          default: false
+        climateControl:
+          type: boolean
+          default: false
+        bathroomEssentials:
+          type: boolean
+          default: false
+
+    Visitor:
+      type: object
+      properties:
+        visitorId:
+          type: integer
+          description: Unique identifier for the visitor
+        firstname:
+          type: string
+          description: First name of the visitor
+        lastname:
+          type: string
+          description: Last name of the visitor
+
+    VisitorInput:
+      type: object
+      required:
+        - firstname
+        - lastname
+      properties:
+        firstname:
+          type: string
+          description: First name of the visitor
+        lastname:
+          type: string
+          description: Last name of the visitor
+
+    VisitorUpdate:
+      type: object
+      required:
+        - visitorId
+        - firstname
+        - lastname
+      properties:
+        visitorId:
+          type: integer
+          description: Unique identifier for the visitor
+        firstname:
+          type: string
+          description: First name of the visitor
+        lastname:
+          type: string
+          description: Last name of the visitor
+
+    Booking:
+      type: object
+      properties:
+        bookingId:
+          type: integer
+          description: Unique identifier for the booking
+        visitorId:
+          type: integer
+          description: Visitor ID associated with the booking
+        hotelId:
+          type: integer
+          description: Hotel ID associated with the booking
+        checkin:
+          type: string
+          format: date
+          description: Check-in date (YYYY-MM-DD)
+        checkout:
+          type: string
+          format: date
+          description: Check-out date (YYYY-MM-DD)
+        rooms:
+          type: integer
+          description: Number of rooms
+        adults:
+          type: integer
+          description: Number of adults
+        kids:
+          type: integer
+          description: Number of kids
+        babies:
+          type: integer
+          description: Number of babies
+        price:
+          type: number
+          format: float
+          description: Total price
+
+    BookingWithDetails:
+      type: object
+      properties:
+        bookingId:
+          type: integer
+          description: Unique identifier for the booking
+        checkin:
+          type: string
+          format: date
+          description: Check-in date (YYYY-MM-DD)
+        checkout:
+          type: string
+          format: date
+          description: Check-out date (YYYY-MM-DD)
+        hotelId:
+          type: integer
+          description: Hotel ID associated with the booking
+        hotelname:
+          type: string
+          description: Hotel name
+        visitorId:
+          type: integer
+          description: Visitor ID associated with the booking
+        firstname:
+          type: string
+          description: Visitor's first name
+        lastname:
+          type: string
+          description: Visitor's last name
+        adults:
+          type: integer
+          description: Number of adults
+        kids:
+          type: integer
+          description: Number of kids
+        babies:
+          type: integer
+          description: Number of babies
+        rooms:
+          type: integer
+          description: Number of rooms
+        price:
+          type: number
+          format: float
+          description: Total price
+
+    BookingInput:
+      type: object
+      required:
+        - visitorId
+        - hotelId
+        - checkin
+        - checkout
+        - adults
+      properties:
+        visitorId:
+          type: integer
+          description: Visitor ID associated with the booking
+        hotelId:
+          type: integer
+          description: Hotel ID associated with the booking
+        checkin:
+          type: string
+          format: date
+          description: Check-in date (YYYY-MM-DD)
+        checkout:
+          type: string
+          format: date
+          description: Check-out date (YYYY-MM-DD)
+        adults:
+          type: integer
+          description: Number of adults
+        kids:
+          type: integer
+          description: Number of kids
+          default: 0
+        babies:
+          type: integer
+          description: Number of babies
+          default: 0
+        rooms:
+          type: integer
+          description: Number of rooms
+          default: 1
+        price:
+          type: number
+          format: float
+          description: Total price
+
+    DeleteResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: Indicates if the operation was successful
+        deleted:
+          type: boolean
+          description: Indicates if deletion was necessary
+        hotelId:
+          type: integer
+          description: Hotel ID (for hotel deletions)
+        visitorId:
+          type: integer
+          description: Visitor ID (for visitor deletions)
+        bookingId:
+          type: integer
+          description: Booking ID (for booking deletions)
+
+    Amenities:
+      type: object
+      properties:
+        skiing:
+          type: string
+          description: Description of skiing amenity
+        suites:
+          type: string
+          description: Description of suites amenity
+        inRoomEntertainment:
+          type: string
+          description: Description of in-room entertainment
+        conciergeServices:
+          type: string
+          description: Description of concierge services
+        housekeeping:
+          type: string
+          description: Description of housekeeping services
+        petFriendlyOptions:
+          type: string
+          description: Description of pet-friendly options
+        laundryServices:
+          type: string
+          description: Description of laundry services
+        roomService:
+          type: string
+          description: Description of room service
+        indoorPool:
+          type: string
+          description: Description of indoor pool amenities
+        outdoorPool:
+          type: string
+          description: Description of outdoor pool amenities
+        fitnessCenter:
+          type: string
+          description: Description of fitness center
+        complimentaryBreakfast:
+          type: string
+          description: Description of complimentary breakfast
+        businessCenter:
+          type: string
+          description: Description of business center
+        freeGuestParking:
+          type: string
+          description: Description of free guest parking
+        complimentaryCoffeaAndTea:
+          type: string
+          description: Description of complimentary coffee and tea
+        climateControl:
+          type: string
+          description: Description of climate control
+        bathroomEssentials:
+          type: string
+          description: Description of bathroom essentials
+
+    ChatHistory:
+      type: object
+      properties:
+        inputs:
+          type: object
+          properties:
+            content:
+              type: string
+              description: Input message content
+        outputs:
+          type: object
+          properties:
+            answer:
+              type: string
+              description: Output answer content
+
+    ChatRequest:
+      type: object
+      required:
+        - question
+      properties:
+        chat_history:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChatHistory'
+          description: Previous chat history
+        question:
+          type: string
+          description: Current question to ask
+
+    ChatResponse:
+      type: object
+      properties:
+        answer:
+          type: string
+          description: Answer from the chatbot
+
+    SetupRequest:
+      type: object
+      properties:
+        drop_schema:
+          type: boolean
+          default: false
+          description: Whether to drop existing schema
+        create_schema:
+          type: boolean
+          default: true
+          description: Whether to create schema
+        populate_data:
+          type: boolean
+          default: true
+          description: Whether to populate data
+        number_of_visitors:
+          type: integer
+          minimum: 2
+          maximum: 10000
+          default: 100
+          description: Number of visitors to generate
+        min_bookings_per_visitor:
+          type: integer
+          minimum: 0
+          maximum: 10
+          default: 2
+          description: Minimum bookings per visitor
+        max_bookings_per_visitor:
+          type: integer
+          minimum: 1
+          maximum: 20
+          default: 5
+          description: Maximum bookings per visitor
+
+    SetupResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: Indicates if the operation was successful
+        drop_schema:
+          type: boolean
+          description: Whether schema was dropped
+        create_schema:
+          type: object
+          properties:
+            hotels:
+              type: boolean
+            visitors:
+              type: boolean
+            bookings:
+              type: boolean
+        populate_data:
+          type: object
+          properties:
+            hotels:
+              type: boolean
+            visitors:
+              type: boolean
+            bookings:
+              type: boolean
+        number_of_visitors:
+          type: integer
+        min_bookings_per_visitor:
+          type: integer
+        max_bookings_per_visitor:
+          type: integer
+
+    ErrorResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: Always false for error responses
+        error:
+          type: string
+          description: Error message
+
+  responses:
+    BadRequest:
+      description: Bad Request (Invalid input data)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    InternalServerError:
+      description: Internal Server Error (Server side processing error)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    BadGateway:
+      description: Bad Gateway (Issue with promptflow)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+
+paths:
+  /api/hotels:
+    get:
+      summary: Get Hotels
+      description: Retrieve a list of hotels with optional filtering
+      parameters:
+        - name: hotelname
+          in: query
+          description: Optional Hotel Name to filter
+          required: false
+          schema:
+            type: string
+        - name: exactMatch
+          in: query
+          description: Optional exactMatch (false uses like '%search%')
+          required: false
+          schema:
+            type: boolean
+            default: false
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Hotel'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /api/visitors:
+    get:
+      summary: Get Visitors
+      description: Retrieve a list of visitors with optional filtering
+      parameters:
+        - name: name
+          in: query
+          description: Optional Name to filter (first or last name)
+          required: false
+          schema:
+            type: string
+        - name: exactMatch
+          in: query
+          description: Optional exactMatch (false uses like '%search%')
+          required: false
+          schema:
+            type: boolean
+            default: false
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Visitor'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /api/bookings:
+    get:
+      summary: Get Bookings
+      description: Retrieve a list of bookings with optional filtering
+      parameters:
+        - name: visitorId
+          in: query
+          description: Optional visitorId to filter
+          required: false
+          schema:
+            type: integer
+        - name: hotelId
+          in: query
+          description: Optional hotelId to filter
+          required: false
+          schema:
+            type: integer
+        - name: fromdate
+          in: query
+          description: Optionally filter for bookings that are after this date
+          required: false
+          schema:
+            type: string
+            format: date
+        - name: untildate
+          in: query
+          description: Optionally filter for bookings that are before this date
+          required: false
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BookingWithDetails'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /api/hotel:
+    get:
+      summary: Get a single Hotel
+      description: Retrieve detailed information about a specific hotel
+      parameters:
+        - name: hotelId
+          in: query
+          description: Required id of the hotel
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Hotel'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    put:
+      summary: Create Hotel
+      description: Create a new hotel
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HotelInput'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Hotel'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    post:
+      summary: Update Hotel
+      description: Update an existing hotel
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HotelUpdate'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Hotel'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      summary: Delete Hotel
+      description: Delete a hotel by ID
+      parameters:
+        - name: hotelId
+          in: query
+          description: Required id of the hotel
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /api/visitor:
+    get:
+      summary: Get a single Visitor
+      description: Retrieve information about a specific visitor
+      parameters:
+        - name: visitorId
+          in: query
+          description: Required id of the visitor
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Visitor'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    put:
+      summary: Create Visitor
+      description: Create a new visitor
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VisitorInput'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Visitor'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    post:
+      summary: Update Visitor
+      description: Update an existing visitor
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VisitorUpdate'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Visitor'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      summary: Delete Visitor
+      description: Delete a visitor by ID
+      parameters:
+        - name: visitorId
+          in: query
+          description: Required id of the visitor
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /api/booking:
+    get:
+      summary: Get a single Booking
+      description: Retrieve information about a specific booking
+      parameters:
+        - name: bookingId
+          in: query
+          description: Required id of the booking
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Booking'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    put:
+      summary: Create Booking
+      description: Create a new booking
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookingInput'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Booking'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      summary: Delete Booking
+      description: Delete a booking by ID
+      parameters:
+        - name: bookingId
+          in: query
+          description: Required id of the booking
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /api/amenities:
+    get:
+      summary: Get the amenities
+      description: Retrieve a list of all available amenities and their descriptions
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Amenities'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /api/chat:
+    get:
+      summary: Chat with the Chatbot
+      description: Send a message to the chatbot and receive a response
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChatRequest'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChatResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '502':
+          $ref: '#/components/responses/BadGateway'
+
+  /api/setup:
+    post:
+      summary: Setup the Database
+      description: Initialize and populate the database with test data
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SetupRequest'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SetupResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
