@@ -1,0 +1,277 @@
+swagger: '2.0'
+info:
+  title: Contoso Hotel MCP Server
+  description: |
+    MCP Server for Microsoft Copilot Studio - streamable hotel booking data access tools.
+    
+    A Model Context Protocol server providing comprehensive hotel booking management tools for hotels, visitors, and bookings using the Contoso Hotel API.
+    
+    **Available MCP Tools:**
+    - Create Booking: Create new hotel bookings
+    - Create Visitor: Register new visitors in the system
+    - Delete Booking: Remove existing bookings
+    - Delete Visitor: Remove visitors from the system
+    - Get a single Booking: Get detailed booking information by ID
+    - Get a single Hotel: Get detailed hotel information by ID
+    - Get a single Visitor: Get detailed visitor information by ID
+    - Get Bookings: Search and retrieve multiple bookings by criteria
+    - Get Hotels: Search and retrieve multiple hotels by name and location
+    - Get the amenities: Get available hotel amenities and descriptions
+    - Get Visitors: Search and retrieve multiple visitors by name
+    - Update Visitor: Modify existing visitor information
+    
+    All tools are streamable and return formatted hotel booking data.
+  version: 1.0.0
+host: xxxxx.azure-api.net
+basePath: /hotel-mcp
+schemes:
+  - https
+consumes:
+  - application/json
+produces:
+  - application/json
+x-ms-agentic-protocol: mcp-streamable-1.0
+
+paths:
+  /mcp:
+    post:
+      summary: MCP Streamable Tools - POST Operations
+      description: |
+        Execute MCP streamable tools via POST requests. All 12 tools use the MCP streamable protocol:
+        
+        **Booking Management Tools (MCP Streamable POST):**
+        - Create Booking: Create new hotel reservations with visitor and hotel details (POST /mcp)
+        - Get a single Booking: Retrieve detailed booking information by booking ID (POST /mcp)
+        - Get Bookings: Search and filter bookings by dates, visitor, or hotel criteria (POST /mcp)
+        - Delete Booking: Remove existing bookings from the system (POST /mcp)
+        
+        **Hotel Management Tools (MCP Streamable POST):**
+        - Get a single Hotel: Retrieve detailed hotel information by hotel ID (POST /mcp)
+        - Get Hotels: Search hotels by name and location with filtering options (POST /mcp)
+        - Get the amenities: Get comprehensive list of available hotel amenities and descriptions (POST /mcp)
+        
+        **Visitor Management Tools (MCP Streamable POST):**
+        - Create Visitor: Register new visitors with personal details (POST /mcp)
+        - Get a single Visitor: Retrieve detailed visitor information by visitor ID (POST /mcp)
+        - Get Visitors: Search visitors by name with flexible matching options (POST /mcp)
+        - Update Visitor: Modify existing visitor information and details (POST /mcp)
+        - Delete Visitor: Remove visitors from the system (POST /mcp)
+        
+        All tools return streamable formatted hotel booking data via the MCP protocol.
+      operationId: ExecuteMCPStreamableTool
+      tags: ["MCP Streamable Tools"]
+      parameters:
+        - name: body
+          in: body
+          required: true
+          description: MCP request payload for tool execution
+          schema:
+            $ref: '#/definitions/MCPRequest'
+      responses:
+        '200':
+          description: Successful MCP tool execution
+          schema:
+            $ref: '#/definitions/MCPResponse'
+        '400':
+          description: Bad request - Invalid JSON or parameters
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+  
+  /health:
+    get:
+      summary: Health Check
+      description: Check if the MCP server is running
+      operationId: HealthCheck
+      tags: ["Health"]
+      responses:
+        '200':
+          description: Server is healthy
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+                example: "healthy"
+              timestamp:
+                type: string
+                format: date-time
+
+definitions:
+  # Main MCP request definition
+  MCPRequest:
+    type: object
+    required: ["method", "params"]
+    properties:
+      method:
+        type: string
+        enum: ["tools/call"]
+        description: MCP method - always tools/call for tool execution
+      params:
+        type: object
+        required: ["name", "arguments"]
+        description: Parameters for MCP tool execution
+        properties:
+          name:
+            type: string
+            enum:
+              - "Create Booking"
+              - "Create Visitor"
+              - "Delete Booking"
+              - "Delete Visitor"
+              - "Get a single Booking"
+              - "Get a single Hotel"
+              - "Get a single Visitor"
+              - "Get Bookings"
+              - "Get Hotels"
+              - "Get the amenities"
+              - "Get Visitors"
+              - "Update Visitor"
+            description: Name of the MCP tool to call (POST operation, streamable)
+          arguments:
+            type: object
+            description: Tool-specific arguments for MCP streamable execution
+            properties:
+              hotelId:
+                type: integer
+                description: Hotel ID (for get-hotel, get-hotel-bookings)
+                example: 1
+              visitorId:
+                type: integer
+                description: Visitor ID (for get-visitor, get-visitor-bookings)
+                example: 1
+              bookingId:
+                type: integer
+                description: Booking ID (for get-booking)
+                example: 1
+              hotelname:
+                type: string
+                description: Hotel name search term (for search-hotels)
+                example: "Grand Hotel"
+              exactMatch:
+                type: boolean
+                description: Whether to use exact matching for searches
+                default: false
+                example: false
+              name:
+                type: string
+                description: Visitor name search term (for search-visitors)
+                example: "John"
+              fromdate:
+                type: string
+                format: date
+                description: Start date filter for bookings (YYYY-MM-DD)
+                example: "2024-01-01"
+              untildate:
+                type: string
+                format: date
+                description: End date filter for bookings (YYYY-MM-DD)
+                example: "2024-12-31"
+              question:
+                type: string
+                description: Question for chat assistant (for chat-assistant)
+                example: "What hotels have indoor pools?"
+              chat_history:
+                type: array
+                description: Previous chat history (for chat-assistant)
+                items:
+                  type: object
+                  properties:
+                    inputs:
+                      type: object
+                      properties:
+                        content:
+                          type: string
+                    outputs:
+                      type: object
+                      properties:
+                        answer:
+                          type: string
+              drop_schema:
+                type: boolean
+                description: Whether to drop existing schema (for setup-database)
+                default: false
+              create_schema:
+                type: boolean
+                description: Whether to create schema (for setup-database)
+                default: true
+              populate_data:
+                type: boolean
+                description: Whether to populate data (for setup-database)
+                default: true
+              number_of_visitors:
+                type: integer
+                description: Number of visitors to generate (for setup-database)
+                minimum: 2
+                maximum: 10000
+                default: 100
+              min_bookings_per_visitor:
+                type: integer
+                description: Minimum bookings per visitor (for setup-database)
+                minimum: 0
+                maximum: 10
+                default: 2
+              max_bookings_per_visitor:
+                type: integer
+                description: Maximum bookings per visitor (for setup-database)
+                minimum: 1
+                maximum: 20
+                default: 5
+    example:
+      method: "tools/call"
+      params:
+        name: "get-hotel"
+        arguments:
+          hotelId: 1
+
+  # Response definitions
+  MCPResponse:
+    type: object
+    properties:
+      result:
+        type: object
+        description: MCP streamable tool execution result
+        properties:
+          content:
+            type: array
+            items:
+              $ref: '#/definitions/MCPContent'
+              
+  MCPContent:
+    type: object
+    properties:
+      type:
+        type: string
+        enum: ["text"]
+        example: "text"
+      text:
+        type: string
+        description: Formatted hotel booking data response
+        example: "🏨 Hotel Details:\n\n📋 Basic Information:\n├─ ID: 1\n├─ Name: Grand Plaza Hotel\n├─ Country: United States\n├─ Price per Night: $299.99\n└─ Total Rooms: 250\n\n🎯 Amenities:\n├─ ✅ Indoor Pool\n├─ ✅ Fitness Center\n├─ ✅ Room Service\n└─ ✅ Free Parking"
+        
+  ErrorResponse:
+    type: object
+    properties:
+      error:
+        type: string
+        example: "Invalid JSON"
+      message:
+        type: string
+        example: "Bad escaped character in JSON"
+
+x-ms-connector-metadata:
+  - propertyName: Website
+    propertyValue: http://localhost:8000
+  - propertyName: Privacy policy
+    propertyValue: https://modelcontextprotocol.io/
+  - propertyName: Categories
+    propertyValue: AI;Data;Hospitality
+
+tags:
+  - name: MCP Streamable Tools
+    description: Model Context Protocol streamable hotel booking tools (POST operations)
+  - name: Health
+    description: Server health and status endpoints
